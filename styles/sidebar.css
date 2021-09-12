@@ -1,0 +1,47 @@
+/*Side bar*/
+
+.sidebar {
+  padding: 0;
+  margin: 0;
+  display: inline;
+  float: left;
+  height: 100vh;
+}
+
+.sidemenu {
+  position: absolute;
+  right: -21vw;
+  background-color: #fbd988;
+  width: 22vw;
+  height: 65vh;
+  transition: 0.4s;
+  overflow: scroll;
+  height: 100vh;
+}
+
+.sidemenu table {
+  position: absolute;
+  display: inline;
+  border: 2px solid black;
+  height: 70vh;
+}
+
+.sidemenu table td {
+  padding: 0;
+  margin: 0;
+  border: 2px solid black;
+  height: 10vh;
+}
+
+.sidemenu table td img {
+  padding: 0;
+  width: 4.9vw;
+}
+
+/* .sidebar:active {
+   border: 2px solid red; 
+} */
+
+/*.sidemenu:hover {
+	right: 0px;
+}*/
