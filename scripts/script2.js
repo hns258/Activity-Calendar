@@ -2,7 +2,7 @@
  * Activity Calendar App
  * 2021-08-31
  * PM: Jack Everard
- * Developers: Vaaranan Yogalingam, Kyle Flores
+ * Developers: Vaaranan Yogalingam, Kyle Flores, Azhya Knox
  */
 
 // Initializing variables and constants
