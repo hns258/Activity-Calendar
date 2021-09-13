@@ -5,9 +5,6 @@
  * Developers: Vaaranan Yogalingam, Kyle Flores, Azhya Knox
  */
 
-//imports
-import { switchToLeft, showSettingsOptions } from "./settings";
-
 // Initializing variables and constants
 var open = false;
 var itemCount = 0

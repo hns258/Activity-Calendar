@@ -19,20 +19,23 @@
   height: 100vh;
 }
 
-.sidemenu table {
+.sidemenu table,
+.menuOnLeft table{
   position: absolute;
   display: inline;
   border: 2px solid black;
 }
 
-.sidemenu table td {
+.sidemenu table td,
+.menuOnLeft table td{
   padding: 0;
   margin: 0;
   border: 2px solid black;
   height: 10vh;
 }
 
-.sidemenu table td img {
+.sidemenu table td img,
+.menuOnLeft table td img{
   padding: 0;
   width: 4.9vw;
 }

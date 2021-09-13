@@ -66,13 +66,13 @@
 	</div>
 
 	<div class="sidemenu">
-		<img src="misc/handle.png" alt="click" class="sidebar">
+		<img src="misc/handle.png" alt="click" class="sidebar" onclick="toggleSidemenu()">
 		<table>
 			<tr class="settings-area">
 				<td>
 					<label class="switch">
-						<input type="checkbox" checked>
-						<span class="slider round"></span>
+						<input type="checkbox" class="isLeftToggle" checked>
+						<span class="slider round" onclick="switchToLeft()"></span>
 					</label>
 				</td>
 				<td colspan="2"><span class="switch-title">Switch to left</span></td>
@@ -137,5 +137,6 @@
 
 	</div>
 	<script type="text/javascript" src="./scripts/script.js"></script>
+	<script type="text/javascript" src="./scripts/settings.js"></script>
 </body>
 </html>

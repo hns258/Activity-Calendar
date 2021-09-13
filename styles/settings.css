@@ -79,3 +79,22 @@ input:checked + .slider:before {
 .settings-icon i:hover{
     opacity: 0.7;
 }
+/* left toggle settings */
+.menuOnLeft{
+    position: absolute;
+    left: -21vw;
+    direction: rtl;
+    background-color: #fbd988;
+    width: 22vw;
+    height: 65vh;
+    transition: 0.4s;
+    overflow: scroll;
+    height: 100vh;
+}
+.barOnLeft{
+  padding: 0;
+  margin: 0;
+  float: right;
+  display: inline;
+  height: 100vh;
+}

@@ -5,14 +5,12 @@
  * Developers: Vaaranan Yogalingam, Kyle Flores, Azhya Knox
  */
 
-
-//imports
-import { switchToLeft, showSettingsOptions } from "./settings";
-
 // Initializing variables and constants
 var open = false;
+var isLeft = document.querySelector(".isLeftToggle").checked;
 var itemCount = 0
 const sideMenu = document.querySelector(".sidemenu");
+
 // Coordinates of the currently selected element
 var x = 0
 var y = 0
@@ -48,16 +46,32 @@ function setUpDate(){
 }
 
 // Slide-in library menu functionality initialization
-function initializeSideMenu(){
-	sideMenu.addEventListener("click", () => {	
+function toggleSidemenu(){
+	console.log("sidebar has been clicked");
+	console.log(`open set to: ${open} and isLeft set to: ${isLeft}`);
+	console.log(sideMenu);	
+	
+	if(!isLeft){
 		if (open){
+			console.log("closing sidebar to right");
 			sideMenu.style.right = "-21vw"
 			open = false;
 		} else {
-			sideMenu.style.right = "0px"
+			console.log("opening sidebar to right");
+			sideMenu.style.right= "0px"
 			open = true;
 		}
-	})
+	}else {
+		if(open){
+			console.log("closing sidebar to left");
+			sideMenu.style.left = "-21vw"
+			open = false;
+		} else {
+			console.log("opening sidebar to left");
+			sideMenu.style.left = "0px"
+			open = true;
+		}
+	}
 }
 
 // Initializes event listeners for each of the library images (so they can be dragged)
@@ -183,7 +197,6 @@ function moveIntoNextWeek(){
 
 // Invoke all methods needed to boot up app
 setUpDate();
-initializeSideMenu();
 initializeLibraryListeners();
 reloadPreviousCalendar();
 moveIntoNextWeek();
