@@ -98,3 +98,43 @@ input:checked + .slider:before {
   display: inline;
   height: 100vh;
 }
+
+/* settings page styles */
+.settings-body{
+  background-color: #fbeacc;
+}
+.my-settings{
+  margin-left: 20px !important;
+  margin-top: 20px !important;
+}
+.title{
+  margin-bottom: 20px;
+}
+.folder-dir{
+  margin: 20px auto;
+  padding: 5px auto;
+}
+.folder-dir h3{
+  font-size: 1rem;
+  font-weight: 600;
+}
+.paths{
+  display: block;
+  font-weight: 200;
+}
+.back-btn{
+  background-color: #e31cf5 !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+.back-btn i{
+  margin-right: 10px;
+}
+.desc{
+  margin-top: 20px;
+  font-size: 0.8rem;
+}
