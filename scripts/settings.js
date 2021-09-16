@@ -124,15 +124,23 @@ function returnToMain(){
 }
 
 function initializeSettings(){
-    var locationDisplays = document.querySelectorAll(".paths");
-    var settings = localStorage.getItem("userSettings");
-    var settingsJSON = JSON.parse(settings);
-    console.log(settingsJSON.imageFolderSettings[0].peopleLocation);
+    var myLocation = window.location.href;
+    var url = myLocation.split("/");
+    var page = url[url.length - 1];
+    if(page === "settings.html"){
+        console.log("i'm in the settings page");
+        var locationDisplays = document.querySelectorAll(".paths");
+        var settings = localStorage.getItem("userSettings");
+        var settingsJSON = JSON.parse(settings);
+        console.log(settingsJSON.imageFolderSettings[0].peopleLocation);
 
-    locationDisplays[0].innerHTML = settingsJSON.imageFolderSettings[0].peopleLocation;
-    locationDisplays[1].innerHTML = settingsJSON.imageFolderSettings[0].transportLocation;
-    locationDisplays[2].innerHTML = settingsJSON.imageFolderSettings[0].popularLocation;
-    locationDisplays[3].innerHTML = settingsJSON.imageFolderSettings[0].activityLocation;
+        locationDisplays[0].innerHTML = settingsJSON.imageFolderSettings[0].peopleLocation;
+        locationDisplays[1].innerHTML = settingsJSON.imageFolderSettings[0].transportLocation;
+        locationDisplays[2].innerHTML = settingsJSON.imageFolderSettings[0].popularLocation;
+        locationDisplays[3].innerHTML = settingsJSON.imageFolderSettings[0].activityLocation;
+    }else{
+        console.log("not the settings page");
+    }
 }
 
 initializeSettings();

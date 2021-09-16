@@ -46,5 +46,6 @@ function switchToLeft(){
 
 //open the settings page from the sidebar button
 function goToSettings(){
+    console.log("settings cog has been clicked.");
     window.location.href = "settings.html";
 }
