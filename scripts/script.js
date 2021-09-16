@@ -91,6 +91,13 @@ function initializeLibraryListeners(){
 	// 1. When an image from the library is clicked
 	for(let i = 0; i < draggables.length; i++){
 		/*draggables[i].addEventListener("touchstart", () => {*/
+		/* TODO:
+		 * Add draggables="true" to each <img> during this loop
+		 * draggables[i].setAttribute("draggable","true"); maybe?
+		 * Do the same for script2.js later down the line
+		 * - Kyle
+		 */
+		draggables[i].setAttribute("draggable", "true");
 		draggables[i].addEventListener("dragstart", () => {
 			currentElement = i;
 			toDrag = draggables[currentElement].cloneNode(true)
@@ -103,8 +110,16 @@ function initializeLibraryListeners(){
 	for (item of draggables){
 		/*item.addEventListener("touchmove", () => {*/
 		item.addEventListener("drag", () => {
-			x = event.touches[0].clientX;
-			y = event.touches[0].clientY;
+			/* Is "touches" in x and y here the reason why drag events continue to not work?
+			 * And what would their mouse equivalents be?
+			 * - Kyle
+			 * 
+			 * Documentation for "touches": https://www.w3schools.com/jsref/event_touch_touches.asp
+			 */
+			//x = event.touches[0].clientX;
+			//y = event.touches[0].clientY;
+			x = event.clientX; 
+			y = event.clientY;
 			document.body.append(toDrag);
 			toDrag.style.position = "absolute";
 			toDrag.style.width = "250px";
