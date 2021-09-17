@@ -120,6 +120,7 @@ function initializeLibraryListeners(){
 			//y = event.touches[0].clientY;
 			x = event.clientX; 
 			y = event.clientY;
+			console.log("image currently dragged to (x, y): (" + x + ", " + y + ")");
 			document.body.append(toDrag);
 			toDrag.style.position = "absolute";
 			toDrag.style.width = "250px";
@@ -133,10 +134,12 @@ function initializeLibraryListeners(){
 	for (item of draggables){
 		/*item.addEventListener("touchend", () => {*/
 		item.addEventListener("dragend", () => {
-			// toDrag.style.display = "none" --> idk if this is necessary
+			toDrag.style.display = "none" //--> idk if this is necessary
 
 			// Check if element was dragged to top of screen, with intent of being deleted
 			// Otherwise, append the image to wherever the user released
+			console.log("image ended drag at (x, y): (" + x + ", " + y + ")");
+			console.log("document.elementFromPoint(x,y) is: " + document.elementFromPoint(x, y));
 			if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")) {
 				console.log("item dragend if block");
 				toDrag.remove();
