@@ -13,7 +13,7 @@ function switchToLeft(){
     isLeft = sideToggleBtn.checked;
     console.log(isLeft);
     //when toggle is clicked
-    if(isLeft){
+    if(!isLeft){
         //left settings should be on
         //swap classes to -left
         leftSideMenu.classList.remove("sidemenu");
@@ -24,9 +24,9 @@ function switchToLeft(){
         //set the toggle btn based on new class
         leftSideMenu = document.querySelector(".menuOnLeft");
         sideBarImg = document.querySelector(".barOnLeft");
-        //set the toggle to OFF (grey side)
+        //set the toggle to ON (blue)
         setTimeout(()=>{
-            sideToggleBtn.checked = false;
+            sideToggleBtn.checked = true;
             console.log(sideToggleBtn);
             console.log(sideToggleBtn.checked);
             //set isLeft boolean to TRUE
@@ -46,9 +46,9 @@ function switchToLeft(){
         //set the toggle btn based on new class
         leftSideMenu = document.querySelector(".sidemenu");
         sideBarImg = document.querySelector(".sidebar");
-        //set toggle to ON (checked/blue side)
+        //set toggle to OFF (grey)
         setTimeout(()=>{
-            sideToggleBtn.checked = true;
+            sideToggleBtn.checked = false;
             console.log(sideToggleBtn);
             console.log(sideToggleBtn.checked);
             //set isLeft boolean to FALSE
