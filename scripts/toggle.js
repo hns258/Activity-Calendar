@@ -25,22 +25,37 @@ function switchToLeft(){
         leftSideMenu = document.querySelector(".menuOnLeft");
         sideBarImg = document.querySelector(".barOnLeft");
         //set the toggle to OFF (grey side)
-        sideToggleBtn.checked = false;
-        console.log(sideToggleBtn);
-        //set isLeft boolean to TRUE
-        isLeft = true;
+        setTimeout(()=>{
+            sideToggleBtn.checked = false;
+            console.log(sideToggleBtn);
+            console.log(sideToggleBtn.checked);
+            //set isLeft boolean to TRUE
+            isLeft = true;
+            console.log("done");
+        }, 1500);
+        console.log("finished!!!");
     }else{
         //left settings should be off
+        leftSideMenu.style = "";
         //swap classes to default
         leftSideMenu.classList.remove("menuOnLeft");
         leftSideMenu.classList.add("sidemenu");
+        //swap bar classes too
+        sideBarImg.classList.remove("barOnLeft");
+        sideBarImg.classList.add("sidebar");
         //set the toggle btn based on new class
         leftSideMenu = document.querySelector(".sidemenu");
+        sideBarImg = document.querySelector(".sidebar");
         //set toggle to ON (checked/blue side)
-        sideToggleBtn.checked = true;
-        console.log(sideToggleBtn);
-        //set isLeft boolean to FALSE
-        isLeft = false;
+        setTimeout(()=>{
+            sideToggleBtn.checked = true;
+            console.log(sideToggleBtn);
+            console.log(sideToggleBtn.checked);
+            //set isLeft boolean to FALSE
+            isLeft = false;
+            console.log("done 2")
+        }, 1500);
+        console.log("finished 2!!!");
     }
 }
 
