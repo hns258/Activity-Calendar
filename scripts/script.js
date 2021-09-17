@@ -137,10 +137,12 @@ function initializeLibraryListeners(){
 
 			// Check if element was dragged to top of screen, with intent of being deleted
 			// Otherwise, append the image to wherever the user released
-			if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")){
+			if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")) {
+				console.log("item dragend if block");
 				toDrag.remove();
 				localStorage.setItem("latest version", document.body.innerHTML);
 			} else {
+				console.log("item dragend else block");
 				itemCount += 1;
 				toDrag.style.display = "block"
 				// Add the dragged in image to array of images on the calendar (i.e. the 'copies' array)
@@ -162,6 +164,7 @@ function updateCopies(){
 
 	// 1. When an image on the calendar is clicked
 	/*copies[copies.length - 1].addEventListener("touchstart", () => {*/
+	copies[copies.length - 1].setAttribute("draggable", "true");
 	copies[copies.length - 1].addEventListener("dragstart", () => {
 		// Keep this event listener for now (not sure if there would be an error without it)
 	})
@@ -169,8 +172,10 @@ function updateCopies(){
 	// 2. When an image on the calendar is held onto, and being dragged
 	/*copies[copies.length - 1].addEventListener("touchmove", () => {*/
 	copies[copies.length - 1].addEventListener("drag", () => {
-		x = event.touches[0].clientX;
-		y = event.touches[0].clientY;
+		//x = event.touches[0].clientX;
+		//y = event.touches[0].clientY;
+		x = event.clientX;
+		y = event.clientY;
 		document.body.append(latestImage);
 		latestImage.style.position = "absolute";
 		latestImage.style.width = "250px";
