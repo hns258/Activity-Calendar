@@ -10,8 +10,8 @@
 </head>
 <body>
 	<div class="p1">
-			<table class="main-table">
-		<tr class="deletion-box">
+		<table class="main-table">
+		<tr class="deletion-box" onmouseenter="initializeDeletionBox()" onmouseleave="removeDeletionBox()">
 			<!--Change the 'th' class selectors to their proper days-->
 			<th class="this-week deletion-box">This Week</th>
 			<th class="monday-col deletion-box"><img src="week_images/monday.png" alt="Monday" class="deletion-box"></th>
@@ -132,5 +132,6 @@
 	
 	<script type="text/javascript" src="/scripts/script2.js"></script>
 	<script type="text/javascript" src="./scripts/toggle.js"></script>
+	<script type="text/javascript" src="./scripts/deletion-box.js"></script>
 </body>
 </html>

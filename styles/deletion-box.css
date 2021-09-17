@@ -1,5 +1,6 @@
 .deletion-box:hover{
     cursor: grab;
+    transition: all .4s;
 }
 .trash-box i{
     margin-left: 10px;
@@ -16,6 +17,7 @@
   	align-items: center;
     border: 3px solid black;
     border-style: dashed;
+    transition: all .4s;
 }
 .trash-box-container{
     column-span: all;
@@ -30,14 +32,17 @@
   	align-items: center;
     background: red;
     padding: 10px;
+    transition: all .4s;
 }
 .trash-box-container:hover{
     opacity: 0.7;
     background-color: white;
+    transition: all .4s;
 }
 .trash-box:hover{
     color: red;
     background: white;
     border: 3px solid red;
     border-style: dashed;
+    transition: all .4s;
 }
