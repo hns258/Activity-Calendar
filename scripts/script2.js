@@ -199,7 +199,6 @@ function moveIntoNextWeek(){
 
 // Invoke all methods needed to boot up app
 setUpDate();
-initializeSideMenu();
 initializeLibraryListeners();
 reloadPreviousCalendar();
 moveIntoNextWeek();
