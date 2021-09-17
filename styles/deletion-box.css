@@ -1,13 +1,9 @@
-.deletion-box:hover{
-    cursor: grab;
-    transition: all .4s;
-}
 .trash-box i{
     margin-left: 10px;
 }
 .trash-box{
     background-color: red;
-    z-index: 3;
+    z-index: 4;
     column-span: all;
     height: 100px;
     width: 100vw;
@@ -17,9 +13,9 @@
   	align-items: center;
     border: 3px solid black;
     border-style: dashed;
-    transition: all .4s;
 }
 .trash-box-container{
+    z-index: 3;
     column-span: all;
     height: 100px;
     width: 100vw;
@@ -32,17 +28,7 @@
   	align-items: center;
     background: red;
     padding: 10px;
-    transition: all .4s;
 }
-.trash-box-container:hover{
-    opacity: 0.7;
-    background-color: white;
-    transition: all .4s;
-}
-.trash-box:hover{
-    color: red;
-    background: white;
-    border: 3px solid red;
-    border-style: dashed;
-    transition: all .4s;
+.trash-box-container{
+    transition: all 0.3s ease-in-out;
 }
