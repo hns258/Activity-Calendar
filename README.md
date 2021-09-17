@@ -1,4 +1,3 @@
-<img src="https://cdn.pixabay.com/photo/2019/01/01/14/55/calendar-3906791_1280.jpg" style="margin: 10px auto; height: height: 100px; width: 50%;">
 # Activity Calender
 ## Overview
 Families or organisations with people in their care with learning disabilities/autism will use a visual symbol calendar which communicates to the individual what activities they will participate in that week, which carer/support worker is supporting them, and what form of transport they will take. It can be essential for anyone with learning difficulties to have this communicated non verbally.
