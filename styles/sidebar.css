@@ -40,6 +40,12 @@
   width: 4.9vw;
 }
 
+.copy{
+  width: 4.9vw !important;
+  /* background-color: white;
+  border-radius: 10px; */
+}
+
 /* .sidebar:active {
    border: 2px solid red; 
 } */
