@@ -139,6 +139,8 @@ function initializeLibraryListeners(){
 			// Check if element was dragged to top of screen, with intent of being deleted
 			// Otherwise, append the image to wherever the user released
 			console.log("image ended drag at (x, y): (" + x + ", " + y + ")");
+			console.log("toDrag.style.left: " + toDrag.style.left);
+			console.log("toDrag.style.top: " + toDrag.style.top);
 			console.log("document.elementFromPoint(x,y) is: " + document.elementFromPoint(x, y));
 			if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")) {
 				console.log("item dragend if block");
