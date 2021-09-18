@@ -112,8 +112,20 @@ function save(temp){
     setTimeout(()=>{
         var newData = JSON.stringify(temp);
         localStorage.setItem("userSettings", newData);
-        var data = localStorage.getItem("userSettings");
+        var data = JSON.parse(localStorage.getItem("userSettings"));
         console.log(data);
+        //now that I have JSON data --> make POST request to server
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function()
+        {
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            {
+                console.log("successful! data has been sent to server.")
+            }
+        }
+        xmlHttp.open("post", "https://ac-db-server.aaknox.repl.co/save"); 
+        xmlHttp.send(data); 
+        //all done!
         console.log("done");
     }, 1000);
 }
