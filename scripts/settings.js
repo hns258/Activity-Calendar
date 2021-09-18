@@ -118,7 +118,7 @@ function save(temp){
                 console.log("successful! data has been sent to server.")
             }
         }
-        xmlHttp.open("post", "https://ac-db-server.aaknox.repl.co/save"); 
+        xmlHttp.open("post", "https://ac-db-server2.aaknox.repl.co/save"); 
         xmlHttp.send(data); 
         //all done!
         console.log("done");
