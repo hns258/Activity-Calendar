@@ -1,6 +1,7 @@
 .p1 {
   display: inline;
   position: absolute;
+  width: 100%;
 }
 .main-table {
   display: inline;
@@ -59,4 +60,9 @@
 .next-week{
   color: #38b9f6;
   font-size: 3vw;
+}
+.day-segment {
+  width: 5.9vw !important;
+  height: 18.5vh !important;
+  object-fit: contain;
 }
