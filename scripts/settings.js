@@ -66,7 +66,7 @@ function saveToJsonFile(folderStr, locationType){
 
     //read json file for previous saved data
     //fill template with enclosed data
-    var prevData = localStorage.getItem("userSettings");
+    var prevData = localStorage.setItem("userSettings", "");
     console.log(prevData);
     settingsTemp = JSON.parse(prevData);
     console.log(settingsTemp);
