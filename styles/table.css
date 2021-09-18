@@ -53,7 +53,10 @@
 }
 
 .this-week {
-  color: purple;
-  font-family: sans-serif;
-  font-size: 1vw;
+  color: #d191da;
+  font-size: 3vw;
+}
+.next-week{
+  color: #38b9f6;
+  font-size: 3vw;
 }
