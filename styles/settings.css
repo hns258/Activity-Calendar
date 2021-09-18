@@ -116,7 +116,8 @@ input:checked + .slider:before {
 }
 .folder-dir h3{
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
+  font-family: 'Billionary';
 }
 .paths{
   display: block;
@@ -137,6 +138,28 @@ input:checked + .slider:before {
 .desc{
   margin-top: 20px;
   font-size: 0.8rem;
+}
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  background-color: #efefef !important;
+  border: 1px solid black !important;
+  color: black !important;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
 }
 
 /* MEDIA BREAKPOINTS */
@@ -168,5 +191,16 @@ input:checked + .slider:before {
   }
   .settings-icon i {
     margin-right: 10px;
+  }
+
+  /*settings page*/
+  .title{
+    font-size: 7rem;
+  }
+  .folder-dir h3{
+    font-size: 5rem;
+  }
+  .folder-dir input{
+    font-size: 5rem;
   }
 }
