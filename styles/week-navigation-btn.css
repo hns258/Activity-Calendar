@@ -1,20 +1,40 @@
-.next-week-link {
-  font-size: 2.25vw;
+.this-week-link, .next-week-link{
+  font-size: 1rem;
   color: white;
-  background-color: #2cb8f0;
   text-decoration: none;
-  font-family: sans-serif;
-  top: 96vh;
-  position: absolute;
+  padding: 20px;
+  width: 17%;
+  height: 1%;
+  text-align: center;
 }
 
-.this-week-link {
-  font-size: 2.25vw;
-  color: white;
+.next-week-link {
+  background-color: #2cb8f0;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+}
+
+.this-week-link{
   background-color: #e844f4;
-  text-decoration: none;
-  font-family: sans-serif;
-  top: 96vh;
-  position: absolute;
-  font-weight: lighter;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
+
+.this-week-link i{
+  margin-right: 50px;
+}
+
+.next-week-link i{
+  margin-left: 50px;
+}
+
+/* Large screens ----------- */
+@media only screen  and (min-width : 1824px) {
+  .this-week-link, .next-week-link {
+    font-size: 4rem;
+    width: 12%;
+    height: 2%;
+  }
 }
