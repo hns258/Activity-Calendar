@@ -145,7 +145,7 @@ function initializeSettings(){
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log(`Success!\n${xhr.responseText}`);
                 var settings = localStorage.setItem('userSettings', xhr.responseText);
-                var settingsJSON = JSON.parse(settings);
+                var settingsJSON = JSON.parse(xhr.responseText);
                 //now load the data into the spans
                 locationDisplays[0].innerHTML = settingsJSON.image_folder_settings[0].people_folder_location;
                 locationDisplays[1].innerHTML = settingsJSON.image_folder_settings[0].transport_folder_location;
