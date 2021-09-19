@@ -54,16 +54,17 @@ function saveToJsonFile(folderStr, locationType){
     //make object
     let temp2 = localStorage.getItem('userSettings');
     console.log(`Temp test:\n${temp2}`);
+    let temp2Obj = JSON.parse(temp2);
     let settingsTemp = {
         image_folder_settings: [
           {
-            activity_folder_location: temp2.image_folder_settings[0].activity_folder_location,
-            people_folder_location: temp2.image_folder_settings[0].people_folder_location,
-            popular_folder_location: temp2.image_folder_settings[0].popular_folder_location,
-            transport_folder_location: temp2.image_folder_settings[0].transport_folder_location
+            activity_folder_location: temp2Obj.image_folder_settings[0].activity_folder_location,
+            people_folder_location: temp2Obj.image_folder_settings[0].people_folder_location,
+            popular_folder_location: temp2Obj.image_folder_settings[0].popular_folder_location,
+            transport_folder_location: temp2Obj.image_folder_settings[0].transport_folder_location
           }
         ],
-        last_modified: temp2.last_modified
+        last_modified: temp2Obj.last_modified
       };
 
     //read json file for previous saved data
