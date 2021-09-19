@@ -52,6 +52,8 @@ function selectActivityFolder(e) {
 
 function saveToJsonFile(folderStr, locationType){
     //make object
+    let temp = localStorage.getItem('userSettings');
+    console.log(`Temp test:\n${temp}`);
     let settingsTemp = {
         image_folder_settings: [
           {
