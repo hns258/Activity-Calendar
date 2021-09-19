@@ -83,6 +83,11 @@ function toggleSidemenu(){
  * > touchmove becomes drag
  * > touchend becamse dragend
  *
+ * Update September 18, 2021:
+ * 
+ * See here on how to implement drag and drop with mouse events instead of drag events:
+ * https://javascript.info/mouse-drag-and-drop
+ * 
  * - Kyle
  */
 
@@ -98,6 +103,8 @@ function initializeLibraryListeners(){
 		 * - Kyle
 		 */
 		draggables[i].setAttribute("draggable", "true");
+		//draggables[i].preventDefault(); //Disables the default interactions of the element, if any
+		//draggables[i].addEventListener("mousedown", () => { //Trying this in the meantime. - Kyle
 		draggables[i].addEventListener("dragstart", () => {
 			currentElement = i;
 			toDrag = draggables[currentElement].cloneNode(true)
@@ -106,16 +113,16 @@ function initializeLibraryListeners(){
 
 	}
 
+	/*	TODO:
+	 *	"item" goes to the coordinates (0, 0) when releasing the mouse.
+	 *	This inadvertently triggers the image deletion code (see the for statement below).
+	 *	It otherwise has accurate coordinates during the drag event.
+	 */
 	// 2. When an image from the library is held onto, and being dragged
 	for (item of draggables){
 		/*item.addEventListener("touchmove", () => {*/
+		//item.addEventListener("mousemove", () => {
 		item.addEventListener("drag", () => {
-			/* Is "touches" in x and y here the reason why drag events continue to not work?
-			 * And what would their mouse equivalents be?
-			 * - Kyle
-			 * 
-			 * Documentation for "touches": https://www.w3schools.com/jsref/event_touch_touches.asp
-			 */
 			//x = event.touches[0].clientX;
 			//y = event.touches[0].clientY;
 			x = event.clientX; 
@@ -133,6 +140,7 @@ function initializeLibraryListeners(){
 	// 3. When an image from the library has been released
 	for (item of draggables){
 		/*item.addEventListener("touchend", () => {*/
+		//item.addEventListener("mouseup", () => {
 		item.addEventListener("dragend", () => {
 			toDrag.style.display = "none" //--> idk if this is necessary
 
