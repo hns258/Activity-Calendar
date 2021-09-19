@@ -143,7 +143,7 @@ function initializeSettings(){
                 console.log('loading');
             }
             if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log("Success");
+                console.log(`Success!\n${xhr.responseText}`);
                 var settings = localStorage.setItem('userSettings', xhr.responseText);
                 var settingsJSON = JSON.parse(settings);
                 //now load the data into the spans
