@@ -135,12 +135,38 @@ function initializeSettings(){
     if(page === "settings.html"){
         console.log("i'm in the settings page");
         var locationDisplays = document.querySelectorAll(".paths");
-        var settings = localStorage.getItem("userSettings");
-        var settingsJSON = JSON.parse(settings);
-        locationDisplays[0].innerHTML = settingsJSON.image_folder_settings[0].people_folder_location;
-        locationDisplays[1].innerHTML = settingsJSON.image_folder_settings[0].transport_folder_location;
-        locationDisplays[2].innerHTML = settingsJSON.image_folder_settings[0].popular_folder_location;
-        locationDisplays[3].innerHTML = settingsJSON.image_folder_settings[0].activity_folder_location;
+        //make AJAX request to get current data
+        xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            console.log('ReadyState: ' + xhr.readyState);
+            if (xhr.readyState <= 3) {
+                console.log('loading');
+            }
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Success");
+                var settings = localStorage.setItem('userSettings', xhr.responseText);
+                var settingsJSON = JSON.parse(settings);
+                //now load the data into the spans
+                locationDisplays[0].innerHTML = settingsJSON.image_folder_settings[0].people_folder_location;
+                locationDisplays[1].innerHTML = settingsJSON.image_folder_settings[0].transport_folder_location;
+                locationDisplays[2].innerHTML = settingsJSON.image_folder_settings[0].popular_folder_location;
+                locationDisplays[3].innerHTML = settingsJSON.image_folder_settings[0].activity_folder_location;
+            }
+            if (xhr.readyState === 4 && xhr.status !== 200) {
+                console.log("Failed. Status Code: " + xhr.status)
+                var reason = {
+                    code: xhr.status,
+                    issue: 'Failed to load table data from server.'
+                    //redirect to error page
+                };
+                console.log(reason);
+                sessionStorage.setItem('failMessage', JSON.stringify(reason));
+                console.log(sessionStorage.getItem('failMessage'));
+            }
+            console.log("Processing")
+        };
+        xhr.open("GET", "https://ac-db-server2.aaknox.repl.co/settings", true);
+        xhr.send();
     }else{
         console.log("not the settings page");
     }
