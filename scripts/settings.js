@@ -6,6 +6,8 @@
  * 
 */
 
+var peopleFileList = localStorage.getItem("peoplePics");
+
 function selectPeopleFolder(e) {
     var theFiles = e.target.files;
     var relativePath = theFiles[0].webkitRelativePath;
