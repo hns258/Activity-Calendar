@@ -7,6 +7,7 @@
 
 // Initializing variables and constants
 var open = false;
+var isLeft = document.querySelector(".isLeftToggle").checked;
 var itemCount = 0
 const sideMenu = document.querySelector(".sidemenu");
 // Coordinates of the currently selected element
