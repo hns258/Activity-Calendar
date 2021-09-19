@@ -73,11 +73,23 @@ function toggleSidemenu(){
 	}
 }
 
+/* TODO: Switch touchstart, etc. events to their mouse-based equivalents
+ * A list of some DOM JS event handlers can be found here:
+ * https://www.w3schools.com/jsref/dom_obj_event.asp
+ * 
+ * For now, the plan is:
+ * > touchstart becomes dragstart
+ * > touchmove becomes drag
+ * > touchend becamse dragend
+ * 
+ * - Kyle
+ */
 // Initializes event listeners for each of the library images (so they can be dragged)
 function initializeLibraryListeners(){
 	// 1. When an image from the library is clicked
 	for(let i = 0; i < draggables.length; i++){
-		draggables[i].addEventListener("touchstart", () => {
+		/*draggables[i].addEventListener("touchstart", () => {*/
+		draggables[i].addEventListener("dragstart", () => {
 			currentElement = i;
 			toDrag = draggables[currentElement].cloneNode(true)
 			toDrag.classList.add("copy");
@@ -87,7 +99,8 @@ function initializeLibraryListeners(){
 
 	// 2. When an image from the library is held onto, and being dragged
 	for (item of draggables){
-		item.addEventListener("touchmove", () => {
+		/*item.addEventListener("touchmove", () => {*/
+		item.addEventListener("drag", () => {
 			x = event.touches[0].clientX;
 			y = event.touches[0].clientY;
 			document.body.append(toDrag);
@@ -101,7 +114,8 @@ function initializeLibraryListeners(){
 
 	// 3. When an image from the library has been released
 	for (item of draggables){
-		item.addEventListener("touchend", () => {
+		/*item.addEventListener("touchend", () => {*/
+		item.addEventListener("dragend", () => {
 			// toDrag.style.display = "none" --> idk if this is necessary
 
 			// Check if element was dragged to top of screen, with intent of being deleted
@@ -130,12 +144,14 @@ function updateCopies(){
 	var latestImage = copies[copies.length - 1]
 
 	// 1. When an image on the calendar is clicked
-	copies[copies.length - 1].addEventListener("touchstart", () => {
+	/*copies[copies.length - 1].addEventListener("touchstart", () => {*/
+	copies[copies.length - 1].addEventListener("dragstart", () => {
 		// Keep this event listener for now (not sure if there would be an error without it)
 	})
 
 	// 2. When an image on the calendar is held onto, and being dragged
-	copies[copies.length - 1].addEventListener("touchmove", () => {
+	/*copies[copies.length - 1].addEventListener("touchmove", () => {*/
+	copies[copies.length - 1].addEventListener("drag", () => {
 		x = event.touches[0].clientX;
 		y = event.touches[0].clientY;
 		document.body.append(latestImage);
@@ -146,7 +162,8 @@ function updateCopies(){
 	})
 
 	// 3. When an image on the calendar has been released
-	copies[copies.length - 1].addEventListener("touchend", () => {
+	/*copies[copies.length - 1].addEventListener("touchend", () => {*/
+	copies[copies.length - 1].addEventListener("dragend", () => {
 		latestImage.style.display = "none"
 		if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")){
 			latestImage.remove();

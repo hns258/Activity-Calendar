@@ -74,11 +74,43 @@ function toggleSidemenu(){
 	}
 }
 
+/* TODO: Switch touchstart, etc. events to their mouse-based equivalents
+ * A list of some DOM JS event handlers can be found here:
+ * https://www.w3schools.com/jsref/dom_obj_event.asp
+ *
+ * For now, the plan is:
+ * > touchstart becomes dragstart
+ * > touchmove becomes drag
+ * > touchend becamse dragend
+ *
+ * Update September 18, 2021:
+ * 
+ * See here on how to implement drag and drop with mouse events instead of drag events:
+ * https://javascript.info/mouse-drag-and-drop
+ * 
+ * Update September 19, 2021:
+ * 
+ * The mouse event handlers need to be separated into their own functions,
+ * possibly away from the for loops that added the event handlers in the first place.
+ * 
+ * - Kyle
+ */
+
 // Initializes event listeners for each of the library images (so they can be dragged)
 function initializeLibraryListeners(){
 	// 1. When an image from the library is clicked
 	for(let i = 0; i < draggables.length; i++){
-		draggables[i].addEventListener("touchstart", () => {
+		/*draggables[i].addEventListener("touchstart", () => {*/
+		/* TODO:
+		 * Add draggables="true" to each <img> during this loop
+		 * draggables[i].setAttribute("draggable","true"); maybe?
+		 * Do the same for script2.js later down the line
+		 * - Kyle
+		 */
+		draggables[i].setAttribute("draggable", "true");
+		//draggables[i].preventDefault(); //Disables the default interactions of the element, if any
+		//draggables[i].addEventListener("dragstart", () => {
+		draggables[i].addEventListener("mousedown", () => { //Trying this in the meantime. - Kyle
 			currentElement = i;
 			toDrag = draggables[currentElement].cloneNode(true)
 			toDrag.classList.add("copy");
@@ -86,11 +118,21 @@ function initializeLibraryListeners(){
 
 	}
 
+	/*	TODO:
+	 *	"item" goes to the coordinates (0, 0) when releasing the mouse.
+	 *	This inadvertently triggers the image deletion code (see the for statement below).
+	 *	It otherwise has accurate coordinates during the drag event.
+	 */
 	// 2. When an image from the library is held onto, and being dragged
 	for (item of draggables){
-		item.addEventListener("touchmove", () => {
-			x = event.touches[0].clientX;
-			y = event.touches[0].clientY;
+		/*item.addEventListener("touchmove", () => {*/
+		/*item.addEventListener("drag", () => {*/
+		item.addEventListener("mousemove", () => {
+			//x = event.touches[0].clientX;
+			//y = event.touches[0].clientY;
+			x = event.clientX; 
+			y = event.clientY;
+			console.log("image currently dragged to (x, y): (" + x + ", " + y + ")");
 			document.body.append(toDrag);
 			toDrag.style.position = "absolute";
 			toDrag.style.width = "250px";
@@ -102,15 +144,23 @@ function initializeLibraryListeners(){
 
 	// 3. When an image from the library has been released
 	for (item of draggables){
-		item.addEventListener("touchend", () => {
-			// toDrag.style.display = "none" --> idk if this is necessary
+		/*item.addEventListener("touchend", () => {*/
+		/*item.addEventListener("dragend", () => {*/
+		item.addEventListener("mouseup", () => {
+			toDrag.style.display = "none" //--> idk if this is necessary
 
 			// Check if element was dragged to top of screen, with intent of being deleted
 			// Otherwise, append the image to wherever the user released
-			if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")){
+			console.log("image ended drag at (x, y): (" + x + ", " + y + ")");
+			console.log("toDrag.style.left: " + toDrag.style.left);
+			console.log("toDrag.style.top: " + toDrag.style.top);
+			console.log("document.elementFromPoint(x,y) is: " + document.elementFromPoint(x, y));
+			if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")) {
+				console.log("item dragend if block");
 				toDrag.remove();
 				localStorage.setItem("latest version", document.body.innerHTML);
 			} else {
+				console.log("item dragend else block");
 				itemCount += 1;
 				toDrag.style.display = "block"
 				// Add the dragged in image to array of images on the calendar (i.e. the 'copies' array)
@@ -131,14 +181,19 @@ function updateCopies(){
 	var latestImage = copies[copies.length - 1]
 
 	// 1. When an image on the calendar is clicked
-	copies[copies.length - 1].addEventListener("touchstart", () => {
+	/*copies[copies.length - 1].addEventListener("touchstart", () => {*/
+	copies[copies.length - 1].setAttribute("draggable", "true");
+	copies[copies.length - 1].addEventListener("dragstart", () => {
 		// Keep this event listener for now (not sure if there would be an error without it)
 	})
 
 	// 2. When an image on the calendar is held onto, and being dragged
-	copies[copies.length - 1].addEventListener("touchmove", () => {
-		x = event.touches[0].clientX;
-		y = event.touches[0].clientY;
+	/*copies[copies.length - 1].addEventListener("touchmove", () => {*/
+	copies[copies.length - 1].addEventListener("drag", () => {
+		//x = event.touches[0].clientX;
+		//y = event.touches[0].clientY;
+		x = event.clientX;
+		y = event.clientY;
 		document.body.append(latestImage);
 		latestImage.style.position = "absolute";
 		latestImage.style.width = "250px";
@@ -147,7 +202,8 @@ function updateCopies(){
 	})
 
 	// 3. When an image on the calendar has been released
-	copies[copies.length - 1].addEventListener("touchend", () => {
+	/*copies[copies.length - 1].addEventListener("touchend", () => {*/
+	copies[copies.length - 1].addEventListener("dragend", () => {
 		latestImage.style.display = "none"
 		if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")){
 			latestImage.remove();
