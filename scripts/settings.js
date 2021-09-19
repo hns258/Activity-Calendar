@@ -117,7 +117,7 @@ function save(temp){
         xhttp = new XMLHttpRequest();
         xhttp.open("POST", "https://ac-db-server2.aaknox.repl.co/save", true);
         xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(data);
+        xhttp.send(JSON.stringify(data));
         //all done!
         console.log("done");
     }, 1000);
