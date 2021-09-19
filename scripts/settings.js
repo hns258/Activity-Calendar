@@ -77,25 +77,25 @@ function saveToJsonFile(folderStr, locationType){
             case "PEOPLE":
                 console.log("editing people folder location...");
                 settingsTemp.image_folder_settings[0].people_folder_location = folderStr;
-                console.log(`temp being saved:\n ${settingsTemp}`)
+                console.log(`temp being saved:\n ${JSON.stringify(settingsTemp)}`)
                 save(settingsTemp);
                 break;
             case "TRANSPORT":
                 console.log("editing transport folder location...");
                 settingsTemp.image_folder_settings[0].transport_folder_location = folderStr;
-                console.log(`temp being saved:\n ${settingsTemp}`)
+                console.log(`temp being saved:\n ${JSON.stringify(settingsTemp)}`)
                 save(settingsTemp);
                 break;
             case "POPULAR":
                 console.log("editing popular folder location...");
                 settingsTemp.image_folder_settings[0].popular_folder_location = folderStr;
-                console.log(`temp being saved:\n ${settingsTemp}`)
+                console.log(`temp being saved:\n ${JSON.stringify(settingsTemp)}`)
                 save(settingsTemp);
                 break;
             case "ACTIVITY":
                 console.log("editing activity folder location...");
                 settingsTemp.image_folder_settings[0].activity_folder_location = folderStr;
-                console.log(`temp being saved:\n ${settingsTemp}`)
+                console.log(`temp being saved:\n ${JSON.stringify(settingsTemp)}`)
                 save(settingsTemp);
                 break;
             default:
