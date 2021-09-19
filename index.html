@@ -9,25 +9,21 @@
 </head>
 
 <body>
-	<div class="p1">
+	<div class="p1" id="p1">
+		<div class="trash-box-container deletion-box" id="trash-box-container" style="display: none;">
+            <div class="trash-box">DELETE <i class="fas fa-trash-alt"></i></div>
+        </div>
 		<table class="main-table">
-			<tr class="deletion-box">
+			<tr class="deletion-box" onmouseenter="initializeDeletionBox()" onmouseleave="removeDeletionBox()">
 				<!--Change the 'th' class selectors to their proper days-->
-				<th class="this-week deletion-box">This Week</th>
-				<th class="monday-col deletion-box"><img src="week_images/monday.png" alt="Monday" class="deletion-box">
-				</th>
-				<th class="tuesday-col deletion-box"><img src="week_images/tuesday.png" alt="Tueday"
-						class="deletion-box"></th>
-				<th class="monday-col deletion-box"><img src="week_images/wednesday.png" alt="Wednesday"
-						class="deletion-box"></th>
-				<th class="tuesday-col deletion-box"><img src="week_images/thursday.png" alt="Thursday"
-						class="deletion-box"></th>
-				<th class="monday-col deletion-box"><img src="week_images/friday.png" alt="Friday" class="deletion-box">
-				</th>
-				<th class="tuesday-col deletion-box"><img src="week_images/saturday.png" alt="Saturday"
-						class="deletion-box"></th>
-				<th class="monday-col deletion-box"><img src="week_images/sunday.png" alt="Sunday" class="deletion-box">
-				</th>
+				<th class="this-week ">This Week</th>
+				<th class="monday-col "><img src="week_images/monday.png" class="day-segment" alt="Monday"></th>
+				<th class="tuesday-col "><img src="week_images/tuesday.png" class="day-segment" alt="Tueday"></th>
+				<th class="monday-col "><img src="week_images/wednesday.png" class="day-segment" alt="Wednesday"></th>
+				<th class="tuesday-col "><img src="week_images/thursday.png" class="day-segment" alt="Thursday"></th>
+				<th class="monday-col "><img src="week_images/friday.png" class="day-segment" alt="Friday"></th>
+				<th class="tuesday-col "><img src="week_images/saturday.png" class="day-segment" alt="Saturday"></th>
+				<th class="monday-col "><img src="week_images/sunday.png" class="day-segment" alt="Sunday"></th>
 			</tr>
 			<tr>
 				<th class="time-of-day"><img src="time_of_day/morning.png" alt="Morning"></th>
@@ -58,7 +54,7 @@
 				<td class="friday-col"></td>
 				<td class="saturday-col"></td>
 				<td class="sunday-col">
-					<a class="next-week" href="next_week.html">Next Week</a>
+					<a class="next-week-link" href="next_week.html">Next Week<i class="fas fa-arrow-right"></i></a>
 				</td>
 			</tr>
 		</table>
@@ -71,23 +67,18 @@
 			<tr class="settings-area">
 				<td>
 					<label class="switch">
-						<input type="checkbox" class="isLeftToggle" checked>
+						<input type="checkbox" class="isLeftToggle">
 						<span class="slider round" onclick="switchToLeft()"></span>
 					</label>
 				</td>
 				<td colspan="2"><span class="switch-title">Switch to left</span></td>
-				<td class="settings-icon"><i class="fas fa-cog"></i></td>
+				<td class="settings-icon"><i class="fas fa-cog" onclick="goToSettings()"></i></td>
 			</tr>
 			<!--"People" category-->
 			<!--<tr>
 				<th colspan="4">People</th>
 			</tr>-->
-			<tr>
-				<td><img src="people/maureen.png" alt="image1"></td>
-				<td><img src="people/stevie.png" alt="image2"></td>
-				<td><img src="people/jack.png" alt="image3"></td>
-				<td><img src="people/andrew.png" alt="image4"></td>
-			</tr>
+			<tr id="people-imgs-row"></tr>
 			<!--"Transportation" category-->
 			<!--<tr>
 				<th colspan="4">Transportation</th>
@@ -153,6 +144,8 @@
 
 	</div>
 	<script type="text/javascript" src="./scripts/script.js"></script>
-	<script type="text/javascript" src="./scripts/settings.js"></script>
+	<script type="text/javascript" src="./scripts/toggle.js"></script>
+	<script type="text/javascript" src="./scripts/deletion-box.js"></script>
+	<script type="text/javascript" src="./scripts/alphabetizer.js"></script>
 </body>
 </html>

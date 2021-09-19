@@ -7,6 +7,7 @@
 
 // Initializing variables and constants
 var open = false;
+var isLeft = document.querySelector(".isLeftToggle").checked;
 var itemCount = 0
 const sideMenu = document.querySelector(".sidemenu");
 // Coordinates of the currently selected element
@@ -44,16 +45,32 @@ function setUpDate(){
 }
 
 // Slide-in library menu functionality initialization
-function initializeSideMenu(){
-	sideMenu.addEventListener("click", () => {	
+function toggleSidemenu(){
+	console.log("sidebar has been clicked");
+	console.log(`open set to: ${open} and isLeft set to: ${isLeft}`);
+	console.log(sideMenu);	
+	
+	if(!isLeft){
 		if (open){
+			console.log("closing sidebar to right");
 			sideMenu.style.right = "-21vw"
 			open = false;
 		} else {
-			sideMenu.style.right = "0px"
+			console.log("opening sidebar to right");
+			sideMenu.style.right= "0px"
 			open = true;
 		}
-	})
+	}else {
+		if(open){
+			console.log("closing sidebar to left");
+			sideMenu.style.left = "-21vw"
+			open = false;
+		} else {
+			console.log("opening sidebar to left");
+			sideMenu.style.left = "0px"
+			open = true;
+		}
+	}
 }
 
 /* TODO: Switch touchstart, etc. events to their mouse-based equivalents
@@ -163,7 +180,7 @@ function updateCopies(){
 // Reloads latest version 2
 function reloadPreviousCalendar(){
 	// Get latest version 2 of the body of the calendar app
-	var latestBody = localStorage.getItem("latest version 2")
+	var latestBody = localStorage.getItem("latest version 2") || "";
 	// After "</script>" is when the newly added images appear, which is what we want to load when opening the app (these images are stored in index 1 of the array)
 	x = latestBody.split("</script>")
 	// Convert the string containing the images we want to load into actuall html (now stored in the body of some sample HTML)
@@ -200,7 +217,6 @@ function moveIntoNextWeek(){
 
 // Invoke all methods needed to boot up app
 setUpDate();
-initializeSideMenu();
 initializeLibraryListeners();
 reloadPreviousCalendar();
 moveIntoNextWeek();
