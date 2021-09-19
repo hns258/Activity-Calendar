@@ -53,45 +53,49 @@ function selectActivityFolder(e) {
 function saveToJsonFile(folderStr, locationType){
     //make object
     let settingsTemp = {
-        imageFolderSettings: [
+        image_folder_settings: [
           {
-            peopleLocation: "",
-            transportLocation: "",
-            popularLocation: "",
-            activityLocation: ""
+            activity_folder_location: "",
+            people_folder_location: "",
+            popular_folder_location: "",
+            transport_folder_location: ""
           }
         ],
-        lastModified: ""
-    };
+        last_modified: ""
+      };
 
     //read json file for previous saved data
     //fill template with enclosed data
     setTimeout(()=>{
         //get current datetime
         var currentdate = new Date();
-        settingsTemp.lastModified = `${currentdate.getDay()}/${currentdate.getMonth()}/${currentdate.getFullYear()} `+
+        settingsTemp.last_modified = `${currentdate.getMonth()}/${currentdate.getDay()}/${currentdate.getFullYear()} `+
         `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
 
         //based on location type, modify template to accept new changes
         switch (locationType) {
             case "PEOPLE":
                 console.log("editing people folder location...");
-                settingsTemp.imageFolderSettings[0].peopleLocation = folderStr;
+                settingsTemp.image_folder_settings[0].people_folder_location = folderStr;
+                console.log(`temp being saved:\n ${settingsTemp}`)
                 save(settingsTemp);
                 break;
             case "TRANSPORT":
                 console.log("editing transport folder location...");
-                settingsTemp.imageFolderSettings[0].transportLocation = folderStr;
+                settingsTemp.image_folder_settings[0].transport_folder_location = folderStr;
+                console.log(`temp being saved:\n ${settingsTemp}`)
                 save(settingsTemp);
                 break;
             case "POPULAR":
                 console.log("editing popular folder location...");
-                settingsTemp.imageFolderSettings[0].popularLocation = folderStr;
+                settingsTemp.image_folder_settings[0].popular_folder_location = folderStr;
+                console.log(`temp being saved:\n ${settingsTemp}`)
                 save(settingsTemp);
                 break;
             case "ACTIVITY":
                 console.log("editing activity folder location...");
-                settingsTemp.imageFolderSettings[0].activityLocation = folderStr;
+                settingsTemp.image_folder_settings[0].activity_folder_location = folderStr;
+                console.log(`temp being saved:\n ${settingsTemp}`)
                 save(settingsTemp);
                 break;
             default:
@@ -112,7 +116,7 @@ function save(temp){
         //now that I have JSON data --> make POST request to server
         xhttp = new XMLHttpRequest();
         xhttp.open("POST", "https://ac-db-server2.aaknox.repl.co/save", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(data);
         //all done!
         console.log("done");
@@ -133,12 +137,10 @@ function initializeSettings(){
         var locationDisplays = document.querySelectorAll(".paths");
         var settings = localStorage.getItem("userSettings");
         var settingsJSON = JSON.parse(settings);
-        console.log(settingsJSON.imageFolderSettings[0].peopleLocation);
-
-        locationDisplays[0].innerHTML = settingsJSON.imageFolderSettings[0].peopleLocation;
-        locationDisplays[1].innerHTML = settingsJSON.imageFolderSettings[0].transportLocation;
-        locationDisplays[2].innerHTML = settingsJSON.imageFolderSettings[0].popularLocation;
-        locationDisplays[3].innerHTML = settingsJSON.imageFolderSettings[0].activityLocation;
+        locationDisplays[0].innerHTML = settingsJSON.image_folder_settings[0].people_folder_location;
+        locationDisplays[1].innerHTML = settingsJSON.image_folder_settings[0].transport_folder_location;
+        locationDisplays[2].innerHTML = settingsJSON.image_folder_settings[0].popular_folder_location;
+        locationDisplays[3].innerHTML = settingsJSON.image_folder_settings[0].activity_folder_location;
     }else{
         console.log("not the settings page");
     }
