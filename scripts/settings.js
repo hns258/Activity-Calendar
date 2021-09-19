@@ -57,13 +57,13 @@ function saveToJsonFile(folderStr, locationType){
     let settingsTemp = {
         image_folder_settings: [
           {
-            activity_folder_location: "",
-            people_folder_location: "",
-            popular_folder_location: "",
-            transport_folder_location: ""
+            activity_folder_location: temp.image_folder_settings[0].activity_folder_location,
+            people_folder_location: temp.image_folder_settings[0].people_folder_location,
+            popular_folder_location: temp.image_folder_settings[0].popular_folder_location,
+            transport_folder_location: temp.image_folder_settings[0].transport_folder_location
           }
         ],
-        last_modified: ""
+        last_modified: temp.last_modified
       };
 
     //read json file for previous saved data
