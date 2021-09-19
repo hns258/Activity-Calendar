@@ -110,16 +110,10 @@ function save(temp){
         var data = JSON.parse(localStorage.getItem("userSettings"));
         console.log(data);
         //now that I have JSON data --> make POST request to server
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function()
-        {
-            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            {
-                console.log("successful! data has been sent to server.")
-            }
-        }
-        xmlHttp.open("post", "https://ac-db-server2.aaknox.repl.co/save"); 
-        xmlHttp.send(data); 
+        xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "https://ac-db-server2.aaknox.repl.co/save", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(data);
         //all done!
         console.log("done");
     }, 1000);
