@@ -136,10 +136,14 @@ function abcActivityPics(){
 }
 
 //call all alphabetizer methods at startup
+console.log("1");
 abcPeoplePics();
 setTimeout(()=>{
+    console.log("2");
     abcTransportPics();
     setTimeout(()=>{
+        console.log("3");
         abcActivityPics()
-    }, 1000);
-}, 1000);
+    }, 2000);
+}, 5000);
+
