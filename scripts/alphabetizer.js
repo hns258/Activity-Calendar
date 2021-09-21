@@ -112,8 +112,14 @@ function abcActivityPics(){
                 var tableDiv = document.createElement("td");
                 var img = document.createElement("img");
                 img.src = item;
+
                 tableDiv.appendChild(img);
                 activityTableRow.appendChild(tableDiv);
+                //check if it needs to start a new line
+                if(index % 4 === 0){
+                    var line = document.createElement("br");
+                    tableDiv.appendChild(line);
+                }
             });
             console.log(activityTableRow);
             console.log("finished!");
