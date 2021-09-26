@@ -18,12 +18,15 @@ var y = 0
 var currentElement = 0;
 // Element being dragged currently OR last element that was dragged
 var toDrag = null
-// Array of elements that have already been dragged onto the calendar from the libraray
+// Array of elements that have already been dragged onto the calendar from the library
 var copies = [];
 // Cells of the calendar table
 const containers = document.querySelectorAll("div.p1 table tr td")
 // Images that can be dragged from the library
 const draggables = document.querySelectorAll("div.sidemenu table tr td img")
+//test
+let imagesInLibrary = document.getElementsByClassName("img-lib");
+let imageArray = [];
 
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
@@ -96,125 +99,55 @@ function toggleSidemenu(){
  * - Kyle
  */
 
-// Initializes event listeners for each of the library images (so they can be dragged)
-function initializeLibraryListeners(){
-	// 1. When an image from the library is clicked
-	for(let i = 0; i < draggables.length; i++){
-		/*draggables[i].addEventListener("touchstart", () => {*/
-		/* TODO:
-		 * Add draggables="true" to each <img> during this loop
-		 * draggables[i].setAttribute("draggable","true"); maybe?
-		 * Do the same for script2.js later down the line
-		 * - Kyle
-		 */
-		draggables[i].setAttribute("draggable", "true");
-		//draggables[i].preventDefault(); //Disables the default interactions of the element, if any
-		//draggables[i].addEventListener("dragstart", () => {
-		draggables[i].addEventListener("mousedown", () => { //Trying this in the meantime. - Kyle
-			currentElement = i;
-			toDrag = draggables[currentElement].cloneNode(true)
-			toDrag.classList.add("copy");
-		})
+function clickDrag(){
+	console.log('click and drag event triggered!!');
+	Array.prototype.forEach.call(imagesInLibrary, image => {
+		image.onmousedown = (event)=>{
+			//clone itself and append clone in its original spot
+			const clone = image.cloneNode(true);
+			let parent = image.parentNode;
+			parent.append(clone);
 
-	}
+			//add clone to imageLibrary array
+			imageArray = Array.from(imagesInLibrary);
+			//remove image and add clone
+			imageArray = imageArray.filter(element => element !== image);
+			imageArray.push(clone);
 
-	/*	TODO:
-	 *	"item" goes to the coordinates (0, 0) when releasing the mouse.
-	 *	This inadvertently triggers the image deletion code (see the for statement below).
-	 *	It otherwise has accurate coordinates during the drag event.
-	 */
-	// 2. When an image from the library is held onto, and being dragged
-	for (item of draggables){
-		/*item.addEventListener("touchmove", () => {*/
-		/*item.addEventListener("drag", () => {*/
-		item.addEventListener("mousemove", () => {
-			//x = event.touches[0].clientX;
-			//y = event.touches[0].clientY;
-			x = event.clientX; 
-			y = event.clientY;
-			console.log("image currently dragged to (x, y): (" + x + ", " + y + ")");
-			document.body.append(toDrag);
-			toDrag.style.position = "absolute";
-			toDrag.style.width = "250px";
-			toDrag.style.left = x+'px';
-			toDrag.style.top = y+'px';
+			image.style.position = 'absolute';
+			image.style.zIndex = 1000;
+			image.style.width = "4.9vw";
+			image.style.width = "7.9vh";
+			image.style.objectFit = 'scale-down';
 
-		})
-	}
+			document.body.append(image);
 
-	// 3. When an image from the library has been released
-	for (item of draggables){
-		/*item.addEventListener("touchend", () => {*/
-		/*item.addEventListener("dragend", () => {*/
-		item.addEventListener("mouseup", () => {
-			toDrag.style.display = "none" //--> idk if this is necessary
-
-			// Check if element was dragged to top of screen, with intent of being deleted
-			// Otherwise, append the image to wherever the user released
-			console.log("image ended drag at (x, y): (" + x + ", " + y + ")");
-			console.log("toDrag.style.left: " + toDrag.style.left);
-			console.log("toDrag.style.top: " + toDrag.style.top);
-			console.log("document.elementFromPoint(x,y) is: " + document.elementFromPoint(x, y));
-			if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")) {
-				console.log("item dragend if block");
-				toDrag.remove();
-				localStorage.setItem("latest version", document.body.innerHTML);
-			} else {
-				console.log("item dragend else block");
-				itemCount += 1;
-				toDrag.style.display = "block"
-				// Add the dragged in image to array of images on the calendar (i.e. the 'copies' array)
-				copies.push(toDrag);
-				// Update the copies array
-				updateCopies();
-				// Store the latest version of the calendar in local memory
-				localStorage.setItem("latest version", document.body.innerHTML);
+			function moveAt(pageX, pageY) {
+				image.style.left = pageX - image.offsetWidth / 2 + 'px';
+				image.style.top = pageY - image.offsetHeight / 2 + 'px';
 			}
-		})
-	}
-}
 
+			// move our absolutely positioned image under the pointer
+			moveAt(event.pageX, event.pageY);
+		
+			function onMouseMove(event) {
+				moveAt(event.pageX, event.pageY);
+			}
 
-// Adds event listeners to the images on the calendar, in the same way we added event listeners to each image in the library
-function updateCopies(){
-	// Get the latest image added to the calendar (so we can initialize event listeners for it)
-	var latestImage = copies[copies.length - 1]
-
-	// 1. When an image on the calendar is clicked
-	/*copies[copies.length - 1].addEventListener("touchstart", () => {*/
-	copies[copies.length - 1].setAttribute("draggable", "true");
-	copies[copies.length - 1].addEventListener("dragstart", () => {
-		// Keep this event listener for now (not sure if there would be an error without it)
-	})
-
-	// 2. When an image on the calendar is held onto, and being dragged
-	/*copies[copies.length - 1].addEventListener("touchmove", () => {*/
-	copies[copies.length - 1].addEventListener("drag", () => {
-		//x = event.touches[0].clientX;
-		//y = event.touches[0].clientY;
-		x = event.clientX;
-		y = event.clientY;
-		document.body.append(latestImage);
-		latestImage.style.position = "absolute";
-		latestImage.style.width = "250px";
-		latestImage.style.left = x+'px';
-		latestImage.style.top = y+'px';
-	})
-
-	// 3. When an image on the calendar has been released
-	/*copies[copies.length - 1].addEventListener("touchend", () => {*/
-	copies[copies.length - 1].addEventListener("dragend", () => {
-		latestImage.style.display = "none"
-		if ((y <= 0) || document.elementFromPoint(x, y).classList.contains("deletion-box")){
-			latestImage.remove();
-			index = copies.indexOf(latestImage)
-			copies.splice(index, 1);
-			localStorage.setItem("latest version", document.body.innerHTML);
-		} else {
-			latestImage.style.display = "block"
-			localStorage.setItem("latest version", document.body.innerHTML);
+			// (2) move the image on mousemove
+			document.addEventListener('mousemove', onMouseMove);
+		
+			// (3) drop the image, remove unneeded handlers
+			image.onmouseup = function() {
+				document.removeEventListener('mousemove', onMouseMove);
+				image.onmouseup = null;
+			};
+		
+			image.ondragstart = function() {
+				return false;
+			};
 		}
-	})
+	});
 }
 
 // Reloads latest version
@@ -253,9 +186,14 @@ function moveIntoNextWeek(){
 
 // Invoke all methods needed to boot up app
 setUpDate();
-initializeLibraryListeners();
 reloadPreviousCalendar();
 moveIntoNextWeek();
+//check for new clones every 3 secs
+setInterval(()=>{
+	clickDrag();
+	console.log('image check complete')
+}, 3000);
+
 
 
 
