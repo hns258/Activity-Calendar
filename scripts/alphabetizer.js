@@ -23,7 +23,6 @@ function abcPeoplePics(){
                 img.src = item;
                 img.classList.add("img-lib");
                 img.setAttribute("onmousedown", "clickDrag()");
-			    console.log(img.getAttribute("onmousedown"));
                 tableDiv.appendChild(img);
                 peopleTableRow.appendChild(tableDiv);
             });
@@ -71,6 +70,7 @@ function abcTransportPics(){
                 var img = document.createElement("img");
                 img.src = item;
                 img.classList.add("img-lib");
+                img.setAttribute("onmousedown", "clickDrag()");
                 tableDiv.appendChild(img);
                 transportTableRow.appendChild(tableDiv);
             });
@@ -117,6 +117,7 @@ function abcActivityPics(){
                 var img = document.createElement("img");
                 img.src = item;
                 img.classList.add("img-lib");
+                img.setAttribute("onmousedown", "clickDrag()");
                 tableDiv.appendChild(img);
                 activityTableRow.appendChild(tableDiv);
             });
