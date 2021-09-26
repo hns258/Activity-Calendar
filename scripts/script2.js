@@ -89,6 +89,7 @@ function toggleSidemenu(){
  * - Kyle
  */
 function clickDrag(){
+	console.log('click and drag event triggered!!');
 	Array.prototype.forEach.call(imagesInLibrary, image => {
 		image.onmousedown = (event)=>{
 			//clone itself and append clone in its original spot
