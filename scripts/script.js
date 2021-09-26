@@ -119,8 +119,6 @@ function clickDrag(){
 			image.style.width = "4.9vw";
 			image.style.width = "7.9vh";
 			image.style.objectFit = 'scale-down';
-			image.setAttribute("onmousedown", "clickDrag()");
-			console.log(image.getAttribute("onmousedown"));
 			document.body.append(image);
 
 			function moveAt(pageX, pageY) {

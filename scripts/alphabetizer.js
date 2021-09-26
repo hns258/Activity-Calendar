@@ -22,6 +22,8 @@ function abcPeoplePics(){
                 var img = document.createElement("img");
                 img.src = item;
                 img.classList.add("img-lib");
+                img.setAttribute("onmousedown", "clickDrag()");
+			    console.log(img.getAttribute("onmousedown"));
                 tableDiv.appendChild(img);
                 peopleTableRow.appendChild(tableDiv);
             });
