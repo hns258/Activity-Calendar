@@ -102,7 +102,7 @@ function toggleSidemenu(){
 function clickDrag(){
 	console.log('click and drag event triggered!!');
 	Array.prototype.forEach.call(imagesInLibrary, image => {
-		image.onpointerdown = (event)=>{
+		image.onmousedown = (event)=>{
 			//clone itself and append clone in its original spot
 			const clone = image.cloneNode(true);
 			let parent = image.parentNode;
@@ -135,12 +135,12 @@ function clickDrag(){
 			}
 
 			// (2) move the image on mousemove
-			document.addEventListener('pointermove', onMouseMove);
+			document.addEventListener('mousemove', onMouseMove);
 		
 			// (3) drop the image, remove unneeded handlers
 			image.onmouseup = function() {
-				document.removeEventListener('pointermove', onMouseMove);
-				image.onpointerup = null;
+				document.removeEventListener('mousemove', onMouseMove);
+				image.onmouseup = null;
 			};
 		
 			image.ondragstart = function() {
@@ -191,6 +191,7 @@ moveIntoNextWeek();
 //check for new clones every 3 secs
 setInterval(()=>{
 	clickDrag();
+	console.log('image check complete')
 }, 3000);
 
 
