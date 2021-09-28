@@ -14,8 +14,16 @@
   height: 10vh;
   padding: none;
   margin: 0;
-  width: 15vh;
+  /*width: 15vh;*/
+  /*width: 17vw;*/
 }
+
+/*WIP column changes: thinner time of day column*/
+.main-table tr th.time-of-day{
+    width: 9.2vw;
+    column-width: 1vw;
+}
+
 .main-table tr td {
   /*padding: 250px;*/
   height: 27vh;
@@ -46,7 +54,7 @@
 }
 
 .main-table th img {
-  width: 12.5vw;
+  width: 9vw; /*WIP column changes: smaller time of day images - Kyle*/
 }
 .time-of-day img {
   position: relative;
@@ -55,7 +63,7 @@
 
 .this-week {
   color: #d191da;
-  font-size: 3vw;
+  font-size: 2vw; /*WIP column changes: smaller "This Week" title text*/
 }
 .next-week{
   color: #38b9f6;

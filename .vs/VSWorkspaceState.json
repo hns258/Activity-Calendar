@@ -1,8 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\scripts"
+    "\\activities",
+    "\\desktop-application",
+    "\\locations",
+    "\\misc",
+    "\\people",
+    "\\styles",
+    "\\time_of_day",
+    "\\transportation",
+    "\\week_images"
   ],
-  "SelectedNode": "\\scripts\\script.js",
+  "SelectedNode": "\\index.html",
   "PreviewInSolutionExplorer": false
 }
