@@ -14,7 +14,8 @@
   height: 10vh;
   padding: none;
   margin: 0;
-  width: 15vh;
+  /*width: 15vh;*/
+  width: 17vw;
 }
 .main-table tr td {
   /*padding: 250px;*/
