@@ -80,9 +80,10 @@ input:checked + .slider:before {
     opacity: 0.7;
 }
 /* left toggle settings */
-.menuOnLeft{
+.menuOnLeft {
     position: absolute;
-    left: -21vw;
+    /*left: -21vw; Larger sidebar changes: Offset more to the left for new size - Kyle*/
+    left: -20.5vw; /*Reverted for now*/
     direction: rtl;
     background-color: #fbd988;
     width: 22vw;
@@ -91,12 +92,13 @@ input:checked + .slider:before {
     overflow: scroll;
     height: 100vh;
 }
-.barOnLeft{
-  padding: 0;
-  margin: 0;
-  float: right;
-  display: inline;
-  height: 100vh;
+.barOnLeft {
+    padding: 0;
+    margin: 0;
+    float: right;
+    display: inline;
+    height: 100vh;
+    /*width: 2vw;*/ /*Larger sidebar changes: Sidebar toggle is slightly wider - Kyle*/
 }
 
 /* settings page styles */
