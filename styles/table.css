@@ -67,7 +67,7 @@
 }
 .next-week{
   color: #38b9f6;
-  font-size: 3vw;
+  font-size: 2vw; /*WIP column changes: smaller "Next Week" title text*/
 }
 .day-segment {
   /*width: 5.9vw !important;*/
