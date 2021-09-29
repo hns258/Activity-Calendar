@@ -82,8 +82,8 @@ input:checked + .slider:before {
 /* left toggle settings */
 .menuOnLeft {
     position: absolute;
-    /*left: -21vw; Larger sidebar changes: Offset more to the left for new size - Kyle*/
-    left: -20.5vw; /*Reverted for now*/
+    left: -21vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+    /*left: -20.5vw;*/ /*Old size*/
     direction: rtl;
     background-color: #fbd988;
     width: 22vw;
@@ -98,7 +98,7 @@ input:checked + .slider:before {
     float: right;
     display: inline;
     height: 100vh;
-    /*width: 2vw;*/ /*Larger sidebar changes: Sidebar toggle is slightly wider - Kyle*/
+    width: 2vw; /*Larger sidebar changes: Sidebar toggle is slightly wider - Kyle*/
 }
 
 /* settings page styles */
