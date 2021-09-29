@@ -70,7 +70,8 @@
   font-size: 3vw;
 }
 .day-segment {
-  width: 5.9vw !important;
+  /*width: 5.9vw !important;*/
+  width: 7.8vw !important; /*WIP column changes: Slightly larger day of the week images*/
   height: 18.5vh !important;
   object-fit: contain;
 }
