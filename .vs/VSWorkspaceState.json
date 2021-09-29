@@ -1,16 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\activities",
     "\\desktop-application",
-    "\\locations",
-    "\\misc",
-    "\\people",
-    "\\styles",
-    "\\time_of_day",
-    "\\transportation",
-    "\\week_images"
+    "\\styles"
   ],
-  "SelectedNode": "\\index.html",
+  "SelectedNode": "\\styles\\settings.css",
   "PreviewInSolutionExplorer": false
 }
