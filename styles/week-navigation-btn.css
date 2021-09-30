@@ -7,6 +7,7 @@
   height: 1%;
   text-align: center;
   font-family: 'Billionary'; 
+  vertical-align: middle; /*WIP week button changes: centered text (NOTE: NOT WORKING)*/
 }
 
 .next-week-link {
@@ -36,6 +37,6 @@
   .this-week-link, .next-week-link {
     font-size: 4rem;
     width: 12%;
-    height: 2%;
+    height: 3%; /*WIP week button changes: this week and next week buttons are taller*/
   }
 }
