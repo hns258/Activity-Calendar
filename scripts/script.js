@@ -27,6 +27,7 @@ const draggables = document.querySelectorAll("div.sidemenu table tr td img")
 //test
 let imagesInLibrary = document.getElementsByClassName("img-lib");
 let imageArray = [];
+let deleteBox = document.getElementById('trash-box-container');
 
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
@@ -102,17 +103,23 @@ function toggleSidemenu(){
 function clickDrag(){
 	console.log('click and drag event triggered!!');
 	Array.prototype.forEach.call(imagesInLibrary, image => {
+		console.log(`Selected image:\n${image.classList}`);
 		image.onmousedown = (event)=>{
-			//clone itself and append clone in its original spot
-			const clone = image.cloneNode(true);
-			let parent = image.parentNode;
-			parent.append(clone);
-
-			//add clone to imageLibrary array
-			imageArray = Array.from(imagesInLibrary);
-			//remove image and add clone
-			imageArray = imageArray.filter(element => element !== image);
-			imageArray.push(clone);
+			if(!image.classList.contains("copy")){
+				console.log("making clone and moving copy")
+				//clone itself and append clone in its original spot
+				const clone = image.cloneNode(true);
+				let parent = image.parentNode;
+				parent.append(clone);
+	
+				//add clone to imageLibrary array
+				imageArray = Array.from(imagesInLibrary);
+				//remove image and add clone
+				imageArray = imageArray.filter(element => element !== image);
+				imageArray.push(clone);
+				//finally add copy class to image
+				image.classList.add("copy");
+			}
 
 			image.style.position = 'absolute';
 			image.style.zIndex = 1000;
@@ -131,15 +138,20 @@ function clickDrag(){
 		
 			function onMouseMove(event) {
 				moveAt(event.pageX, event.pageY);
+				console.log(`Image Coordinates: ${event.pageX}, ${event.pageY}`)
 			}
 
 			// (2) move the image on mousemove
 			document.addEventListener('mousemove', onMouseMove);
-		
+
 			// (3) drop the image, remove unneeded handlers
-			image.onmouseup = function() {
+			image.onmouseup = function(event) {
 				document.removeEventListener('mousemove', onMouseMove);
 				image.onmouseup = null;
+				//check if in deletion area
+				if(event.pageY < 100 && open === false){
+					image.style.display = 'none';
+				}
 			};
 		
 			image.ondragstart = function() {

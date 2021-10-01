@@ -91,24 +91,29 @@ function toggleSidemenu(){
 function clickDrag(){
 	console.log('click and drag event triggered!!');
 	Array.prototype.forEach.call(imagesInLibrary, image => {
+		console.log(`Selected image:\n${image.classList}`);
 		image.onmousedown = (event)=>{
-			//clone itself and append clone in its original spot
-			const clone = image.cloneNode(true);
-			let parent = image.parentNode;
-			parent.append(clone);
-
-			//add clone to imageLibrary array
-			imageArray = Array.from(imagesInLibrary);
-			//remove image and add clone
-			imageArray = imageArray.filter(element => element !== image);
-			imageArray.push(clone);
+			if(!image.classList.contains("copy")){
+				console.log("making clone and moving copy")
+				//clone itself and append clone in its original spot
+				const clone = image.cloneNode(true);
+				let parent = image.parentNode;
+				parent.append(clone);
+	
+				//add clone to imageLibrary array
+				imageArray = Array.from(imagesInLibrary);
+				//remove image and add clone
+				imageArray = imageArray.filter(element => element !== image);
+				imageArray.push(clone);
+				//finally add copy class to image
+				image.classList.add("copy");
+			}
 
 			image.style.position = 'absolute';
 			image.style.zIndex = 1000;
 			image.style.width = "4.9vw";
 			image.style.width = "7.9vh";
 			image.style.objectFit = 'scale-down';
-			image.setAttribute("onmousedown", "clickDrag()");
 			document.body.append(image);
 
 			function moveAt(pageX, pageY) {
@@ -121,15 +126,20 @@ function clickDrag(){
 		
 			function onMouseMove(event) {
 				moveAt(event.pageX, event.pageY);
+				console.log(`Image Coordinates: ${event.pageX}, ${event.pageY}`)
 			}
 
 			// (2) move the image on mousemove
 			document.addEventListener('mousemove', onMouseMove);
-		
+
 			// (3) drop the image, remove unneeded handlers
-			image.onmouseup = function() {
+			image.onmouseup = function(event) {
 				document.removeEventListener('mousemove', onMouseMove);
 				image.onmouseup = null;
+				//check if in deletion area
+				if(event.pageY < 100 && open === false){
+					image.style.display = 'none';
+				}
 			};
 		
 			image.ondragstart = function() {
