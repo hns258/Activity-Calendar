@@ -1,18 +1,19 @@
-.week-link-btn-text {
-    font-size: 0.9rem;
+/* .week-link-btn-text {
     color: white;
     text-decoration: none;
     text-align: center;
     font-family: 'Billionary';
     vertical-align: middle; /*WIP week button changes: centered text (NOTE: NOT WORKING)*/
-}
 
 .this-week-link, .next-week-link{
-  
+  color: white;
   padding: 15px;
   width: 15%;
   height: 1%;
-  
+  text-decoration: none;
+  text-align: center;
+  font-family: 'Billionary';
+  vertical-align: middle;
 }
 
 .next-week-link {
