@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\desktop-application",
+    "\\scripts",
     "\\styles"
   ],
-  "SelectedNode": "\\styles\\settings.css",
+  "SelectedNode": "\\index.html",
   "PreviewInSolutionExplorer": false
 }
