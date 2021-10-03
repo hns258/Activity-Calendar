@@ -82,9 +82,15 @@
 .settings-area{
   margin-top: 2vh;
 }
+
+.img-row-title{
+    text-align: left;
+}
+
 @media only screen  and (min-width : 1824px) {
   .img-row-title{
     font-size: 2.5rem;
+    text-align: left;
   }
 
   .sidemenu {
