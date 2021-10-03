@@ -41,8 +41,13 @@
 /* Large screens ----------- */
 @media only screen  and (min-width : 1824px) {
   .this-week-link, .next-week-link {
-    font-size: 4rem;
+    font-size: 3.5rem;
+    padding: 25px 15px 0px 15px;
     width: 12%;
     height: 3%; /*WIP week button changes: this week and next week buttons are taller*/
+  }
+
+  .next-week-link {
+    right: 80px;
   }
 }
