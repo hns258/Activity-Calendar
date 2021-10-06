@@ -63,9 +63,9 @@
 #people-imgs-row, #popular-imgs-row, .settings-area {
     display: grid;
     grid-template-columns: 5vw 5vw 5vw 5vw;
-    grid-gap: 10px;
+    grid-gap: 26px;
     text-align: center;
-    margin: 10px 10px 10px 25px;
+    margin: 30px 10px 10px 25px;
 }
 
 .settings-area td:nth-child(2){
@@ -73,7 +73,7 @@
 }
 #transport-imgs-row, #activity-imgs-row {
     display: grid;
-    grid-template-rows: 10vh 10vh;
+    grid-template-rows: 8vh 8vh;
     grid-auto-flow: column;
     grid-template-columns: 5vw 5vw 5vw 5vw;
     grid-gap: 26px;
