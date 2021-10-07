@@ -2,6 +2,7 @@
 var open = false;
 let leftSideMenu = document.querySelector(".sidemenu");
 let sideBarImg = document.querySelector(".sidebar");
+let switchTitle = document.querySelector(".switch-title");
 var isLeft = false;
 const sideToggleBtn = document.querySelector(".isLeftToggle");
 
@@ -18,6 +19,10 @@ function switchToLeft(){
         //swap classes to -left
         leftSideMenu.classList.remove("sidemenu");
         leftSideMenu.classList.add("menuOnLeft");
+        //swap classes and text of the "Switch to..." title
+        switchTitle.classList.remove("switch-title");
+        switchTitle.classList.add("switch-title-left");
+        switchTitle.innerHTML = "Switch to right";
         //swap bar classes too
         sideBarImg.classList.remove("sidebar");
         sideBarImg.classList.add("barOnLeft");
@@ -40,6 +45,10 @@ function switchToLeft(){
         //swap classes to default
         leftSideMenu.classList.remove("menuOnLeft");
         leftSideMenu.classList.add("sidemenu");
+        //swap classes and text of "Switch to..." title to its defaults
+        switchTitle.classList.remove("switch-title-left");
+        switchTitle.classList.add("switch-title");
+        switchTitle.innerHTML = "Switch to left";
         //swap bar classes too
         sideBarImg.classList.remove("barOnLeft");
         sideBarImg.classList.add("sidebar");

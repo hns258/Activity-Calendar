@@ -81,8 +81,9 @@
     margin: 30px 10px 10px 25px;
 }
 
-.settings-area{
-  margin-top: 2vh;
+.settings-area {
+    margin-top: 2vh;
+    grid-template-rows: 2vh;
 }
 
 .img-row-title{
