@@ -5,7 +5,6 @@ function createWindow() {
         width: 600,
         height: 300
     });
-
     win.loadFile('./old/public/index.html');
 };
 
