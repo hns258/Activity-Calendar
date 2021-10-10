@@ -4,14 +4,17 @@
   "description": "Activity Calendar App",
   "main": "main.js",
   "scripts": {
+    "postinstall": "install-app-deps",
     "start": "electron ."
   },
   "author": "Azhya Knox",
   "license": "MIT",
-  "dependencies": {
-    "lowdb": "^3.0.0"
-  },
   "devDependencies": {
-    "electron": "^15.1.2"
+    "electron": "^15.1.2",
+    "electron-builder": "^22.13.1"
+  },
+  "dependencies": {
+    "sequelize": "^6.7.0",
+    "sqlite3": "^5.0.2"
   }
 }
