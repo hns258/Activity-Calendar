@@ -17,7 +17,7 @@ const initializeImageTypes = async () => {
     { Name: 'popular'},
     { Name: 'activity'},
   ]);
-}
+};
 
 // Initialize week tags if they don't exist
 const initializeWeekTags = async () => {
@@ -25,7 +25,7 @@ const initializeWeekTags = async () => {
     { Description: 'This Week' },
     { Description: 'Next Week' },
   ]);
-}
+};
 
 // test write image to database
 const testImage = async () => {
