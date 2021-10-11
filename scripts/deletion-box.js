@@ -1,66 +1,39 @@
 var mouseInArea = false;
 
-function initializeDeletionBox(){
-    var myObj = document.getElementById('trash-box-container');
-    mouseInArea = true;
+function deletionBoxCheck(){
 
-    var element = document.querySelector('.sidemenu') || null;
-    if(element === null){
-        //call reverse check here
-        console.log("DEV, YOU NEED TO DO A REVERSE CHECK BECAUSE CLASS DNE!")
-        initializeDeletionBox_L()
-    }else{
-        console.log(element.computedStyleMap().get('right'));
-        var isClosed = false;
-        if(element.computedStyleMap().get('right') < "0px"){
-            console.log("i'm negative!!!")
-            isClosed = true;
-        }else if(element.computedStyleMap().get('right') >= "0px"){
-            console.log("i'm positive boo")
-            isClosed = false;
+    var eventDoc, doc, body;
+    var event = window.event; 
+    var offsets = document.getElementById('deletionBoxRow').getBoundingClientRect();
+
+        // Calculate location of event triggered by mouse
+        if (event.pageX == null && event.clientX != null) {
+            eventDoc = (event.target && event.target.ownerDocument) || document;
+            doc = eventDoc.documentElement;
+            body = eventDoc.body;
+
+            event.pageX = event.clientX +
+              (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+              (doc && doc.clientLeft || body && body.clientLeft || 0);
+            event.pageY = event.clientY +
+              (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+              (doc && doc.clientTop  || body && body.clientTop  || 0 );
         }
-    
-        if(mouseInArea === true && isClosed === true){
+        
+        // Get element to be manipulated
+        var myObj = document.getElementById('trash-box-container');
+
+        // Check delete div offset and compare to event location
+        if(offsets.height < event.pageY){
+            mouseInArea = false;
+            myObj.style.display = "none";
+        }
+        else {
             console.log("mouse in deletion area");
             myObj.style.display = "flex";
-        }else{
-            console.log("mouse in deletion area BUT menu is also opened!!!")
         }
     }
-}
 
-function initializeDeletionBox_L(){
-    var myObj2 = document.getElementById('trash-box-container');
-    mouseInArea2 = true;
-
-    var element2 = document.querySelector('.menuOnLeft');
-
-    console.log(element2.computedStyleMap().get('left'));
-    var isClosed2 = false;
-    if(element2.computedStyleMap().get('left') < "0px"){
-        console.log("i'm negative!!!")
-        isClosed2 = true;
-    }else if(element2.computedStyleMap().get('left') >= "0px"){
-        console.log("i'm positive boo")
-        isClosed2 = false;
-    }
-
-    if(mouseInArea2 === true && isClosed2 === true){
-        console.log("mouse in deletion area");
-        myObj2.style.display = "flex";
-    }else{
-        console.log("mouse in deletion area BUT menu is also opened!!!")
-    }
-}
-
-function removeDeletionBox(){
-    var myObj = document.getElementById('trash-box-container');
-    setTimeout(()=>{
-        mouseInArea = false;
-        myObj.style.display = "none";
-        console.log("mouse position in trash area has been reset");
-    }, 200);
-    setTimeout(()=>{
-        myObj.classList.remove("trash-box-container-inside");
-    }, 1000);
+function dismissDeleteDiv() {
+    document.getElementById('trash-box-container').style.display = "none";
 }

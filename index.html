@@ -8,14 +8,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
 
-
 <body>
 	<div class="p1" id="p1">
 		<div class="trash-box-container deletion-box" id="trash-box-container" style="display: none;">
             <div class="trash-box">DELETE <i class="fas fa-trash-alt"></i></div>
         </div>
 		<table class="main-table">
-			<tr class="deletion-box" onmouseenter="initializeDeletionBox()" onmouseleave="removeDeletionBox()">
+			<tr class="deletion-box" onmousemove="deletionBoxCheck()" id="deletionBoxRow">
 				<!--Change the 'th' class selectors to their proper days-->
 				<th class="this-week ">This Week</th>
 				<th class="monday-col "><img src="week_images/monday.png" class="day-segment" alt="Monday"></th>
@@ -26,7 +25,7 @@
 				<th class="tuesday-col "><img src="week_images/saturday.png" class="day-segment" alt="Saturday"></th>
 				<th class="monday-col "><img src="week_images/sunday.png" class="day-segment" alt="Sunday"></th>
 			</tr>
-			<tr>
+			<tr onmousemove="deletionBoxCheck()" >
 				<th class="time-of-day"><img src="time_of_day/morning.png" alt="Morning"></th>
 				<td class="monday-col"></td>
 				<td class="tuesday-col"></td>
@@ -55,9 +54,7 @@
 				<td class="friday-col"></td>
 				<td class="saturday-col"></td>
 				<td class="sunday-col">
-					<a class="next-week-link" href="next_week.html">
-						<span>Next Week</span><i class="fas fa-arrow-right"></i>
-					</a>
+					<a class="next-week-link" href="next_week.html"><span>Next Week</span><i class="fas fa-arrow-right"></i></a>
 				</td>
 			</tr>
 		</table>
@@ -67,7 +64,7 @@
 	<div class="sidemenu menu-container">
 		<img src="misc/handle.png" alt="click" class="sidebar" onclick="toggleSidemenu()">
 		<table>
-			<tr class="settings-area">
+			<tr class="settings-area" onmouseenter="dismissDeleteDiv()">
 				<td>
 					<label class="switch">
 						<input type="checkbox" class="isLeftToggle">
