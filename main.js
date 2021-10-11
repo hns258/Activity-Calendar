@@ -1,15 +1,20 @@
 const { app, BrowserWindow } = require('electron');
 
+/* test helper functions for database functionality */
+// const { 
+//     initializeImageTypes,
+//     initializeWeekTags,
+//     testImage,
+//     testImageCopy,
+// } = require('./src/helpers/_testDB');
+
+// Import database
 const db = require('./src/config/db');
 
-const connectDB = async () => {
-    try {
-        await db.authenticate();
-        console.log('Database connected...');
-    } catch (err) {
-        console.log('DB Error: ' + err.message);
-    }
-}
+// Connect to database
+db.authenticate()
+    .then(async () => { console.log('Database connected...') })
+    .catch(err => console.log('DB Error: ' + err.message));
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -20,7 +25,8 @@ function createWindow() {
 };
 
 app.whenReady().then(() => {
-    connectDB();
+    initializeWeekTags();
+    initializeImageTypes();
     createWindow();
 });
 
