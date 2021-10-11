@@ -25,8 +25,6 @@ function createWindow() {
 };
 
 app.whenReady().then(() => {
-    initializeWeekTags();
-    initializeImageTypes();
     createWindow();
 });
 
