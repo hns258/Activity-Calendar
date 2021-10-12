@@ -103,12 +103,15 @@ function toggleSidemenu(){
 function clickDrag(){
 	console.log('click and drag event triggered!!');
 	Array.prototype.forEach.call(imagesInLibrary, image => {
+		var imgId = "";
 		console.log(`Selected image:\n${image.classList}`);
 		image.onmousedown = (event)=>{
 			if(!image.classList.contains("copy")){
 				console.log("making clone and moving copy")
 				//clone itself and append clone in its original spot
-				const clone = image.cloneNode(true);
+				let clone = image.cloneNode(true);
+				clone.id = `imgClone${Date.now()}`
+				imgId = clone.id;
 				let parent = image.parentNode;
 				parent.append(clone);
 	
@@ -139,6 +142,17 @@ function clickDrag(){
 			function onMouseMove(event) {
 				moveAt(event.pageX, event.pageY);
 				console.log(`Image Coordinates: ${event.pageX}, ${event.pageY}`)
+
+				var offsets = document.getElementById('deletionBoxRow').getBoundingClientRect();
+				var myObj = document.getElementById('trash-box-container');
+				console.log(event.pageY, offsets.height);
+				
+				if(event.pageY > offsets.height){
+					myObj.style.display = 'none';
+				}
+				else {
+					myObj.style.display = 'flex';
+				}
 			}
 
 			// (2) move the image on mousemove
@@ -150,7 +164,8 @@ function clickDrag(){
 				image.onmouseup = null;
 				//check if in deletion area
 				if(event.pageY < 100 && open === false){
-					image.style.display = 'none';
+					var parent = image.parentNode;
+					parent.removeChild(image);
 				}
 			};
 		
