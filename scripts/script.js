@@ -163,9 +163,10 @@ function clickDrag(){
 				document.removeEventListener('mousemove', onMouseMove);
 				image.onmouseup = null;
 				//check if in deletion area
-				if(event.pageY < 100 && open === false){
+				if(event.pageY < 100){
 					var parent = image.parentNode;
 					parent.removeChild(image);
+					myObj.style.display = 'none';
 				}
 			};
 		
