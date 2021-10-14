@@ -14,10 +14,15 @@ const initializeImageTypes = async () => {
   await ImageType.bulkCreate([
     { Name: 'people' },
     { Name: 'transport' },
-    { Name: 'popular'},
-    { Name: 'activity'},
+    { Name: 'popular' },
+    { Name: 'activity' },
   ]);
 };
+
+const listImageTypes = async () => {
+  const imageTypes = await ImageType.findAll({ raw: true });
+  console.log(imageTypes);
+}
 
 // Initialize week tags if they don't exist
 const initializeWeekTags = async () => {
@@ -35,12 +40,13 @@ const testImage = async () => {
 // test write image copy to database
 /* You need to have have Cycling image in database from testImage() */
 const testImageCopy = async () => {
-  const originalImage = await Image.findOne({ where: { FileName: 'Cycling' }});
-  await ImageCopy.create({ FileName: 'Cycling', PosX: 0, PosY: 0,  ImageID: originalImage.ID, WeekTagID: 1});
+  const originalImage = await Image.findOne({ where: { FileName: 'Cycling' } });
+  await ImageCopy.create({ FileName: 'Cycling', PosX: 0, PosY: 0, ImageID: originalImage.ID, WeekTagID: 1 });
 };
 
 module.exports = {
   initializeImageTypes,
+  listImageTypes,
   initializeWeekTags,
   testImage,
   testImageCopy,

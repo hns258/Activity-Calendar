@@ -22,7 +22,7 @@ const Image = db.define('image', {
     type: DataTypes.INTEGER,
     deferrable: Deferrable.INITIALLY_DEFERRED,
     allowNull: false,
-  }
+  },
 });
 
 // Associations
