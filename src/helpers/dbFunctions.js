@@ -142,6 +142,10 @@ const updateCalendar = () => { }
 // Saves an image copy in the database
 const setImageCopy = () => { }
 
+// Called when an image is dragged and dropped onto the delete tab
+// Deletes an image copy from the database
+const deleteImageCopy = () => { }
+
 // Called when app loads
 // Get all image copies sorted by created date
 const getImageCopies = () => { }
