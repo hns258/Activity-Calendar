@@ -12,8 +12,8 @@ const { app, BrowserWindow } = require('electron');
 // Load DB helpers
 // const {
 //     writeImages,
-//     loadImages,
-//     getSomeImages,
+//     writeAllImages,
+//     getImages,
 //     getAllImages,
 //     updateCalendar,
 //     setImageCopy,
@@ -37,7 +37,7 @@ function createWindow() {
     win.loadFile('./public/index.html');
 };
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     createWindow();
 });
 

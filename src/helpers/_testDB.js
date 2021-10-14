@@ -13,9 +13,9 @@ const WeekTag = require('../models/WeekTag');
 const initializeImageTypes = async () => {
   await ImageType.bulkCreate([
     { Name: 'people' },
-    { Name: 'transport' },
+    { Name: 'transportation' },
     { Name: 'popular' },
-    { Name: 'activity' },
+    { Name: 'activities' },
   ]);
 };
 
