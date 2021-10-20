@@ -16,7 +16,11 @@ const ImageType = db.define('imageType', {
   },
   Location: {
     type: DataTypes.STRING(500),
-  }
+  },
+  IsCustomized: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
 // Associations
