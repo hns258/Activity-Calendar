@@ -12,12 +12,8 @@
   height: 1%;
   text-decoration: none;
   text-align: center;
-  /*font-family: 'Billionary';*/
+  font-family: 'Billionary';
   vertical-align: middle;
-}
-
-.this-week-link span, .next-week-link span {
-    font-family: 'Billionary';
 }
 
 .next-week-link {

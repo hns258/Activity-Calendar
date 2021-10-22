@@ -1,0 +1,29 @@
+{
+  "name": "activity-calendar-server",
+  "version": "1.0.0",
+  "description": "Activity Calendar App",
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "install-app-deps",
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "asarUnpack": [
+      "src/database/database.sqlite3",
+      "public/base_images/**/*"
+    ]
+  },
+  "author": "Azhya Knox",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^15.1.2",
+    "electron-builder": "^22.13.1"
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0",
+    "sequelize": "^6.7.0",
+    "sqlite3": "^5.0.2"
+  }
+}
