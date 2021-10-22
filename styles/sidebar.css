@@ -98,7 +98,22 @@
 
   .sidemenu {
     padding-right: 15px;
+    width: 31vw !important;
   }
+
+    #people-imgs-row, #popular-imgs-row, .settings-area {
+        grid-gap: 3.5vh;
+    }
+
+    #transport-imgs-row, #activity-imgs-row{
+        grid-gap: 3.5vh;
+    }
+
+    .settings-area{
+        margin-top: 1vh;
+        grid-template-rows: 3vh;
+        grid-template-columns: 3vw 3vw 3vw 22vw; 
+    }
 }
 
 /* .sidebar:active {
