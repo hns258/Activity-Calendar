@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
 
 // Load DB helpers
 const {
@@ -45,7 +44,7 @@ function createWindow() {
   });
   win.loadFile('./public/index.html');
 
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 }
 
 app.whenReady().then(async () => {

@@ -1,15 +1,15 @@
 const sequelize = require('sequelize');
 const fs = require('fs');
-const path = require('path');
-const process = require('process');
 const { readdir } = require('fs/promises');
+const isDev = require('electron-is-dev');
+const path = require('path');
+const app = require('electron').app;
 
 // Import Models
 const Image = require('../models/Image');
 const ImageCopy = require('../models/ImageCopy');
 const ImageType = require('../models/ImageType');
 const WeekTag = require('../models/WeekTag');
-const { type } = require('os');
 
 // Called when folder location changes
 // Adds new images to the database
@@ -122,24 +122,39 @@ const initializeImageTypes = async () => {
   // See if any image types exist
   const imageTypesInitialized = await ImageType.findOne();
 
+  let basePath;
+  if (isDev) {
+    basePath = path.join(app.getAppPath(), 'public', 'base_images');
+  } else {
+    basePath = path.join(
+      app.getAppPath(),
+      '..',
+      '..',
+      'resources',
+      'app.asar.unpacked',
+      'public',
+      'base_images'
+    );
+  }
+
   // if no image types exist, initialize them in database
   if (!imageTypesInitialized) {
     await ImageType.bulkCreate([
       {
         Name: 'people',
-        Location: process.cwd() + '\\public\\base_images\\people',
+        Location: path.join(basePath, 'people'),
       },
       {
         Name: 'transportation',
-        Location: process.cwd() + '\\public\\base_images\\transportation',
+        Location: path.join(basePath, 'transportation'),
       },
       {
         Name: 'popular',
-        Location: process.cwd() + '\\public\\base_images\\popular',
+        Location: path.join(basePath, 'popular'),
       },
       {
         Name: 'activities',
-        Location: process.cwd() + '\\public\\base_images\\activities',
+        Location: path.join(basePath, 'activities'),
       },
     ]);
   }
@@ -152,7 +167,7 @@ const initializeImageTypes = async () => {
   // update with built-in image location in case executable was moved
   for (const type of uncustomizedTypes)
     await type.update({
-      Location: process.cwd() + '\\public\\base_images\\' + type.Name,
+      Location: path.join(basePath, type.Name),
     });
 };
 
