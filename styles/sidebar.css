@@ -45,7 +45,7 @@
 .sidemenu table td img,
 .menuOnLeft table td img{
   padding: 0;
-  width: 4.9vw;
+  width: 6vw;
   object-fit: scale-down;
   height: 7.9vh;
 }
@@ -94,6 +94,7 @@
   .img-row-title{
     font-size: 2.5rem;
     text-align: left;
+    padding-left: 1vw;
   }
 
   .sidemenu {
@@ -102,11 +103,14 @@
   }
 
     #people-imgs-row, #popular-imgs-row, .settings-area {
-        grid-gap: 3.5vh;
+        grid-gap: 3vh;
+        margin: 30px 10px 10px 50px;
     }
 
     #transport-imgs-row, #activity-imgs-row{
-        grid-gap: 3.5vh;
+        grid-gap: 3vh;
+        grid-template-rows: 6vh 6vh;
+        margin: 30px 10px 80px 50px;
     }
 
     .settings-area{
