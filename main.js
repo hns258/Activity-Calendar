@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
 
 // Load DB helpers
 const {
