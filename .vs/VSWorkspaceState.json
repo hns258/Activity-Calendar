@@ -1,9 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\desktop-application",
-    "\\scripts",
-    "\\styles"
+    "\\public",
+    "\\public\\scripts",
+    "\\src",
+    "\\src\\config",
+    "\\src\\database",
+    "\\src\\helpers",
+    "\\src\\models"
   ],
+  "SelectedNode": "\\public\\scripts\\script.js",
   "PreviewInSolutionExplorer": false
 }
