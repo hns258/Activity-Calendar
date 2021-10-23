@@ -63,7 +63,7 @@ input:checked + .slider:before {
 .settings-area td{
     border: none !important;
 }
-.switch-title{
+.switch-title, .switch-title-left{
     display: inline;
     font-size: 0.8rem;
     font-weight: 600;
@@ -78,27 +78,6 @@ input:checked + .slider:before {
 }
 .settings-icon i:hover{
     opacity: 0.7;
-}
-/* left toggle settings */
-.menuOnLeft {
-    position: absolute;
-    left: 0px; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
-    /*left: -20.5vw;*/ /*Old size*/
-    direction: rtl;
-    background-color: #fbd988;
-    width: 30.5vw;
-    height: 65vh;
-    transition: 0.4s;
-    overflow: scroll;
-    height: 100vh;
-}
-.barOnLeft {
-    padding: 0;
-    margin: 0;
-    float: right;
-    display: inline;
-    height: 100vh;
-    width: 2vw; /*Larger sidebar changes: Sidebar toggle is slightly wider - Kyle*/
 }
 
 /* settings page styles */
@@ -183,7 +162,7 @@ input:checked + .slider:before {
     left: 0px;
     bottom: 15px;
   }
-    .switch-title {
+    .switch-title, .switch-title-left {
         font-size: 2.8rem;
         text-align: left;
         margin-left: -3vw;
@@ -196,6 +175,7 @@ input:checked + .slider:before {
   .sidemenu table td, .menuOnLeft table td {
     font-size: 5rem;
   }
+  
   .settings-icon i {
     margin-right: 10px;
   }
