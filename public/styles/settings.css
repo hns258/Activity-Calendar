@@ -183,14 +183,16 @@ input:checked + .slider:before {
     left: 0px;
     bottom: 15px;
   }
-  .switch-title {
-    font-size: 2.8rem;
-    text-align: left;
-    margin-left: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    .switch-title {
+        font-size: 2.8rem;
+        text-align: left;
+        margin-left: -3vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: .5vh;
+        letter-spacing: 2.5px;
+    }
   .sidemenu table td, .menuOnLeft table td {
     font-size: 5rem;
   }

@@ -1,23 +1,24 @@
 .trash-box i{
     margin-left: 10px;
 }
-.trash-box{
-    background-color: red;
+.trash-box {
+    background-color: #ca6754;
     z-index: 4;
     column-span: all;
     height: 100px;
     width: 100vw;
     text-align: center;
     display: flex;
-  	justify-content: center;
-  	align-items: center;
+    justify-content: center;
+    align-items: center;
     border: 3px solid black;
     border-style: dashed;
+    font-size: 3rem;
 }
 .trash-box-container{
     z-index: 3;
     column-span: all;
-    height: 100px;
+    height: 6%;
     width: 100vw;
     position: fixed;
     left: 0;
@@ -26,8 +27,9 @@
     display: flex;
   	justify-content: center;
   	align-items: center;
-    background: red;
+    background: #ca6754;
     padding: 10px;
+    opacity: 0.9;
 }
 .trash-box-container{
     transition: all 0.3s ease-in-out;

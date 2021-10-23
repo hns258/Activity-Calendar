@@ -15,10 +15,10 @@
 
 .sidemenu {
   position: absolute;
-  right: -20.5vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+  right: -28vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
   /*right: -21vw;*/ /*Old size*/
   background-color: #fbd988;
-  width: 22vw !important;
+  width: 29.5vw !important;
   height: 100%;
   transition: 0.4s;
   /*overflow: scroll !important;*/
@@ -50,7 +50,7 @@
   padding: 0;
   width: 6.5vw;
   object-fit: scale-down;
-  height: 7.9vh;
+  height: 8.9vh;
 }
 
 #transportation-imgs-row img{
@@ -98,21 +98,22 @@
     font-size: 2.5rem;
     text-align: left;
     padding-left: 1vw;
+    padding-top: 1.5vw;
   }
 
   .sidemenu {
     padding-right: 15px;
-    width: 31vw !important;
+    width: 29.5vw !important;
   }
 
     #people-imgs-row, #popular-imgs-row, .settings-area {
-        grid-gap: 3vh;
+        grid-gap: 2vh 3vh;
         margin: 30px 10px 10px 50px;
     }
 
     #transportation-imgs-row, #activities-imgs-row{
-        grid-gap: 3vh;
-        margin: 30px 10px 80px 50px;
+        grid-gap: 2vh 3vh;
+        margin: 30px 10px 10px 50px;
     }
 
     #transportation-imgs-row {
