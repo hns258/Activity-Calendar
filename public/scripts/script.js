@@ -68,7 +68,7 @@ function toggleSidemenu() {
   } else {
     if (open) {
       console.log('closing sidebar to left');
-      sideMenu.style.left = '-27.5vw'; 
+      sideMenu.style.left = '-28.5vw'; 
       open = false;
     } else {
       console.log('opening sidebar to left');

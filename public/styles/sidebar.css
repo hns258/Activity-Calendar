@@ -15,7 +15,7 @@
 
 .sidemenu {
   position: absolute;
-  right: -28vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+  right: -29vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
   /*right: -21vw;*/ /*Old size*/
   background-color: #fbd988;
   width: 29.5vw !important;
@@ -91,6 +91,28 @@
 
 .img-row-title{
     text-align: left;
+}
+
+/* left toggle settings */
+.menuOnLeft {
+  position: absolute;
+  left: 0px; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+  /*left: -20.5vw;*/ /*Old size*/
+  direction: rtl;
+  background-color: #fbd988;
+  width: 30.5vw;
+  height: 65vh;
+  transition: 0.4s;
+  overflow: scroll;
+  height: 100vh;
+}
+.barOnLeft {
+  padding: 0;
+  margin: 0;
+  float: right;
+  display: inline;
+  height: 100vh;
+  width: 2vw; /*Larger sidebar changes: Sidebar toggle is slightly wider - Kyle*/
 }
 
 @media only screen  and (min-width : 1824px) {
