@@ -15,7 +15,7 @@
 
 .sidemenu {
   position: absolute;
-  right: -28vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+  right: -29vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
   /*right: -21vw;*/ /*Old size*/
   background-color: #fbd988;
   width: 29.5vw !important;
