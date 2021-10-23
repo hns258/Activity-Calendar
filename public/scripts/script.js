@@ -58,7 +58,7 @@ function toggleSidemenu() {
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
-      sideMenu.style.right = '-27.5vw'; 
+      sideMenu.style.right = '-29vw'; 
       open = false;
     } else {
       console.log('opening sidebar to right');
