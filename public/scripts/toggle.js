@@ -35,9 +35,9 @@ function switchToLeft(){
             console.log(sideToggleBtn);
             console.log(sideToggleBtn.checked);
             //set isLeft boolean to TRUE
-            isLeft = true;
             console.log("done");
         }, 1500);
+        isLeft = true;
         console.log("finished!!!");
     }else{
         //left settings should be off
@@ -61,9 +61,10 @@ function switchToLeft(){
             console.log(sideToggleBtn);
             console.log(sideToggleBtn.checked);
             //set isLeft boolean to FALSE
-            isLeft = false;
+            
             console.log("done 2")
         }, 1500);
+        isLeft = false;
         console.log("finished 2!!!");
     }
 }
