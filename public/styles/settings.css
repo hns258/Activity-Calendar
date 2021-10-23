@@ -82,7 +82,7 @@ input:checked + .slider:before {
 /* left toggle settings */
 .menuOnLeft {
     position: absolute;
-    left: -21vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+    left: -28.5vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
     /*left: -20.5vw;*/ /*Old size*/
     direction: rtl;
     background-color: #fbd988;
