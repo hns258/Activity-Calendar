@@ -86,7 +86,7 @@ input:checked + .slider:before {
     /*left: -20.5vw;*/ /*Old size*/
     direction: rtl;
     background-color: #fbd988;
-    width: 22vw;
+    width: 30.5vw;
     height: 65vh;
     transition: 0.4s;
     overflow: scroll;
