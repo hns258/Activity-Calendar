@@ -39,7 +39,7 @@ app.whenReady().then(async () => {
   await initializeWeekTags();
   await initializeImageTypes();
   await writeAllImages();
-  // createWindow();
+  createWindow();
 });
 
 app.on('window-all-closed', async function () {
