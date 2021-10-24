@@ -95,6 +95,7 @@ const readImages = async (category) => {
   return imageArray;
 };
 
+/* NEEDS TESTING */
 // Called when app loads (should run before getImageCopies())
 //    1. Checks for week passing
 //    2. Deletes all image copies with 'This Week' tag
@@ -125,20 +126,47 @@ const updateCalendar = async () => {
   } // end of if statement
 }; // end of function
 
-// Called when an image is dragged and dropped onto the screen
-// Saves an image copy in the database
-// Takes in image name, X & Y coordinates, and Week Tag
-const setImageCopy = async (name, thisPosX, thisPosY, thisWeekTagID) => {
-  const image = await Image.findOne({ where: { FileName: name } });
-  await ImageCopy.create({
-    FileName: name,
-    PosX: thisPosX,
-    PosY: thisPosY,
-    ImageID: image.ID,
-    WeekTagID: thisWeekTagID,
-  });
+// Called when...
+//    Image is dragged onto calendar
+//    Image copy is moved
+// Takes in image or imagecopy id, PosX, PosY, weekTagID
+const setImageCopy = async (id, thisPosX, thisPosY, thisWeekTagID) => {
+  // Try to find an already existing image copy with passed in ID
+  const imageCopy = await ImageCopy.findOne({ where: { ID: id } });
+
+  // If one exists, update posX and posY
+  if (imageCopy) {
+    imageCopy.PosX = thisPosX;
+    imageCopy.PosY = thisPosY;
+    await imageCopy.save();
+  } else {
+    // Find image with passed in ID
+    const image = await Image.findOne({ where: { ID: id } });
+    // Original image stored in activities (if popular)
+    let baseImage;
+
+    // If the image is of type "popular"
+    if (image.ImageTypeID === 3) {
+      // check if a base image exists in "activities"
+      baseImage = await Image.findOne({
+        where: { FileName: image.FileName, ImageTypeID: 4 },
+      });
+    }
+
+    // if a base image exists, set to that id, otherwise set to popular id
+    const imageID = baseImage ? baseImage.ID : image.ID;
+
+    // Create image copy with set variables
+    await ImageCopy.create({
+      PosX: thisPosX,
+      PosY: thisPosY,
+      ImageID: imageID,
+      WeekTagID: thisWeekTagID,
+    });
+  }
 };
 
+/* NEEDS TESTING */
 // Called when an image is dragged and dropped onto the delete tab
 // Deletes an image copy from the database
 // Takes in image copy name
@@ -147,6 +175,7 @@ const deleteImageCopy = async (name) => {
   await ImageCopy.destroy({ where: { ImageID: image.ID } });
 };
 
+/* NEEDS TESTING */
 // Called when app loads
 // Get all image copies sorted by created date
 const getImageCopies = async () => {
@@ -158,6 +187,7 @@ const getImageCopies = async () => {
   return imageCopies;
 };
 
+/* NEEDS IMPLEMENTATION */
 // Called when folder path is changed for specific image type
 // Set customization flag in model
 const updateFolderLocation = () => {};
