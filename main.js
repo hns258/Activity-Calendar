@@ -21,18 +21,6 @@ db.authenticate()
   .then(console.log('Database connected...'))
   .catch((err) => console.log('DB Error: ' + err.message));
 
-/* IPC */
-// request to load images
-ipcMain.handle('load-images', async (event, category) => {
-  return await readImages(category);
-});
-
-// folder location changes
-ipcMain.handle('change-folder', async (event, category) => {
-  await writeImages(category);
-  return await readImages(category);
-});
-
 function createWindow() {
   const win = new BrowserWindow({
     width: 2000,
@@ -51,11 +39,23 @@ app.whenReady().then(async () => {
   await initializeWeekTags();
   await initializeImageTypes();
   await writeAllImages();
-  createWindow();
+  // createWindow();
 });
 
 app.on('window-all-closed', async function () {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+/* IPC */
+// request to load images
+ipcMain.handle('load-images', async (event, category) => {
+  return await readImages(category);
+});
+
+// folder location changes
+ipcMain.handle('change-folder', async (event, category) => {
+  await writeImages(category);
+  return await readImages(category);
 });
