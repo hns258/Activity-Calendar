@@ -166,13 +166,11 @@ const setImageCopy = async (id, thisPosX, thisPosY, thisWeekTagID) => {
   }
 };
 
-/* NEEDS TESTING */
 // Called when an image is dragged and dropped onto the delete tab
 // Deletes an image copy from the database
 // Takes in image copy name
-const deleteImageCopy = async (name) => {
-  const image = await ImageCopy.findOne({ where: { FileName: name } });
-  await ImageCopy.destroy({ where: { ImageID: image.ID } });
+const deleteImageCopy = async (id) => {
+  await ImageCopy.destroy({ where: { ID: id } });
 };
 
 /* NEEDS TESTING */
