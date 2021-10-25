@@ -174,7 +174,6 @@ const deleteImageCopy = async (id) => {
   await ImageCopy.destroy({ where: { ID: id } });
 };
 
-/* NEEDS TESTING */
 // Called when app loads
 // Get all image copies sorted by created date
 const getImageCopies = async (thisWeekTagID) => {
