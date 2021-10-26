@@ -166,25 +166,46 @@ const setImageCopy = async (id, thisPosX, thisPosY, thisWeekTagID) => {
   }
 };
 
-/* NEEDS TESTING */
 // Called when an image is dragged and dropped onto the delete tab
 // Deletes an image copy from the database
 // Takes in image copy name
-const deleteImageCopy = async (name) => {
-  const image = await ImageCopy.findOne({ where: { FileName: name } });
-  await ImageCopy.destroy({ where: { ImageID: image.ID } });
+const deleteImageCopy = async (id) => {
+  // Delete Image copy found by passed in array
+  await ImageCopy.destroy({ where: { ID: id } });
 };
 
-/* NEEDS TESTING */
 // Called when app loads
 // Get all image copies sorted by created date
-const getImageCopies = async () => {
+const getImageCopies = async (thisWeekTagID) => {
+  // declare image copy array
+  const imageCopyArray = [];
+
+  // get all images matching image type in order of created date
   const imageCopies = await ImageCopy.findAll({
-    order: [[sequelize.fn('lower', sequelize.col('FileName')), 'ASC']],
+    order: [[sequelize.fn('lower', sequelize.col('createdAt')), 'ASC']],
     raw: true,
+    where: {
+      WeekTagID: thisWeekTagID,
+    },
   });
 
-  return imageCopies;
+  // for each image copy...
+  for (const imageCopy of imageCopies) {
+    // Find base image
+    const image = await Image.findOne({ where: { ID: imageCopy.ImageID } });
+
+    // Find image type
+    const type = await ImageType.findOne({ where: { ID: image.ImageTypeID } });
+
+    // get the absolute path of the image
+    const imagePath = type.Location + '\\' + image.FileName + image.FileType;
+
+    // Push to image copy array
+    imageCopyArray.push([imagePath, imageCopy.ID, image.FileName]);
+  }
+
+  // return the array of image paths to use as img src ref in front-end
+  return imageCopyArray;
 };
 
 /* NEEDS IMPLEMENTATION */
