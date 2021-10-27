@@ -29,7 +29,7 @@ const writeImages = async (category) => {
 
       // check if the image already exists
       const image = await Image.findOne({
-        where: { FileName: name },
+        where: { FileName: name, ImageTypeID: type.ID },
       });
 
       // if the image doesn't exist, add it to the database
@@ -95,71 +95,120 @@ const readImages = async (category) => {
   return imageArray;
 };
 
+/* NEEDS TESTING */
 // Called when app loads (should run before getImageCopies())
 //    1. Checks for week passing
 //    2. Deletes all image copies with 'This Week' tag
 //    3. Changes image copies with 'Next Week' tag to 'This Week' tag
-const updateCalendar = async() => {
+const updateCalendar = async () => {
   const check = new Date();
-  if((check.getDay() == 0) && check.getHours() == 0)
-  {
-  const imageArray = [];
-  
-  const imagesForRemoval = await ImageCopy.findAll({
-    where: {WeekTagID: 2}
-  });
-  const imagesForUpdate = await ImageCopy.findAll({
-    where: {WeekTagID: 1}
-  });
-//remove images with 'this week' tag
-  for (const image of imagesForRemoval)
-  {
-    await ImageCopy.destroy(image);
-  }
-//update images with 'next week' tag
-  for (const image of imagesForUpdate)
-  {
-    await image.update({
-      WeekTagID: 2
+  if (check.getDay() == 0 && check.getHours() == 0) {
+    const imageArray = [];
+
+    const imagesForRemoval = await ImageCopy.findAll({
+      where: { WeekTagID: 2 },
+    });
+    const imagesForUpdate = await ImageCopy.findAll({
+      where: { WeekTagID: 1 },
+    });
+    //remove images with 'this week' tag
+    for (const image of imagesForRemoval) {
+      await ImageCopy.destroy(image);
+    }
+    //update images with 'next week' tag
+    for (const image of imagesForUpdate) {
+      await image.update({
+        WeekTagID: 2,
+      });
+    }
+
+    return imageArray;
+  } // end of if statement
+}; // end of function
+
+// Called when...
+//    Image is dragged onto calendar
+//    Image copy is moved
+// Takes in image or imagecopy id, PosX, PosY, weekTagID
+const setImageCopy = async (id, thisPosX, thisPosY, thisWeekTagID) => {
+  // Try to find an already existing image copy with passed in ID
+  const imageCopy = await ImageCopy.findOne({ where: { ID: id } });
+
+  // If one exists, update posX and posY
+  if (imageCopy) {
+    imageCopy.PosX = thisPosX;
+    imageCopy.PosY = thisPosY;
+    await imageCopy.save();
+  } else {
+    // Find image with passed in ID
+    const image = await Image.findOne({ where: { ID: id } });
+    // Original image stored in activities (if popular)
+    let baseImage;
+
+    // If the image is of type "popular"
+    if (image.ImageTypeID === 3) {
+      // check if a base image exists in "activities"
+      baseImage = await Image.findOne({
+        where: { FileName: image.FileName, ImageTypeID: 4 },
+      });
+    }
+
+    // if a base image exists, set to that id, otherwise set to popular id
+    const imageID = baseImage ? baseImage.ID : image.ID;
+
+    // Create image copy with set variables
+    await ImageCopy.create({
+      PosX: thisPosX,
+      PosY: thisPosY,
+      ImageID: imageID,
+      WeekTagID: thisWeekTagID,
     });
   }
-
-  return imageArray;
-
-} // end of if statement
-} // end of function
-
-// Called when an image is dragged and dropped onto the screen
-// Saves an image copy in the database
-// Takes in image name, X & Y coordinates, and Week Tag
-const setImageCopy = async (name, thisPosX, thisPosY, thisWeekTagID) => {
-  const image = await Image.findOne({where: {FileName: name}})
-  await ImageCopy.create({ FileName: name, PosX: thisPosX, PosY: thisPosY, ImageID: image.ID, WeekTagID: thisWeekTagID });
 };
 
 // Called when an image is dragged and dropped onto the delete tab
 // Deletes an image copy from the database
 // Takes in image copy name
-const deleteImageCopy = async (name) => {
-const image  = await ImageCopy.findOne({where:{FileName: name}})
-await ImageCopy.destroy({where: {ImageID: image.ID}})
+const deleteImageCopy = async (id) => {
+  // Delete Image copy found by passed in array
+  await ImageCopy.destroy({ where: { ID: id } });
 };
 
 // Called when app loads
 // Get all image copies sorted by created date
-const getImageCopies = async () => {
+const getImageCopies = async (thisWeekTagID) => {
+  // declare image copy array
+  const imageCopyArray = [];
 
+  // get all images matching image type in order of created date
   const imageCopies = await ImageCopy.findAll({
-    order: [[sequelize.fn('lower', sequelize.col('FileName')), 'ASC']],
-    raw: true
+    order: [[sequelize.fn('lower', sequelize.col('createdAt')), 'ASC']],
+    raw: true,
+    where: {
+      WeekTagID: thisWeekTagID,
+    },
+  });
+
+  // for each image copy...
+  for (const imageCopy of imageCopies) {
+    // Find base image
+    const image = await Image.findOne({ where: { ID: imageCopy.ImageID } });
+
+    // Find image type
+    const type = await ImageType.findOne({ where: { ID: image.ImageTypeID } });
+
+    // get the absolute path of the image
+    const imagePath = type.Location + '\\' + image.FileName + image.FileType;
+
+    // Push to image copy array
+    imageCopyArray.push([imagePath, imageCopy.ID, image.FileName]);
   }
-  
-  )
 
-  return imageCopies;
+  // return the array of image paths to use as img src ref in front-end
+  return imageCopyArray;
 };
-  
 
+/* NEEDS IMPLEMENTATION */
 // Called when folder path is changed for specific image type
 // Set customization flag in model
 const updateFolderLocation = () => {};

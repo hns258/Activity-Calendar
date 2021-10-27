@@ -63,7 +63,7 @@ input:checked + .slider:before {
 .settings-area td{
     border: none !important;
 }
-.switch-title{
+.switch-title, .switch-title-left{
     display: inline;
     font-size: 0.8rem;
     font-weight: 600;
@@ -78,27 +78,6 @@ input:checked + .slider:before {
 }
 .settings-icon i:hover{
     opacity: 0.7;
-}
-/* left toggle settings */
-.menuOnLeft {
-    position: absolute;
-    left: -21vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
-    /*left: -20.5vw;*/ /*Old size*/
-    direction: rtl;
-    background-color: #fbd988;
-    width: 22vw;
-    height: 65vh;
-    transition: 0.4s;
-    overflow: scroll;
-    height: 100vh;
-}
-.barOnLeft {
-    padding: 0;
-    margin: 0;
-    float: right;
-    display: inline;
-    height: 100vh;
-    width: 2vw; /*Larger sidebar changes: Sidebar toggle is slightly wider - Kyle*/
 }
 
 /* settings page styles */
@@ -171,29 +150,35 @@ input:checked + .slider:before {
 /* Large screens ----------- */
 @media only screen  and (min-width : 1824px) {
   .switch {
-    width: 150px !important;
-    height: 80px !important;
-  }
+    width: 100px !important;
+    height: 50px !important;
+}
   .slider.round {
     border-radius: 54px;
   }
   .slider:before {
-    height: 50px;
-    width: 50px;
-    left: 0px;
-    bottom: 15px;
-  }
-  .switch-title {
-    font-size: 2.8rem;
-    text-align: left;
-    margin-left: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    height: 35px;
+    width: 35px;
+    left: 6px;
+    bottom: 6px;
+}
+input:checked + .slider:before {
+  transform: translateX(45px);
+}
+    .switch-title, .switch-title-left {
+        font-size: 1.5rem;
+        text-align: left;
+        margin-left: -4vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: .8vh;
+        width: 220px;
+    }
   .sidemenu table td, .menuOnLeft table td {
-    font-size: 5rem;
+    font-size: 3rem;
   }
+  
   .settings-icon i {
     margin-right: 10px;
   }

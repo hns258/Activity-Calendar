@@ -1,5 +1,5 @@
 {
-  "name": "activity-calendar-server",
+  "name": "activity-calendar",
   "version": "1.0.0",
   "description": "Activity Calendar App",
   "main": "main.js",

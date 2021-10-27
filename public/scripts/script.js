@@ -58,7 +58,7 @@ function toggleSidemenu() {
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
-      sideMenu.style.right = '-20.5vw'; //Larger sidebar changes: -21vw -> -20.5vw for new size
+      sideMenu.style.right = '-29vw'; 
       open = false;
     } else {
       console.log('opening sidebar to right');
@@ -68,7 +68,7 @@ function toggleSidemenu() {
   } else {
     if (open) {
       console.log('closing sidebar to left');
-      sideMenu.style.left = '-20.5vw'; //Larger sidebar changes: -21vw -> -20.5vw for new size
+      sideMenu.style.left = '-28.5vw'; 
       open = false;
     } else {
       console.log('opening sidebar to left');
