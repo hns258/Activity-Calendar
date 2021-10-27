@@ -28,26 +28,6 @@ const draggables = document.querySelectorAll('div.sidemenu table tr td img');
 let imagesInLibrary = document.getElementsByClassName('img-lib');
 let imageArray = [];
 
-// Initializing the date functionality of the app
-// Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
-function setUpDate() {
-  var dateToday = new Date();
-  var day = dateToday.getDay();
-  const days = document.querySelectorAll('div.p1 table tr th');
-  if (day == 0) {
-    var sunday = 7;
-    days[sunday].style.backgroundColor = '#c5e6f5';
-    for (var i = sunday - 1; i < 21; i += 7) {
-      containers[i].style.backgroundColor = '#c5e6f5';
-    }
-  } else {
-    days[day].style.backgroundColor = '#c5e6f5';
-    for (var i = day - 1; i < 21; i += 7) {
-      containers[i].style.backgroundColor = '#c5e6f5';
-    }
-  }
-}
-
 // Slide-in library menu functionality initialization
 function toggleSidemenu() {
   console.log('sidebar has been clicked');
@@ -216,7 +196,6 @@ addImages('activities');
 /***************************************************************** */
 
 // Invoke all methods needed to boot up app
-setUpDate();
 reloadPreviousCalendar();
 moveIntoNextWeek();
 //check for new clones every 3 secs
