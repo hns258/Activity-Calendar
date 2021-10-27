@@ -162,6 +162,9 @@ input:checked + .slider:before {
     left: 6px;
     bottom: 6px;
 }
+input:checked + .slider:before {
+  transform: translateX(45px);
+}
     .switch-title, .switch-title-left {
         font-size: 1.5rem;
         text-align: left;
