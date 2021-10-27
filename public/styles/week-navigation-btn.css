@@ -9,17 +9,18 @@
   color: white;
   padding: 15px;
   width: 15%;
-  height: 1%;
+  height: 2%;
   text-decoration: none;
   text-align: center;
 /*  font-family: 'Billionary';*/
   vertical-align: middle;
+  font-size: 2rem;
 }
 
 .next-week-link {
   background-color: #2cb8f0;
   position: fixed;
-  right: 0;
+  right: 1.5%;
   bottom: 0;
 }
 
@@ -38,16 +39,29 @@
   margin-left: 50px;
 }
 
+
+@media only screen  and (max-width : 1824px){
+  .this-week-link, .next-week-link {
+    right: 0.5%;
+  }
+}
+
+@media only screen  and (min-width : 2535px){
+  .this-week-link, .next-week-link {
+    font-size: 2.5rem;
+    padding: 25px 15px 0px 15px;
+    width: 12%;
+    height: 2%; /*WIP week button changes: this week and next week buttons are taller*/
+  }
+}
+
 /* Large screens ----------- */
-@media only screen  and (min-width : 1824px) {
+@media only screen  and (min-width : 3500px){
   .this-week-link, .next-week-link {
     font-size: 3.5rem;
     padding: 25px 15px 0px 15px;
     width: 12%;
     height: 3%; /*WIP week button changes: this week and next week buttons are taller*/
   }
-
-  .next-week-link {
-    right: 80px;
-  }
 }
+

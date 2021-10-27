@@ -59,8 +59,6 @@
 
 .copy{
   width: 4.9vw !important;
-  /* background-color: white;
-  border-radius: 10px; */
 }
 #people-imgs-row, #popular-imgs-row, .settings-area {
     display: grid;
@@ -75,9 +73,6 @@
 }
 #transportation-imgs-row, #activities-imgs-row {
     display: grid;
-    /*grid-template-rows: 8vh 8vh;*/
-    /*grid-auto-flow: column;*/
-    /*grid-template-columns: 5vw 5vw 5vw 5vw;*/
     grid-template-columns: repeat(4, 7.5vh);
     grid-gap: 26px;
     text-align: center;
@@ -96,8 +91,7 @@
 /* left toggle settings */
 .menuOnLeft {
   position: absolute;
-  left: 0px; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
-  /*left: -20.5vw;*/ /*Old size*/
+  left: 0px;
   direction: rtl;
   background-color: #fbd988;
   width: 30.5vw;
@@ -112,12 +106,15 @@
   float: right;
   display: inline;
   height: 100vh;
-  width: 2vw; /*Larger sidebar changes: Sidebar toggle is slightly wider - Kyle*/
+  width: 2vw;
 }
 
 @media only screen  and (min-width : 1824px) {
+  .settings-area td:nth-child(2) {
+    margin-left: 80px;
+  }
   .img-row-title{
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     text-align: left;
     padding-left: 1vw;
     padding-top: 1.5vw;
@@ -125,17 +122,17 @@
 
   .sidemenu {
     padding-right: 15px;
-    width: 30.5vw !important;
+    width: 30.3vw !important;
   }
 
     #people-imgs-row, #popular-imgs-row, .settings-area {
         grid-gap: 2vh 3vh;
-        margin: 30px 10px 10px 50px;
+        margin: 30px 10px;
     }
 
     #transportation-imgs-row, #activities-imgs-row{
         grid-gap: 2vh 3vh;
-        margin: 30px 10px 10px 50px;
+        margin: 20px 10px;
     }
 
     #transportation-imgs-row {
@@ -154,11 +151,3 @@
         grid-template-columns: 3vw 3vw 3vw 22vw; 
     }
 }
-
-/* .sidebar:active {
-   border: 2px solid red; 
-} */
-
-/*.sidemenu:hover {
-	right: 0px;
-}*/
