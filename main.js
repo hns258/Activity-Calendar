@@ -23,6 +23,7 @@ db.authenticate()
 
 function createWindow() {
   const win = new BrowserWindow({
+    autoHideMenuBar: true,
     width: 2000,
     height: 1200,
     webPreferences: {
