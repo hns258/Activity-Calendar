@@ -55,6 +55,10 @@
 
 #transportation-imgs-row img{
   background-color: white;
+  padding: 30px;
+  height: 4.56rem;
+  width: 4.56rem;
+  object-fit: cover;
 }
 
 .copy{
