@@ -49,9 +49,7 @@
 
 #transportation-imgs-row img{
   background-color: white;
-  padding: 30px;
-  height: 4.56rem;
-  width: 4.56rem;
+  padding: 15px;
   object-fit: cover;
 }
 
@@ -129,7 +127,7 @@
     }
 
     #transportation-imgs-row, #activities-imgs-row{
-        grid-gap: 2vh 3.5vh;
+        grid-gap: 2vh 3.28vh;
         margin: 20px 10px;
     }
 
