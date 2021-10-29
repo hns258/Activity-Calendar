@@ -22,6 +22,7 @@ function switchToLeft(){
         //swap classes and text of the "Switch to..." title
         switchTitle.classList.remove("switch-title");
         switchTitle.classList.add("switch-title-left");
+        switchTitle.innerHTML = "Switch to right";
         //swap bar classes too
         sideBarImg.classList.remove("sidebar");
         sideBarImg.classList.add("barOnLeft");
@@ -47,6 +48,7 @@ function switchToLeft(){
         //swap classes and text of "Switch to..." title to its defaults
         switchTitle.classList.remove("switch-title-left");
         switchTitle.classList.add("switch-title");
+        switchTitle.innerHTML = "Switch to left";
         //swap bar classes too
         sideBarImg.classList.remove("barOnLeft");
         sideBarImg.classList.add("sidebar");
