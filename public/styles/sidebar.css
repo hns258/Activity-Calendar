@@ -30,12 +30,6 @@
   display: inline;
   height: 100%;
   overflow: scroll !important;
-
-}
-
-.sidemenu table tbody,
-.menuOnLeft table tbody{
-  /*height: 100vh;*/
 }
 
 .sidemenu table td,
