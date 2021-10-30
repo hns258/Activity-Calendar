@@ -1,6 +1,4 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const TouchscreenWindow = require('electron-touchscreen');
-
 
 // Load DB helpers
 const {
@@ -24,7 +22,7 @@ db.authenticate()
   .catch((err) => console.log('DB Error: ' + err.message));
 
 function createWindow() {
-  const win = new TouchscreenWindow({
+  const win = new BrowserWindow({
     autoHideMenuBar: true,
     width: 2000,
     height: 1200,
