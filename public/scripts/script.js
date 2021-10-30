@@ -56,16 +56,16 @@ const populateImageLibrary = async (category) => {
 const setImageCopy = async (imageCopyID, baseID, posX, posY) => {
   ipcRenderer
     .invoke('set-image-copy', imageCopyID, baseID, posX, posY, 1)
-    .then((wasSuccessful) => {
-      return wasSuccessful;
+    .then((isSaved) => {
+      return isSaved;
     });
 };
 
 // Call to delete image copy in database
 // returns true if database deletion was successful
 const deleteImageCopy = async (imageCopyID) => {
-  ipcRenderer.invoke('delete-image-copy', imageCopyID).then((wasSuccessful) => {
-    return wasSuccessful;
+  ipcRenderer.invoke('delete-image-copy', imageCopyID).then((isDeleted) => {
+    return isDeleted;
   });
 };
 
