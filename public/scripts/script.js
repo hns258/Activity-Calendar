@@ -29,6 +29,25 @@ let imagesInLibrary = document.getElementsByClassName('img-lib');
 let imageArray = [];
 let deleteBox = document.getElementById('trash-box-container');
 
+/* IPC FUNCTIONS + Node Imports */
+const ipcRenderer = require('electron').ipcRenderer;
+const { randomUUID } = require('crypto');
+
+// TODO: Change innerHTML to use code from image copy
+const populateImageLibrary = async (category) => {
+  const row = document.getElementById(category + '-imgs-row');
+  ipcRenderer.invoke('load-images', category).then((images) => {
+    for (const image of images) {
+      row.innerHTML +=
+        '<td>' +
+        `<img src="${image[0]}" ` +
+        `data-id="${image[1]}" ` +
+        `alt="${image[2]}" ` +
+        'class="img-lib" onmousedown="clickDrag()"></td>';
+    }
+  });
+};
+
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
 function setUpDate() {
@@ -195,33 +214,11 @@ function moveIntoNextWeek() {
   // need to do anything then
 }
 
-/*
- *	Author: Ken Orsini
- *	Dynamically adding html elements
- */
-const ipcRenderer = require('electron').ipcRenderer;
-const { randomUUID } = require('crypto');
-
-// Change innerHTML to use code from image copy
-const populateImageLibrary = async (category) => {
-  const row = document.getElementById(category + '-imgs-row');
-  ipcRenderer.invoke('load-images', category).then((images) => {
-    for (const image of images) {
-      row.innerHTML +=
-        '<td>' +
-        `<img src="${image[0]}" ` +
-        `data-id="${image[1]}" ` +
-        `alt="${image[2]}" ` +
-        'class="img-lib" onmousedown="clickDrag()"></td>';
-    }
-  });
-};
-
+// Populate each category of image library
 populateImageLibrary('people');
 populateImageLibrary('transportation');
 populateImageLibrary('popular');
 populateImageLibrary('activities');
-/***************************************************************** */
 
 // Invoke all methods needed to boot up app
 setUpDate();
