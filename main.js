@@ -41,9 +41,7 @@ app.whenReady().then(async () => {
   await initializeWeekTags();
   await initializeImageTypes();
   await writeAllImages();
-  const imageCopyArray = await getImageCopies(1);
-  console.log(imageCopyArray);
-  // createWindow();
+  createWindow();
 });
 
 app.on('window-all-closed', async function () {
