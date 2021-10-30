@@ -29,6 +29,7 @@ let imagesInLibrary = document.getElementsByClassName('img-lib');
 let imageArray = [];
 let deleteBox = document.getElementById('trash-box-container');
 
+/*****************************************************************/
 /* IPC FUNCTIONS + Node Imports */
 const ipcRenderer = require('electron').ipcRenderer;
 const { randomUUID } = require('crypto');
@@ -47,6 +48,30 @@ const populateImageLibrary = async (category) => {
     }
   });
 };
+
+// Call to save or update image copy in database
+const setImageCopy = async (imageCopyID, baseID, posX, posY) => {
+  ipcRenderer
+    .invoke('set-image-copy', imageCopyID, baseID, posX, posY, 1)
+    .then(console.log('Image Copy saved/updated in database...'));
+};
+
+// Call to delete image copy in backend
+const deleteImageCopy = async (imageCopyID) => {
+  ipcRenderer
+    .invoke('delete-image-copy', imageCopyID)
+    .then(console.log('Image Copy deleted in database...'));
+};
+
+// Call to populate image copies on calendar from database
+// NEEDS IMPLEMENTATION
+const populateImageCopies = async () => {
+  ipcRenderer
+    .invoke('load-image-copies', 1)
+    .then(/* Do something with returned image copy array */);
+};
+
+/*****************************************************************/
 
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
