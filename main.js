@@ -73,7 +73,7 @@ ipcMain.handle(
 
 // delete an image copy
 ipcMain.handle('delete-image-copy', async (event, copyID) => {
-  return await deleteImageCopy(copyID);
+  await deleteImageCopy(copyID);
 });
 
 // load all image copies for current week
