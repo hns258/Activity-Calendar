@@ -200,6 +200,7 @@ function moveIntoNextWeek() {
  *	Dynamically adding html elements
  */
 const ipcRenderer = require('electron').ipcRenderer;
+const { randomUUID } = require('crypto');
 
 // Change innerHTML to use code from image copy
 const populateImageLibrary = async (category) => {
