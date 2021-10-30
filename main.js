@@ -11,6 +11,7 @@ const {
   updateFolderLocation,
   initializeImageTypes,
   initializeWeekTags,
+  deleteImageCopy,
 } = require('./src/helpers/dbFunctions');
 
 // Import database
@@ -62,25 +63,20 @@ ipcMain.handle('change-folder', async (event, category) => {
   return await readImages(category);
 });
 
-// create image copy
+// set an image copy
 ipcMain.handle(
-  'create-image-copy',
-  async (event, id, posX, posY, weekTagID) => {
-    await setImageCopy(id, posX, posY, weekTagID);
+  'set-image-copy',
+  async (event, copyID, baseID, posX, posY, weekTagID) => {
+    await setImageCopy(copyID, baseID, posX, posY, weekTagID);
   }
 );
 
-// move an image copy
-ipcMain.handle('move-image-copy', async (event, id, posX, posY, weekTagID) => {
-  await setImageCopy(id, posX, posY, weekTagID);
+// delete an image copy
+ipcMain.handle('delete-image-copy', async (event, copyID) => {
+  return await deleteImageCopy(copyID);
 });
 
-// delete an image copy
-ipcMain.handle('delete-image-copy', async (event, id) => {
-  await deleteImageCopy(id);
-});
-
-// delete an image copy
+// load all image copies for current week
 ipcMain.handle('load-image-copies', async (event, weekTagID) => {
   return await getImageCopies(weekTagID);
 });

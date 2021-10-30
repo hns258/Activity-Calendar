@@ -58,7 +58,7 @@ function toggleSidemenu() {
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
-      sideMenu.style.right = '-29vw'; 
+      sideMenu.style.right = '-29vw';
       open = false;
     } else {
       console.log('opening sidebar to right');
@@ -68,7 +68,7 @@ function toggleSidemenu() {
   } else {
     if (open) {
       console.log('closing sidebar to left');
-      sideMenu.style.left = '-28.5vw'; 
+      sideMenu.style.left = '-28.5vw';
       open = false;
     } else {
       console.log('opening sidebar to left');
@@ -200,24 +200,26 @@ function moveIntoNextWeek() {
  *	Dynamically adding html elements
  */
 const ipcRenderer = require('electron').ipcRenderer;
-const addImages = async (category) => {
+
+// Change innerHTML to use code from image copy
+const populateImageLibrary = async (category) => {
   const row = document.getElementById(category + '-imgs-row');
   ipcRenderer.invoke('load-images', category).then((images) => {
     for (const image of images) {
       row.innerHTML +=
         '<td>' +
         `<img src="${image[0]}" ` +
-        `id="${image[1]}" ` +
+        `data-id="${image[1]}" ` +
         `alt="${image[2]}" ` +
         'class="img-lib" onmousedown="clickDrag()"></td>';
     }
   });
 };
 
-addImages('people');
-addImages('transportation');
-addImages('popular');
-addImages('activities');
+populateImageLibrary('people');
+populateImageLibrary('transportation');
+populateImageLibrary('popular');
+populateImageLibrary('activities');
 /***************************************************************** */
 
 // Invoke all methods needed to boot up app
