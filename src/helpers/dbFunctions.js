@@ -208,7 +208,14 @@ const getImageCopies = async (thisWeekTagID) => {
     const imagePath = type.Location + '\\' + image.FileName + image.FileType;
 
     // Push to image copy array
-    imageCopyArray.push([imagePath, imageCopy.ID, image.FileName]);
+    imageCopyArray.push([
+      imagePath,
+      imageCopy.ID,
+      imageCopy.ImageID,
+      imageCopy.PosX,
+      imageCopy.PosY,
+      image.FileName,
+    ]);
   }
 
   // return the array of image paths to use as img src ref in front-end

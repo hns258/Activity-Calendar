@@ -41,7 +41,9 @@ app.whenReady().then(async () => {
   await initializeWeekTags();
   await initializeImageTypes();
   await writeAllImages();
-  createWindow();
+  const imageCopyArray = await getImageCopies(1);
+  console.log(imageCopyArray);
+  // createWindow();
 });
 
 app.on('window-all-closed', async function () {
@@ -67,13 +69,23 @@ ipcMain.handle('change-folder', async (event, category) => {
 ipcMain.handle(
   'set-image-copy',
   async (event, copyID, baseID, posX, posY, weekTagID) => {
-    await setImageCopy(copyID, baseID, posX, posY, weekTagID);
+    try {
+      await setImageCopy(copyID, baseID, posX, posY, weekTagID);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 );
 
 // delete an image copy
 ipcMain.handle('delete-image-copy', async (event, copyID) => {
-  await deleteImageCopy(copyID);
+  try {
+    await deleteImageCopy(copyID);
+    return true;
+  } catch (e) {
+    return false;
+  }
 });
 
 // load all image copies for current week

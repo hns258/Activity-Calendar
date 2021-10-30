@@ -32,8 +32,9 @@ let deleteBox = document.getElementById('trash-box-container');
 /*****************************************************************/
 /* IPC FUNCTIONS + Node Imports */
 const ipcRenderer = require('electron').ipcRenderer;
-const { randomUUID } = require('crypto');
+const { randomUUID } = require('crypto'); // returns random UUID as string on call
 
+// Populates image library with images from database
 // TODO: Change innerHTML to use code from image copy
 const populateImageLibrary = async (category) => {
   const row = document.getElementById(category + '-imgs-row');
@@ -49,26 +50,37 @@ const populateImageLibrary = async (category) => {
   });
 };
 
+/* Jagoda - implement the following three functions into the frontend script */
 // Call to save or update image copy in database
+// returns true if database save was successful
 const setImageCopy = async (imageCopyID, baseID, posX, posY) => {
   ipcRenderer
     .invoke('set-image-copy', imageCopyID, baseID, posX, posY, 1)
-    .then(console.log('Image Copy saved/updated in database...'));
+    .then((wasSuccessful) => {
+      return wasSuccessful;
+    });
 };
 
-// Call to delete image copy in backend
+// Call to delete image copy in database
+// returns true if database deletion was successful
 const deleteImageCopy = async (imageCopyID) => {
-  ipcRenderer
-    .invoke('delete-image-copy', imageCopyID)
-    .then(console.log('Image Copy deleted in database...'));
+  ipcRenderer.invoke('delete-image-copy', imageCopyID).then((wasSuccessful) => {
+    return wasSuccessful;
+  });
 };
 
-// Call to populate image copies on calendar from database
-// NEEDS IMPLEMENTATION
-const populateImageCopies = async () => {
-  ipcRenderer
-    .invoke('load-image-copies', 1)
-    .then(/* Do something with returned image copy array */);
+// Call to return image copy model from database
+// Returns image copy array
+//    array[i][0] = image path
+//    array[i][1] = image copy ID
+//    array[i][2] = base image ID
+//    array[i][3] = position x
+//    array[i][4] = position y
+//    array[i][5] = file name
+const getImageCopyModels = async () => {
+  ipcRenderer.invoke('load-image-copies', 1).then((imageCopyArray) => {
+    return imageCopyArray;
+  });
 };
 
 /*****************************************************************/
