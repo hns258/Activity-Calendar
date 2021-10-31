@@ -121,7 +121,8 @@ function toggleSidemenu() {
       sideMenu.style.right = '0px';
       open = true;
     }
-  } else {
+  }
+  else {
     if (open) {
       console.log('closing sidebar to left');
       sideMenu.style.left = '-28.5vw';
@@ -131,7 +132,10 @@ function toggleSidemenu() {
       sideMenu.style.left = '0px';
       open = true;
     }
-  }
+    }
+    if (open) {
+        clickDrag(); //Bug fix: dragging image for the first time
+    }
 }
 
 /* TODO: Switch touchstart, etc. events to their mouse-based equivalents
@@ -178,7 +182,7 @@ function clickDrag() {
       }
 
       image.style.position = 'absolute';
-      image.style.zIndex = 1000;
+      image.style.zIndex = 2;
       image.style.width = '4.9vw';
       image.style.width = '7.9vh';
       image.style.objectFit = 'scale-down';
@@ -205,9 +209,11 @@ function clickDrag() {
         document.removeEventListener('mousemove', onMouseMove);
         image.onmouseup = null;
         //check if in deletion area
-        if (event.pageY < 100 && open === false) {
-          image.style.display = 'none';
-        }
+          if (event.pageY < 100 && open === false) {
+              image.style.display = 'none';
+          } else {
+              image.style.zIndex = 0; //Drop the image below the sidebar
+          }
       };
 
       image.ondragstart = function () {
@@ -256,6 +262,7 @@ populateImageLibrary('people');
 populateImageLibrary('transportation');
 populateImageLibrary('popular');
 populateImageLibrary('activities');
+clickDrag();
 
 // Invoke all methods needed to boot up app
 setUpDate();
