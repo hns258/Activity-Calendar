@@ -14,14 +14,15 @@
 }
 
 .sidemenu {
-  position: absolute;
-  right: -29vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
-  /*right: -21vw;*/ /*Old size*/
-  background-color: #fbd988;
-  width: 29.5vw !important;
-  height: 100%;
-  transition: 0.4s;
-  /*overflow: scroll !important;*/
+    position: absolute;
+    right: -29vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+    /*right: -21vw;*/ /*Old size*/
+    background-color: #fbd988;
+    width: 29.5vw !important;
+    height: 100%;
+    transition: 0.4s;
+    /*overflow: scroll !important;*/
+    z-index: 1; /*Place in front of cloned image elemnts*/
 }
 
 .sidemenu table,
@@ -95,6 +96,7 @@
   transition: 0.4s;
   overflow: scroll;
   height: 100vh;
+  z-index: 1; /*Place in front of cloned image elemnts*/
 }
 .barOnLeft {
   padding: 0;
