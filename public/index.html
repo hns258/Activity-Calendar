@@ -10,6 +10,7 @@
 </head>
 
 <body>
+	<input style="display: none;" id="hdnWeek" value="1" />
 	<div class="p1" id="p1">
 		<div class="trash-box-container deletion-box" id="trash-box-container" style="display: none;">
 			<div class="trash-box">DELETE <i class="fas fa-trash-alt"></i></div>
@@ -62,7 +63,7 @@
 
 	</div>
 
-	<div class="sidemenu">
+	<div class="sidemenu menu-container">
 		<img src="misc/handle.png" alt="click" class="sidebar" onclick="toggleSidemenu()">
 		<table>
 			<tr class="settings-area">
@@ -76,12 +77,18 @@
 				<td class="settings-icon"><i class="fas fa-cog" onclick="goToSettings()"></i></td>
 			</tr>
 			<!--"People" category-->
+			<tr>
+				<th colspan="4" class="img-row-title">People</th>
+			</tr>
 			<tr id="people-imgs-row"></tr>
 			<!--"Transportation" category-->
-			<tr id="transportation-imgs-row"></tr>
-			<!--"Popular" category-->
 			<tr>
-				<th colspan="4" class="img-row-title">Popular</th>
+				<th colspan="4" class="img-row-title">Transportation</th>
+			</tr>
+			<tr id="transportation-imgs-row"></tr>
+			<!--"Activities" category-->
+			<tr>
+				<th colspan="4" class="img-row-title">Activities</th>
 			</tr>
 			<tr id="popular-imgs-row"></tr>
 			<tr>

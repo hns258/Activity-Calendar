@@ -53,9 +53,9 @@ const populateImageLibrary = async (category) => {
 /* Jagoda - implement the following three functions into the frontend script */
 // Call to save or update image copy in database
 // returns true if database save was successful
-const setImageCopy = async (imageCopyID, baseID, posX, posY) => {
-  ipcRenderer
-    .invoke('set-image-copy', imageCopyID, baseID, posX, posY, 1)
+const setImageCopy = async (imageCopyID, baseID, posX, posY, weekType) => {
+  await ipcRenderer
+    .invoke('set-image-copy', imageCopyID, baseID, posX, posY, weekType)
     .then((isSaved) => {
       return isSaved;
     });
@@ -84,6 +84,7 @@ const getImageCopyModels = async () => {
 };
 
 /*****************************************************************/
+
 
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
@@ -114,7 +115,7 @@ function toggleSidemenu() {
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
-      sideMenu.style.right = '-29vw';
+      sideMenu.style.right = '-29vw'; 
       open = false;
     } else {
       console.log('opening sidebar to right');
@@ -124,7 +125,7 @@ function toggleSidemenu() {
   } else {
     if (open) {
       console.log('closing sidebar to left');
-      sideMenu.style.left = '-28.5vw';
+      sideMenu.style.left = '-28.5vw'; 
       open = false;
     } else {
       console.log('opening sidebar to left');
@@ -176,7 +177,8 @@ function clickDrag() {
         //finally add copy class to image
         image.classList.add('copy');
       }
-
+      
+      image.setAttribute('clone-id', randomUUID());
       image.style.position = 'absolute';
       image.style.zIndex = 1000;
       image.style.width = '4.9vw';
@@ -206,7 +208,37 @@ function clickDrag() {
         image.onmouseup = null;
         //check if in deletion area
         if (event.pageY < 100 && open === false) {
-          image.style.display = 'none';
+          var copyImageId = image.getAttribute('clone-id');
+          deleteImageCopy(copyImageId).then(
+            function(value) { 
+              // Maybe add save toast?
+              var success = "test";
+            },
+            function(error) {
+              // Alert to be changed to boostrap toast
+              alert('An error occurred, the image could not be saved.')
+            }
+          );
+          // image.style.display = 'none';
+          document.removeChild(image);
+          var parent = image.parentNode();
+          parent.removeChild(image);
+        }
+        else {
+          var copyImageId = image.getAttribute('clone-id');
+          var baseId = image.getAttribute('data-id');
+          var weekType = document.getElementById('hdnWeek').value;
+
+          setImageCopy(copyImageId, baseId, event.pageX, event.pageY, weekType).then(
+            function(value) { 
+              // Maybe add save toast?
+              var success = "test";
+            },
+            function(error) {
+              // Alert to be changed to boostrap toast
+              alert('An error occurred, the image could not be saved.')
+            }
+          );
         }
       };
 
@@ -219,6 +251,15 @@ function clickDrag() {
 
 // Reloads latest version
 function reloadPreviousCalendar() {
+  var latestBody = "";
+  var weekType = document.getElementById('hdnWeek').value;
+  
+  if (weekType == 1){
+    latestBody = localStorage.getItem('latest version');
+  }
+  else {
+    latestBody = localStorage.getItem('latest version 2') || '';
+  }
   // Get latest version of the body of the calendar app
   var latestBody = localStorage.getItem('latest version');
   // After "</script>" is when the newly added images appear, which is what we want to load when opening the app (these images are stored in index 1 of the array)
@@ -256,6 +297,7 @@ populateImageLibrary('people');
 populateImageLibrary('transportation');
 populateImageLibrary('popular');
 populateImageLibrary('activities');
+
 
 // Invoke all methods needed to boot up app
 setUpDate();

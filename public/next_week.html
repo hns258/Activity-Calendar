@@ -9,6 +9,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
 <body>
+	<input style="display: none;" id="hdnWeek" value="2" />
 	<div class="p1">
 		<div class="trash-box-container deletion-box" id="trash-box-container" style="display: none;">
             <div class="trash-box">DELETE <i class="fas fa-trash-alt"></i></div>
@@ -75,15 +76,20 @@
 				<td class="settings-icon"><i class="fas fa-cog" onclick="goToSettings()"></i></td>
 			</tr>
 			<!--"People" category-->
+			<tr>
+				<th colspan="4" class="img-row-title">People</th>
+			</tr>
 			<tr id="people-imgs-row"></tr>
 			<!--"Transportation" category-->
-			<tr id="transportation-imgs-row"></tr>
-			<!--"Popular" category-->
 			<tr>
-				<th colspan="4" class="img-row-title">Popular</th>
+				<th colspan="4" class="img-row-title">Transportation</th>
+			</tr>
+			<tr id="transportation-imgs-row"></tr>
+			<!--"Activities" category-->
+			<tr>
+				<th colspan="4" class="img-row-title">Activities</th>
 			</tr>
 			<tr id="popular-imgs-row"></tr>
-			<!--"A-Z" category-->
 			<tr>
 				<th colspan="4" class="img-row-title">A-Z</th>
 			</tr>
