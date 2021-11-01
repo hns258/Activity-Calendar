@@ -29,6 +29,63 @@ let imagesInLibrary = document.getElementsByClassName('img-lib');
 let imageArray = [];
 let deleteBox = document.getElementById('trash-box-container');
 
+/*****************************************************************/
+/* IPC FUNCTIONS + Node Imports */
+const ipcRenderer = require('electron').ipcRenderer;
+const { randomUUID } = require('crypto'); // returns random UUID as string on call
+
+// Populates image library with images from database
+// TODO: Change innerHTML to use code from image copy
+const populateImageLibrary = async (category) => {
+  const row = document.getElementById(category + '-imgs-row');
+  ipcRenderer.invoke('load-images', category).then((images) => {
+    for (const image of images) {
+      row.innerHTML +=
+        '<td>' +
+        `<img src="${image[0]}" ` +
+        `data-id="${image[1]}" ` +
+        `alt="${image[2]}" ` +
+        'class="img-lib" onmousedown="clickDrag()"></td>';
+    }
+  });
+};
+
+/* Jagoda - implement the following three functions into the frontend script */
+// Call to save or update image copy in database
+// returns true if database save was successful
+const setImageCopy = async (imageCopyID, baseID, posX, posY, weekType) => {
+  await ipcRenderer
+    .invoke('set-image-copy', imageCopyID, baseID, posX, posY, weekType)
+    .then((isSaved) => {
+      return isSaved;
+    });
+};
+
+// Call to delete image copy in database
+// returns true if database deletion was successful
+const deleteImageCopy = async (imageCopyID) => {
+  ipcRenderer.invoke('delete-image-copy', imageCopyID).then((isDeleted) => {
+    return isDeleted;
+  });
+};
+
+// Call to return image copy model from database
+// Returns image copy array
+//    array[i][0] = image path
+//    array[i][1] = image copy ID
+//    array[i][2] = base image ID
+//    array[i][3] = position x
+//    array[i][4] = position y
+//    array[i][5] = file name
+const getImageCopyModels = async () => {
+  ipcRenderer.invoke('load-image-copies', 1).then((imageCopyArray) => {
+    return imageCopyArray;
+  });
+};
+
+/*****************************************************************/
+
+
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
 function setUpDate() {
@@ -65,8 +122,7 @@ function toggleSidemenu() {
       sideMenu.style.right = '0px';
       open = true;
     }
-  }
-  else {
+  } else {
     if (open) {
       console.log('closing sidebar to left');
       sideMenu.style.left = '-28.5vw'; 
@@ -76,10 +132,7 @@ function toggleSidemenu() {
       sideMenu.style.left = '0px';
       open = true;
     }
-    }
-    if (open) {
-        clickDrag(); //Bug fix: dragging image for the first time
-    }
+  }
 }
 
 /* TODO: Switch touchstart, etc. events to their mouse-based equivalents
@@ -124,9 +177,10 @@ function clickDrag() {
         //finally add copy class to image
         image.classList.add('copy');
       }
-
+      
+      image.setAttribute('clone-id', randomUUID());
       image.style.position = 'absolute';
-      image.style.zIndex = 2;
+      image.style.zIndex = 1000;
       image.style.width = '4.9vw';
       image.style.width = '7.9vh';
       image.style.objectFit = 'scale-down';
@@ -153,11 +207,39 @@ function clickDrag() {
         document.removeEventListener('mousemove', onMouseMove);
         image.onmouseup = null;
         //check if in deletion area
-          if (event.pageY < 100 && open === false) {
-              image.style.display = 'none';
-          } else {
-              image.style.zIndex = 0; //Drop the image below the sidebar
-          }
+        if (event.pageY < 100 && open === false) {
+          var copyImageId = image.getAttribute('clone-id');
+          deleteImageCopy(copyImageId).then(
+            function(value) { 
+              // Maybe add save toast?
+              var success = "test";
+            },
+            function(error) {
+              // Alert to be changed to boostrap toast
+              alert('An error occurred, the image could not be saved.')
+            }
+          );
+          // image.style.display = 'none';
+          document.removeChild(image);
+          var parent = image.parentNode();
+          parent.removeChild(image);
+        }
+        else {
+          var copyImageId = image.getAttribute('clone-id');
+          var baseId = image.getAttribute('data-id');
+          var weekType = document.getElementById('hdnWeek').value;
+
+          setImageCopy(copyImageId, baseId, event.pageX, event.pageY, weekType).then(
+            function(value) { 
+              // Maybe add save toast?
+              var success = "test";
+            },
+            function(error) {
+              // Alert to be changed to boostrap toast
+              alert('An error occurred, the image could not be saved.')
+            }
+          );
+        }
       };
 
       image.ondragstart = function () {
@@ -169,6 +251,15 @@ function clickDrag() {
 
 // Reloads latest version
 function reloadPreviousCalendar() {
+  var latestBody = "";
+  var weekType = document.getElementById('hdnWeek').value;
+  
+  if (weekType == 1){
+    latestBody = localStorage.getItem('latest version');
+  }
+  else {
+    latestBody = localStorage.getItem('latest version 2') || '';
+  }
   // Get latest version of the body of the calendar app
   var latestBody = localStorage.getItem('latest version');
   // After "</script>" is when the newly added images appear, which is what we want to load when opening the app (these images are stored in index 1 of the array)
@@ -201,31 +292,12 @@ function moveIntoNextWeek() {
   // need to do anything then
 }
 
-/*
- *	Author: Ken Orsini
- *	Dynamically adding html elements
- */
-const ipcRenderer = require('electron').ipcRenderer;
-const addImages = async (category) => {
-  const row = document.getElementById(category + '-imgs-row');
-  ipcRenderer.invoke('load-images', category).then((images) => {
-    for (const image of images) {
-      row.innerHTML +=
-        '<td>' +
-        `<img src="${image[0]}" ` +
-        `id="${image[1]}" ` +
-        `alt="${image[2]}" ` +
-        'class="img-lib" onmousedown="clickDrag()"></td>';
-    }
-  });
-};
+// Populate each category of image library
+populateImageLibrary('people');
+populateImageLibrary('transportation');
+populateImageLibrary('popular');
+populateImageLibrary('activities');
 
-addImages('people');
-addImages('transportation');
-addImages('popular');
-addImages('activities');
-clickDrag();
-/***************************************************************** */
 
 // Invoke all methods needed to boot up app
 setUpDate();

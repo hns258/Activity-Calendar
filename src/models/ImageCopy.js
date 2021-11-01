@@ -4,7 +4,6 @@ const db = require('../config/db');
 const ImageCopy = db.define('imageCopy', {
   ID: {
     type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     allowNull: false,
   },

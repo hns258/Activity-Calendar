@@ -130,9 +130,15 @@ const updateCalendar = async () => {
 //    Image is dragged onto calendar
 //    Image copy is moved
 // Takes in image or imagecopy id, PosX, PosY, weekTagID
-const setImageCopy = async (id, thisPosX, thisPosY, thisWeekTagID) => {
+const setImageCopy = async (
+  copyID,
+  baseID,
+  thisPosX,
+  thisPosY,
+  thisWeekTagID
+) => {
   // Try to find an already existing image copy with passed in ID
-  const imageCopy = await ImageCopy.findOne({ where: { ID: id } });
+  const imageCopy = await ImageCopy.findOne({ where: { ID: copyID } });
 
   // If one exists, update posX and posY
   if (imageCopy) {
@@ -141,7 +147,7 @@ const setImageCopy = async (id, thisPosX, thisPosY, thisWeekTagID) => {
     await imageCopy.save();
   } else {
     // Find image with passed in ID
-    const image = await Image.findOne({ where: { ID: id } });
+    const image = await Image.findOne({ where: { ID: baseID } });
     // Original image stored in activities (if popular)
     let baseImage;
 
@@ -158,6 +164,7 @@ const setImageCopy = async (id, thisPosX, thisPosY, thisWeekTagID) => {
 
     // Create image copy with set variables
     await ImageCopy.create({
+      ID: copyID,
       PosX: thisPosX,
       PosY: thisPosY,
       ImageID: imageID,
@@ -201,7 +208,14 @@ const getImageCopies = async (thisWeekTagID) => {
     const imagePath = type.Location + '\\' + image.FileName + image.FileType;
 
     // Push to image copy array
-    imageCopyArray.push([imagePath, imageCopy.ID, image.FileName]);
+    imageCopyArray.push([
+      imagePath,
+      imageCopy.ID,
+      imageCopy.ImageID,
+      imageCopy.PosX,
+      imageCopy.PosY,
+      image.FileName,
+    ]);
   }
 
   // return the array of image paths to use as img src ref in front-end
