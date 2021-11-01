@@ -55,6 +55,10 @@ function toggleSidemenu() {
       open = true;
     }
   }
+
+  if (open) {
+    clickDrag(); //Bug fix: dragging image for the first time
+  }
 }
 
 /* TODO: Switch touchstart, etc. events to their mouse-based equivalents
