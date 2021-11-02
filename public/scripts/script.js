@@ -133,6 +133,10 @@ function toggleSidemenu() {
       open = true;
     }
   }
+
+  if (open) {
+    clickDrag(); //Bug fix: dragging image for the first time
+  }
 }
 
 /* TODO: Switch touchstart, etc. events to their mouse-based equivalents
@@ -307,7 +311,7 @@ moveIntoNextWeek();
 setInterval(() => {
   clickDrag();
   console.log('image check complete');
-}, 3000);
+}, 1000);
 
 /**
  * SAVING AND RELOADING DATA

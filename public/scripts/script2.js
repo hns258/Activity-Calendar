@@ -207,7 +207,7 @@ moveIntoNextWeek();
 //check for new clones every 3 secs
 setInterval(() => {
   clickDrag();
-}, 3000);
+}, 1000);
 
 /**
  * SAVING AND RELOADING DATA
