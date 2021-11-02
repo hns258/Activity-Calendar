@@ -56,6 +56,12 @@
 .copy{
   width: 4.9vw !important;
 }
+
+.activities-imgs-row-copy,
+.popular-imgs-row-copy{
+  width: 6.12vw !important;
+}
+
 #people-imgs-row, #popular-imgs-row, .settings-area {
     display: grid;
     grid-template-columns: repeat(4, 7.5vh);
