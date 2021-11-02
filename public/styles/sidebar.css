@@ -43,14 +43,13 @@
 .sidemenu table td img,
 .menuOnLeft table td img{
   padding: 0;
-  width: 4.9vw;
+  width: 6.6vw;
   object-fit: scale-down;
-  height: 6.9vh;
+  height: 9.3vh;
 }
 
 #transportation-imgs-row img{
   background-color: white;
-  padding: 15px;
   object-fit: cover;
 }
 
@@ -125,12 +124,12 @@
 
     #people-imgs-row, #popular-imgs-row, .settings-area {
       grid-gap: 2vh 3.5vh;
-      margin: 30px 10px;
+      margin: 30px 20px;
     }
 
     #transportation-imgs-row, #activities-imgs-row{
         grid-gap: 2vh 3.28vh;
-        margin: 20px 10px;
+        margin: 20px 20px;
     }
 
     #transportation-imgs-row {
