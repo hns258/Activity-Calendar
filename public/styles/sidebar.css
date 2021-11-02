@@ -43,9 +43,9 @@
 .sidemenu table td img,
 .menuOnLeft table td img{
   padding: 0;
-  width: 6.6vw;
+  width: 4.9vw;
   object-fit: scale-down;
-  height: 9.3vh;
+  height: 6.9vh;
 }
 
 #transportation-imgs-row img{
