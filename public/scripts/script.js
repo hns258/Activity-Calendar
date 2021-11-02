@@ -184,7 +184,7 @@ function clickDrag() {
       
       image.setAttribute('clone-id', randomUUID());
       image.style.position = 'absolute';
-      image.style.zIndex = 1000;
+      image.style.zIndex = 2;
       image.style.width = '4.9vw';
       image.style.width = '7.9vh';
       image.style.objectFit = 'scale-down';
@@ -243,6 +243,7 @@ function clickDrag() {
               alert('An error occurred, the image could not be saved.')
             }
           );
+          image.style.zIndex = 0; //Drop the image below the sidebar
         }
       };
 
