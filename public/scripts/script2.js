@@ -91,6 +91,7 @@ function clickDrag() {
         imageArray.push(clone);
         //finally add copy class to image
         image.classList.add('copy');
+        image.classList.add(`${parent.parentNode.getAttribute("id")}-copy`);
       }
 
       image.style.position = 'absolute';
