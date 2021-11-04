@@ -51,10 +51,15 @@
 #transportation-imgs-row img{
   background-color: white;
   object-fit: cover;
+  padding: 15px;
 }
 
 .copy{
   width: 4.9vw !important;
+}
+
+.transportation-imgs-row-copy{
+  padding: 15px;
 }
 
 .activities-imgs-row-copy,
@@ -110,6 +115,13 @@
   display: inline;
   height: 100vh;
   width: 2vw;
+}
+
+#activities-imgs-row img,
+#popular-imgs-row img{
+  width: 6.12vw !important;
+  object-fit: scale-down;
+  height: 8vh;
 }
 
 @media only screen  and (min-width : 1824px) {
