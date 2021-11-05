@@ -73,9 +73,9 @@ function toggleSidemenu() {
  * - Kyle
  */
 function clickDrag() {
-  console.log('click and drag event triggered!!');
+  //console.log('click and drag event triggered!!');
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
-    console.log(`Selected image:\n${image.classList}`);
+    //console.log(`Selected image:\n${image.classList}`);
     image.onmousedown = (event) => {
       if (!image.classList.contains('copy')) {
         console.log('making clone and moving copy');
@@ -136,24 +136,6 @@ function clickDrag() {
   });
 }
 
-// Reloads latest version 2
-function reloadPreviousCalendar() {
-  // Get latest version 2 of the body of the calendar app
-  var latestBody = localStorage.getItem('latest version 2') || '';
-  // After "</script>" is when the newly added images appear, which is what we want to load when opening the app (these images are stored in index 1 of the array)
-  x = latestBody.split('</script>');
-  // Convert the string containing the images we want to load into actuall html (now stored in the body of some sample HTML)
-  convertedToHTML = new DOMParser().parseFromString(x[1], 'text/html');
-  // Store the actual image elements in an array of image elements what we will now load
-  imagesToLoad = convertedToHTML.body.children;
-  // Append each image to the body (note that after appending one element from the array, you also remove that element from the array, which is why this for loop is strange)
-  for (var i = 0; imagesToLoad.length != 0; i += 0) {
-    copies.push(imagesToLoad[i]);
-    updateCopies();
-    document.body.append(imagesToLoad[i]);
-  }
-}
-
 // Fully implementing this/next week feature
 function moveIntoNextWeek() {
   if (copies.length == 0) {
@@ -203,40 +185,8 @@ addImages('activities');
 /***************************************************************** */
 
 // Invoke all methods needed to boot up app
-reloadPreviousCalendar();
 moveIntoNextWeek();
 //check for new clones every 3 secs
 setInterval(() => {
   clickDrag();
 }, 1000);
-
-/**
- * SAVING AND RELOADING DATA
- *
- * to get latest version 2, recall localStorage.setItem("latest version 2", document.body.innerHTML);
- * therefore do the following
- * 1. var latestBody = localStorage.getItem("latest version 2")
- * 2. x = latestBody.split("</script>\n")
- * 3. Parse this string as so:
- * 		imagesToAdd = new DOMParser().parseFromString(x[1], 'text/html');
- * 4. Now the images are stored as elements in 'document.body.children'
- * 5.copies.push(imagesToAdd.body.children[x]) AND updateCopies() where x goes from 0 to length of array
- * 6. document.body.append(imagesToAdd.body.children[x]);
- */
-
-// * Now you have a string containing all the latest images
-// * y = x[1].split(">")
-// * for(var i = 0; i < x.length() - 1; i += 1){
-// 	   y[i] += '>'
-//    }
-// * images = [];
-// * for(var i = 0; i < x.length() - 1; i += 1){
-// 		 imageToAdd = new DOMParser().parseFromString(y[i], 'text/xml');
-// 	   images.push()
-//    }
-
-// a = imagesToAdd.body.children
-// for(var i = 0; i < 6; i += 1){
-// 	copies.push(a[i]);
-// 	updateCopies();
-// }
