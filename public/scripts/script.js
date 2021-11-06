@@ -45,7 +45,7 @@ const populateImageLibrary = async (category) => {
         `<img src="${image[0]}" ` +
         `data-id="${image[1]}" ` +
         `alt="${image[2]}" ` +
-        'class="img-lib" ontouchstart="clickDrag()"></td>';
+        'class="img-lib"></td>';
     }
   });
 };
@@ -163,12 +163,13 @@ function toggleSidemenu() {
 function clickDrag() {
   //console.log('click and drag event triggered!!');
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
-    //console.log(`Selected image:\n${image.classList}`);
-    image.ontouchstart = (event) => {
+    // console.log(`Selected image:\n${image.classList}`);
+    const dragEvent = (event) => {
       if (!image.classList.contains('copy')) {
         console.log('making clone and moving copy');
         //clone itself and append clone in its original spot
         const clone = image.cloneNode(true);
+        clone.setAttribute('listener', 'false');
         let parent = image.parentNode;
         parent.append(clone);
 
@@ -209,9 +210,8 @@ function clickDrag() {
       document.addEventListener('touchmove', onTouchMove);
 
       // (3) drop the image, remove unneeded handlers
-      image.ontouchend = function (event) {
+      const dragEnd = (event) => {
         document.removeEventListener('touchmove', onTouchMove);
-        image.ontouchend = null;
         //check if in deletion area
         if (event.changedTouches[0].pageY < 100 && open === false) {
           var copyImageId = image.getAttribute('clone-id');
@@ -252,12 +252,19 @@ function clickDrag() {
           );
           image.style.zIndex = 0; //Drop the image below the sidebar
         }
+
+        event.target.removeEventListener('touchend', dragEnd);
       };
+      image.addEventListener('touchend', dragEnd);
 
       image.ondragstart = function () {
         return false;
       };
     };
+    if (image.getAttribute('listener') !== 'true') {
+      image.addEventListener('touchstart', dragEvent);
+      image.setAttribute('listener', 'true');
+    }
   });
 }
 
