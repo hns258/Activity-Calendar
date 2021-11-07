@@ -50,7 +50,7 @@ const populateImageLibrary = async (category) => {
         `<img src="${image[0]}" ` +
         `data-id="${image[1]}" ` +
         `alt="${image[2]}" ` +
-        'class="img-lib" onmousedown="clickDrag()"></td>';
+        'class="img-lib"></td>';
     }
   });
 };
@@ -90,7 +90,6 @@ const getImageCopyModels = async () => {
 
 /*****************************************************************/
 
-
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
 function setUpDate() {
@@ -122,7 +121,7 @@ function toggleSidemenu() {
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
-      sideMenu.style.right = '-29vw'; 
+      sideMenu.style.right = '-29vw';
       open = false;
     } else {
       console.log('opening sidebar to right');
@@ -132,7 +131,7 @@ function toggleSidemenu() {
   } else {
     if (open) {
       console.log('closing sidebar to left');
-      sideMenu.style.left = '-28.5vw'; 
+      sideMenu.style.left = '-28.5vw';
       open = false;
     } else {
       console.log('opening sidebar to left');
@@ -169,14 +168,13 @@ function toggleSidemenu() {
  */
 
 function clickDrag() {
-  //console.log('click and drag event triggered!!');
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
-    //console.log(`Selected image:\n${image.classList}`);
-    image.onmousedown = (event) => {
+    const dragStart = (event) => {
       if (!image.classList.contains('copy')) {
         console.log('making clone and moving copy');
         //clone itself and append clone in its original spot
         const clone = image.cloneNode(true);
+        clone.setAttribute('listener', 'false');
         let parent = image.parentNode;
         parent.append(clone);
 
@@ -187,10 +185,10 @@ function clickDrag() {
         imageArray.push(clone);
         //finally add copy class to image
         image.classList.add('copy');
-        image.classList.add(`${parent.parentNode.getAttribute("id")}-copy`);
+        image.classList.add(`${parent.parentNode.getAttribute('id')}-copy`);
+        image.setAttribute('clone-id', randomUUID());
       }
-      
-      image.setAttribute('clone-id', randomUUID());
+
       image.style.position = 'absolute';
       image.style.zIndex = 2;
       image.style.width = '4.9vw';
@@ -204,61 +202,77 @@ function clickDrag() {
       }
 
       // move our absolutely positioned image under the pointer
-      moveAt(event.pageX, event.pageY);
+      moveAt(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
 
-      function onMouseMove(event) {
-        moveAt(event.pageX, event.pageY);
-        console.log(`Image Coordinates: ${event.pageX}, ${event.pageY}`);
+      function onTouchMove(moveEvent) {
+        moveAt(
+          moveEvent.targetTouches[0].pageX,
+          moveEvent.targetTouches[0].pageY
+        );
+        console.log(
+          `Image Coordinates: ${moveEvent.targetTouches[0].pageX}, ${moveEvent.targetTouches[0].pageY}`
+        );
       }
 
       // (2) move the image on mousemove
-      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('touchmove', onTouchMove);
 
       // (3) drop the image, remove unneeded handlers
-      image.onmouseup = function (event) {
-        document.removeEventListener('mousemove', onMouseMove);
-        image.onmouseup = null;
+      const dragEnd = (endEvent) => {
+        document.removeEventListener('touchmove', onTouchMove);
         //check if in deletion area
-        if (event.pageY < 100 && open === false) {
+        if (endEvent.changedTouches[0].pageY < 100 && open === false) {
           var copyImageId = image.getAttribute('clone-id');
           deleteImageCopy(copyImageId).then(
-            function(value) { 
+            function (value) {
               // Maybe add save toast?
-              var success = "test";
+              return value;
             },
-            function(error) {
+            function (error) {
               // Alert to be changed to boostrap toast
-              alert('An error occurred, the image could not be saved.')
+              alert('An error occurred, the image could not be saved.');
             }
           );
           // image.style.display = 'none';
           document.removeChild(image);
           var parent = image.parentNode();
           parent.removeChild(image);
-        }
-        else {
+        } else {
           var copyImageId = image.getAttribute('clone-id');
           var baseId = image.getAttribute('data-id');
           var weekType = document.getElementById('hdnWeek').value;
 
-          setImageCopy(copyImageId, baseId, event.pageX, event.pageY, weekType).then(
-            function(value) { 
+          setImageCopy(
+            copyImageId,
+            baseId,
+            endEvent.changedTouches[0].pageX,
+            endEvent.changedTouches[0].pageY,
+            weekType
+          ).then(
+            function (value) {
               // Maybe add save toast?
-              var success = "test";
+              return value;
             },
-            function(error) {
+            function (error) {
               // Alert to be changed to boostrap toast
-              alert('An error occurred, the image could not be saved.')
+              alert('An error occurred, the image could not be saved.');
             }
           );
           image.style.zIndex = 0; //Drop the image below the sidebar
         }
+
+        event.target.removeEventListener('touchend', dragEnd);
       };
+      image.addEventListener('touchend', dragEnd);
 
       image.ondragstart = function () {
         return false;
       };
     };
+    if (image.getAttribute('listener') !== 'true') {
+      image.addEventListener('touchstart', dragStart);
+      image.setAttribute('listener', 'true');
+    }
   });
 }
 
@@ -284,12 +298,10 @@ populateImageLibrary('transportation');
 populateImageLibrary('popular');
 populateImageLibrary('activities');
 
-
 // Invoke all methods needed to boot up app
 setUpDate();
 moveIntoNextWeek();
 //check for new clones every 3 secs
 setInterval(() => {
   clickDrag();
-  //console.log('image check complete');
 }, 1000);

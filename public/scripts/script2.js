@@ -73,9 +73,7 @@ function toggleSidemenu() {
  * - Kyle
  */
 function clickDrag() {
-  //console.log('click and drag event triggered!!');
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
-    //console.log(`Selected image:\n${image.classList}`);
     image.onmousedown = (event) => {
       if (!image.classList.contains('copy')) {
         console.log('making clone and moving copy');
@@ -91,7 +89,7 @@ function clickDrag() {
         imageArray.push(clone);
         //finally add copy class to image
         image.classList.add('copy');
-        image.classList.add(`${parent.parentNode.getAttribute("id")}-copy`);
+        image.classList.add(`${parent.parentNode.getAttribute('id')}-copy`);
       }
 
       image.style.position = 'absolute';
@@ -124,7 +122,7 @@ function clickDrag() {
         //check if in deletion area
         if (event.pageY < 100 && open === false) {
           image.style.display = 'none';
-        }else {
+        } else {
           image.style.zIndex = 0; //Drop the image below the sidebar
         }
       };
@@ -141,10 +139,11 @@ function moveIntoNextWeek() {
   if (copies.length == 0) {
     // Storing an original version of the calendar (empty) when the app first opens
     localStorage.setItem('og', document.body.innerHTML);
-    convertedToHTML = new DOMParser().parseFromString(
+    var convertedToHTML = new DOMParser().parseFromString(
       localStorage.getItem('og'),
       'text/html'
     );
+    console.log(convertedToHTML);
   }
   var dateToday = new Date();
   if (dateToday.getDay() == 1 && localStorage.getItem('reset2?') == 'false') {
