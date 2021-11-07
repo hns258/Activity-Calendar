@@ -161,10 +161,8 @@ function toggleSidemenu() {
  */
 
 function clickDrag() {
-  //console.log('click and drag event triggered!!');
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
-    // console.log(`Selected image:\n${image.classList}`);
-    const dragEvent = (event) => {
+    const dragStart = (event) => {
       if (!image.classList.contains('copy')) {
         console.log('making clone and moving copy');
         //clone itself and append clone in its original spot
@@ -210,7 +208,7 @@ function clickDrag() {
       document.addEventListener('touchmove', onTouchMove);
 
       // (3) drop the image, remove unneeded handlers
-      const dragEnd = (event) => {
+      const dragEnd = () => {
         document.removeEventListener('touchmove', onTouchMove);
         //check if in deletion area
         if (event.changedTouches[0].pageY < 100 && open === false) {
@@ -262,7 +260,7 @@ function clickDrag() {
       };
     };
     if (image.getAttribute('listener') !== 'true') {
-      image.addEventListener('touchstart', dragEvent);
+      image.addEventListener('touchstart', dragStart);
       image.setAttribute('listener', 'true');
     }
   });
