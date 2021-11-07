@@ -5,6 +5,11 @@
  * Developers: Vaaranan Yogalingam, Kyle Flores, Azhya Knox
  */
 
+//gets current page
+var path = window.location.pathname;
+var page = path.split("/").pop();
+console.log( page );
+
 // Initializing variables and constants
 var open = false;
 var isLeft = document.querySelector('.isLeftToggle').checked;
@@ -89,19 +94,21 @@ const getImageCopyModels = async () => {
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
 function setUpDate() {
-  var dateToday = new Date();
-  var day = dateToday.getDay();
-  const days = document.querySelectorAll('div.p1 table tr th');
-  if (day == 0) {
-    var sunday = 7;
-    days[sunday].style.backgroundColor = '#c5e6f5';
-    for (var i = sunday - 1; i < 21; i += 7) {
-      containers[i].style.backgroundColor = '#c5e6f5';
-    }
-  } else {
-    days[day].style.backgroundColor = '#c5e6f5';
-    for (var i = day - 1; i < 21; i += 7) {
-      containers[i].style.backgroundColor = '#c5e6f5';
+  if(page === 'index.html'){
+    var dateToday = new Date();
+    var day = dateToday.getDay();
+    const days = document.querySelectorAll('div.p1 table tr th');
+    if (day == 0) {
+      var sunday = 7;
+      days[sunday].style.backgroundColor = '#c5e6f5';
+      for (var i = sunday - 1; i < 21; i += 7) {
+        containers[i].style.backgroundColor = '#c5e6f5';
+      }
+    } else {
+      days[day].style.backgroundColor = '#c5e6f5';
+      for (var i = day - 1; i < 21; i += 7) {
+        containers[i].style.backgroundColor = '#c5e6f5';
+      }
     }
   }
 }
