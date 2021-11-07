@@ -143,6 +143,7 @@ function moveIntoNextWeek() {
       localStorage.getItem('og'),
       'text/html'
     );
+    console.log(convertedToHTML);
   }
   var dateToday = new Date();
   if (dateToday.getDay() == 1 && localStorage.getItem('reset2?') == 'false') {

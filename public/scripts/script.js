@@ -197,10 +197,13 @@ function clickDrag() {
       // move our absolutely positioned image under the pointer
       moveAt(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
 
-      function onTouchMove(event) {
-        moveAt(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
+      function onTouchMove(moveEvent) {
+        moveAt(
+          moveEvent.targetTouches[0].pageX,
+          moveEvent.targetTouches[0].pageY
+        );
         console.log(
-          `Image Coordinates: ${event.targetTouches[0].pageX}, ${event.targetTouches[0].pageY}`
+          `Image Coordinates: ${moveEvent.targetTouches[0].pageX}, ${moveEvent.targetTouches[0].pageY}`
         );
       }
 
@@ -208,15 +211,15 @@ function clickDrag() {
       document.addEventListener('touchmove', onTouchMove);
 
       // (3) drop the image, remove unneeded handlers
-      const dragEnd = () => {
+      const dragEnd = (endEvent) => {
         document.removeEventListener('touchmove', onTouchMove);
         //check if in deletion area
-        if (event.changedTouches[0].pageY < 100 && open === false) {
+        if (endEvent.changedTouches[0].pageY < 100 && open === false) {
           var copyImageId = image.getAttribute('clone-id');
           deleteImageCopy(copyImageId).then(
             function (value) {
               // Maybe add save toast?
-              var success = 'test';
+              return value;
             },
             function (error) {
               // Alert to be changed to boostrap toast
@@ -235,13 +238,13 @@ function clickDrag() {
           setImageCopy(
             copyImageId,
             baseId,
-            event.changedTouches[0].pageX,
-            event.changedTouches[0].pageY,
+            endEvent.changedTouches[0].pageX,
+            endEvent.changedTouches[0].pageY,
             weekType
           ).then(
             function (value) {
               // Maybe add save toast?
-              var success = 'test';
+              return value;
             },
             function (error) {
               // Alert to be changed to boostrap toast
@@ -294,5 +297,4 @@ moveIntoNextWeek();
 //check for new clones every 3 secs
 setInterval(() => {
   clickDrag();
-  //console.log('image check complete');
 }, 1000);
