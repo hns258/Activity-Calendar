@@ -5,6 +5,11 @@
  * Developers: Vaaranan Yogalingam, Kyle Flores, Azhya Knox
  */
 
+//gets current page
+var path = window.location.pathname;
+var page = path.split("/").pop();
+console.log( page );
+
 // Initializing variables and constants
 var open = false;
 var isLeft = document.querySelector('.isLeftToggle').checked;
@@ -45,7 +50,7 @@ const populateImageLibrary = async (category) => {
         `<img src="${image[0]}" ` +
         `data-id="${image[1]}" ` +
         `alt="${image[2]}" ` +
-        'class="img-lib" onmousedown="clickDrag()"></td>';
+        'class="img-lib"></td>';
     }
   });
 };
@@ -85,23 +90,24 @@ const getImageCopyModels = async () => {
 
 /*****************************************************************/
 
-
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
 function setUpDate() {
-  var dateToday = new Date();
-  var day = dateToday.getDay();
-  const days = document.querySelectorAll('div.p1 table tr th');
-  if (day == 0) {
-    var sunday = 7;
-    days[sunday].style.backgroundColor = '#c5e6f5';
-    for (var i = sunday - 1; i < 21; i += 7) {
-      containers[i].style.backgroundColor = '#c5e6f5';
-    }
-  } else {
-    days[day].style.backgroundColor = '#c5e6f5';
-    for (var i = day - 1; i < 21; i += 7) {
-      containers[i].style.backgroundColor = '#c5e6f5';
+  if(page === 'index.html'){
+    var dateToday = new Date();
+    var day = dateToday.getDay();
+    const days = document.querySelectorAll('div.p1 table tr th');
+    if (day == 0) {
+      var sunday = 7;
+      days[sunday].style.backgroundColor = '#c5e6f5';
+      for (var i = sunday - 1; i < 21; i += 7) {
+        containers[i].style.backgroundColor = '#c5e6f5';
+      }
+    } else {
+      days[day].style.backgroundColor = '#c5e6f5';
+      for (var i = day - 1; i < 21; i += 7) {
+        containers[i].style.backgroundColor = '#c5e6f5';
+      }
     }
   }
 }
@@ -115,7 +121,7 @@ function toggleSidemenu() {
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
-      sideMenu.style.right = '-29vw'; 
+      sideMenu.style.right = '-29vw';
       open = false;
     } else {
       console.log('opening sidebar to right');
@@ -125,7 +131,7 @@ function toggleSidemenu() {
   } else {
     if (open) {
       console.log('closing sidebar to left');
-      sideMenu.style.left = '-28.5vw'; 
+      sideMenu.style.left = '-28.5vw';
       open = false;
     } else {
       console.log('opening sidebar to left');
@@ -162,14 +168,13 @@ function toggleSidemenu() {
  */
 
 function clickDrag() {
-  console.log('click and drag event triggered!!');
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
-    console.log(`Selected image:\n${image.classList}`);
-    image.onmousedown = (event) => {
+    const dragStart = (event) => {
       if (!image.classList.contains('copy')) {
         console.log('making clone and moving copy');
         //clone itself and append clone in its original spot
         const clone = image.cloneNode(true);
+        clone.setAttribute('listener', 'false');
         let parent = image.parentNode;
         parent.append(clone);
 
@@ -180,10 +185,10 @@ function clickDrag() {
         imageArray.push(clone);
         //finally add copy class to image
         image.classList.add('copy');
-        image.classList.add(`${parent.parentNode.getAttribute("id")}-copy`);
+        image.classList.add(`${parent.parentNode.getAttribute('id')}-copy`);
+        image.setAttribute('clone-id', randomUUID());
       }
-      
-      image.setAttribute('clone-id', randomUUID());
+
       image.style.position = 'absolute';
       image.style.zIndex = 2;
       image.style.width = '4.9vw';
@@ -197,89 +202,78 @@ function clickDrag() {
       }
 
       // move our absolutely positioned image under the pointer
-      moveAt(event.pageX, event.pageY);
+      moveAt(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
 
-      function onMouseMove(event) {
-        moveAt(event.pageX, event.pageY);
-        console.log(`Image Coordinates: ${event.pageX}, ${event.pageY}`);
+      function onTouchMove(moveEvent) {
+        moveAt(
+          moveEvent.targetTouches[0].pageX,
+          moveEvent.targetTouches[0].pageY
+        );
+        console.log(
+          `Image Coordinates: ${moveEvent.targetTouches[0].pageX}, ${moveEvent.targetTouches[0].pageY}`
+        );
       }
 
       // (2) move the image on mousemove
-      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('touchmove', onTouchMove);
 
       // (3) drop the image, remove unneeded handlers
-      image.onmouseup = function (event) {
-        document.removeEventListener('mousemove', onMouseMove);
-        image.onmouseup = null;
+      const dragEnd = (endEvent) => {
+        document.removeEventListener('touchmove', onTouchMove);
         //check if in deletion area
-        if (event.pageY < 100 && open === false) {
+        if (endEvent.changedTouches[0].pageY < 100 && open === false) {
           var copyImageId = image.getAttribute('clone-id');
           deleteImageCopy(copyImageId).then(
-            function(value) { 
+            function (value) {
               // Maybe add save toast?
-              var success = "test";
+              return value;
             },
-            function(error) {
+            function (error) {
               // Alert to be changed to boostrap toast
-              alert('An error occurred, the image could not be saved.')
+              alert('An error occurred, the image could not be saved.');
             }
           );
           // image.style.display = 'none';
           document.removeChild(image);
           var parent = image.parentNode();
           parent.removeChild(image);
-        }
-        else {
+        } else {
           var copyImageId = image.getAttribute('clone-id');
           var baseId = image.getAttribute('data-id');
           var weekType = document.getElementById('hdnWeek').value;
 
-          setImageCopy(copyImageId, baseId, event.pageX, event.pageY, weekType).then(
-            function(value) { 
+          setImageCopy(
+            copyImageId,
+            baseId,
+            endEvent.changedTouches[0].pageX,
+            endEvent.changedTouches[0].pageY,
+            weekType
+          ).then(
+            function (value) {
               // Maybe add save toast?
-              var success = "test";
+              return value;
             },
-            function(error) {
+            function (error) {
               // Alert to be changed to boostrap toast
-              alert('An error occurred, the image could not be saved.')
+              alert('An error occurred, the image could not be saved.');
             }
           );
           image.style.zIndex = 0; //Drop the image below the sidebar
         }
+
+        event.target.removeEventListener('touchend', dragEnd);
       };
+      image.addEventListener('touchend', dragEnd);
 
       image.ondragstart = function () {
         return false;
       };
     };
+    if (image.getAttribute('listener') !== 'true') {
+      image.addEventListener('touchstart', dragStart);
+      image.setAttribute('listener', 'true');
+    }
   });
-}
-
-// Reloads latest version
-function reloadPreviousCalendar() {
-  var latestBody = "";
-  var weekType = document.getElementById('hdnWeek').value;
-  
-  if (weekType == 1){
-    latestBody = localStorage.getItem('latest version');
-  }
-  else {
-    latestBody = localStorage.getItem('latest version 2') || '';
-  }
-  // Get latest version of the body of the calendar app
-  var latestBody = localStorage.getItem('latest version');
-  // After "</script>" is when the newly added images appear, which is what we want to load when opening the app (these images are stored in index 1 of the array)
-  x = latestBody.split('</script>');
-  // Convert the string containing the images we want to load into actuall html (now stored in the body of some sample HTML)
-  convertedToHTML = new DOMParser().parseFromString(x[1], 'text/html');
-  // Store the actual image elements in an array of image elements what we will now load
-  imagesToLoad = convertedToHTML.body.children;
-  // Append each image to the body (note that after appending one element from the array, you also remove that element from the array, which is why this for loop is strange)
-  for (var i = 0; imagesToLoad.length != 0; i += 0) {
-    copies.push(imagesToLoad[i]);
-    updateCopies();
-    document.body.append(imagesToLoad[i]);
-  }
 }
 
 // Fully implementing this/next week feature
@@ -304,44 +298,10 @@ populateImageLibrary('transportation');
 populateImageLibrary('popular');
 populateImageLibrary('activities');
 
-
 // Invoke all methods needed to boot up app
 setUpDate();
-reloadPreviousCalendar();
 moveIntoNextWeek();
 //check for new clones every 3 secs
 setInterval(() => {
   clickDrag();
-  console.log('image check complete');
 }, 1000);
-
-/**
- * SAVING AND RELOADING DATA
- *
- * to get latest version, recall localStorage.setItem("latest version", document.body.innerHTML);
- * therefore do the following
- * 1. var latestBody = localStorage.getItem("latest version")
- * 2. x = latestBody.split("</script>\n")
- * 3. Parse this string as so:
- * 		imagesToAdd = new DOMParser().parseFromString(x[1], 'text/html');
- * 4. Now the images are stored as elements in 'document.body.children'
- * 5.copies.push(imagesToAdd.body.children[x]) AND updateCopies() where x goes from 0 to length of array
- * 6. document.body.append(imagesToAdd.body.children[x]);
- */
-
-// * Now you have a string containing all the latest images
-// * y = x[1].split(">")
-// * for(var i = 0; i < x.length() - 1; i += 1){
-// 	   y[i] += '>'
-//    }
-// * images = [];
-// * for(var i = 0; i < x.length() - 1; i += 1){
-// 		 imageToAdd = new DOMParser().parseFromString(y[i], 'text/xml');
-// 	   images.push()
-//    }
-
-// a = imagesToAdd.body.children
-// for(var i = 0; i < 6; i += 1){
-// 	copies.push(a[i]);
-// 	updateCopies();
-// }
