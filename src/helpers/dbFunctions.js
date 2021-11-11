@@ -106,7 +106,6 @@ const setEndDates = async (weekStart) => {
   }
 };
 
-/* NEEDS TESTING */
 // Called when app loads (should run before getImageCopies())
 //    1. Checks for week passing
 //    2. Deletes all image copies with 'This Week' tag
@@ -160,30 +159,6 @@ const updateCalendar = async () => {
       });
     }
   }
-
-  // const check = new Date();
-  // if (check.getDay() == 0 && check.getHours() == 0) {
-  //   const imageArray = [];
-
-  //   const imagesForRemoval = await ImageCopy.findAll({
-  //     where: { WeekTagID: 2 },
-  //   });
-  //   const imagesForUpdate = await ImageCopy.findAll({
-  //     where: { WeekTagID: 1 },
-  //   });
-  //   //remove images with 'this week' tag
-  //   for (const image of imagesForRemoval) {
-  //     await ImageCopy.destroy(image);
-  //   }
-  //   //update images with 'next week' tag
-  //   for (const image of imagesForUpdate) {
-  //     await image.update({
-  //       WeekTagID: 2,
-  //     });
-  //   }
-
-  //   return imageArray;
-  // } // end of if statement
 }; // end of function
 
 // Called when...
@@ -282,10 +257,12 @@ const getImageCopies = async (thisWeekTagID) => {
   return imageCopyArray;
 };
 
-/* NEEDS IMPLEMENTATION */
 // Called when folder path is changed for specific image type
 // Set customization flag in model
-const updateFolderLocation = () => {};
+const updateFolderLocation = async (category, path) => {
+  const imageType = await ImageType.findOne({ where: { Name: category } });
+  if (fs.existsSync(path)) imageType.update({ Location: path });
+};
 
 // Initialize image types if they don't exist
 const initializeImageTypes = async () => {
@@ -339,6 +316,15 @@ const initializeImageTypes = async () => {
     await type.update({
       Location: path.join(basePath, type.Name),
     });
+
+  // Fix image types with broken folder paths
+  const imageTypes = await ImageType.findAll();
+  for (const type of imageTypes) {
+    if (!fs.existsSync(type.Location))
+      await type.update({
+        Location: path.join(basePath, type.Name),
+      });
+  }
 };
 
 // Initialize week tags

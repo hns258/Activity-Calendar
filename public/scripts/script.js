@@ -7,8 +7,8 @@
 
 //gets current page
 var path = window.location.pathname;
-var page = path.split("/").pop();
-console.log( page );
+var page = path.split('/').pop();
+console.log(page);
 
 // Initializing variables and constants
 var open = false;
@@ -93,7 +93,7 @@ const getImageCopyModels = async () => {
 // Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
 function setUpDate() {
-  if(page === 'index.html'){
+  if (page === 'index.html') {
     var dateToday = new Date();
     var day = dateToday.getDay();
     const days = document.querySelectorAll('div.p1 table tr th');
