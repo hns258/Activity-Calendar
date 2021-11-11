@@ -118,16 +118,14 @@ const updateCalendar = async () => {
   weekStart.setUTCDate(currentDate.getDate() - currentDate.getDay() + 1);
   weekStart.setUTCHours(0, 0, 0, 0);
 
-  // find a week tag with a null end date
-  const endDatesNull = await WeekTag.findOne({ where: { EndDate: null } });
+  // find and assign both weektags
+  const currentWeekTag = await WeekTag.findOne({ where: { ID: 1 } });
+  const nextWeekTag = await WeekTag.findOne({ where: { ID: 2 } });
+
   // if an end date is null, set new end dates
-  if (endDatesNull) {
+  if (currentWeekTag.EndDate === null) {
     setEndDates(weekStart);
   } else {
-    // find and assign both weektags
-    const currentWeekTag = await WeekTag.findOne({ where: { ID: 1 } });
-    const nextWeekTag = await WeekTag.findOne({ where: { ID: 2 } });
-
     // if current date is past next week end date
     if (nextWeekTag.EndDate < currentDate) {
       // destroy all image copies
