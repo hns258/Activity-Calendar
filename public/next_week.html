@@ -35,49 +35,49 @@
         >
           <!--Change the 'th' class selectors to their proper days-->
           <th class="next-week">Next Week</th>
-          <th class="monday-col">
+          <th id="monday-col" class="monday-col">
             <img
               src="week_images/monday.png"
               alt="Monday"
               class="day-segment"
             />
           </th>
-          <th class="tuesday-col">
+          <th id="tuesday-col" class="tuesday-col">
             <img
               src="week_images/tuesday.png"
               alt="Tueday"
               class="day-segment"
             />
           </th>
-          <th class="monday-col">
+          <th id="wednesday-col" class="monday-col">
             <img
               src="week_images/wednesday.png"
               alt="Wednesday"
               class="day-segment"
             />
           </th>
-          <th class="tuesday-col">
+          <th id="thursday-col" class="tuesday-col">
             <img
               src="week_images/thursday.png"
               alt="Thursday"
               class="day-segment"
             />
           </th>
-          <th class="monday-col">
+          <th id="friday-col" class="monday-col">
             <img
               src="week_images/friday.png"
               alt="Friday"
               class="day-segment"
             />
           </th>
-          <th class="tuesday-col">
+          <th id="saturday-col" class="tuesday-col">
             <img
               src="week_images/saturday.png"
               alt="Saturday"
               class="day-segment"
             />
           </th>
-          <th class="monday-col">
+          <th id="sunday-col" class="monday-col">
             <img
               src="week_images/sunday.png"
               alt="Sunday"
@@ -86,7 +86,7 @@
           </th>
         </tr>
         <tr>
-          <th class="time-of-day">
+          <th id="morning" class="time-of-day">
             <img src="time_of_day/morning.png" alt="Morning" />
           </th>
           <td class="monday-col"></td>
@@ -98,7 +98,9 @@
           <td class="sunday-col"></td>
         </tr>
         <tr class="border-row">
-          <th><img src="time_of_day/afternoon.png" alt="afternoon" /></th>
+          <th id="afternoon">
+            <img src="time_of_day/afternoon.png" alt="afternoon" />
+          </th>
           <td class="monday-col"></td>
           <td class="tuesday-col"></td>
           <td class="wednesday-col"></td>
@@ -108,10 +110,10 @@
           <td class="sunday-col"></td>
         </tr>
         <tr>
-          <th>
+          <th id="evening">
             <img src="time_of_day/evening.png" alt="Evening" />
             <a class="this-week-link" href="index.html"
-              ><i class="fas fa-arrow-left"></i>This Week</a
+              ><em class="fas fa-arrow-left"></em>This Week</a
             >
           </th>
           <td class="monday-col"></td>
@@ -142,7 +144,7 @@
           </td>
           <td colspan="2"><span class="switch-title">Switch to left</span></td>
           <td class="settings-icon">
-            <i class="fas fa-cog" onclick="goToSettings()"></i>
+            <em class="fas fa-cog" onclick="goToSettings()"></em>
           </td>
         </tr>
         <!--"People" category-->

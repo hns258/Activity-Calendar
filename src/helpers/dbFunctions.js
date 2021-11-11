@@ -123,7 +123,6 @@ const updateCalendar = async () => {
   // if an end date is null, set new end dates
   if (endDatesNull) {
     setEndDates(weekStart);
-    return;
   } else {
     // find and assign both weektags
     const currentWeekTag = await WeekTag.findOne({ where: { ID: 1 } });
@@ -259,9 +258,9 @@ const getImageCopies = async (thisWeekTagID) => {
 
 // Called when folder path is changed for specific image type
 // Set customization flag in model
-const updateFolderLocation = async (category, path) => {
+const updateFolderLocation = async (category, typePath) => {
   const imageType = await ImageType.findOne({ where: { Name: category } });
-  if (fs.existsSync(path)) imageType.update({ Location: path });
+  if (fs.existsSync(typePath)) imageType.update({ Location: typePath });
 };
 
 // Initialize image types if they don't exist

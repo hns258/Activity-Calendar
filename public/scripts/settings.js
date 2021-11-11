@@ -7,8 +7,7 @@
  */
 
 /*****************************************************************/
-/* IPC FUNCTIONS + Node Imports */
-// const ipcRenderer = require('electron').ipcRenderer;
+/* IPC FUNCTIONS */
 
 // Call to update folder path in database
 // returns true if folder path update was successful
