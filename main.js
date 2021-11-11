@@ -40,6 +40,7 @@ function createWindow() {
 app.whenReady().then(async () => {
   await initializeWeekTags();
   await initializeImageTypes();
+  await updateCalendar();
   await writeAllImages();
   createWindow();
 });

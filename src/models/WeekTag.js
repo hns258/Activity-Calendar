@@ -13,7 +13,12 @@ const WeekTag = db.define('weekTag', {
   Description: {
     type: DataTypes.ENUM('This Week', 'Next Week'),
     allowNull: false,
-  }
+  },
+  EndDate: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    defaultValue: null,
+  },
 });
 
 // Associations
