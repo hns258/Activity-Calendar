@@ -115,7 +115,7 @@ const updateCalendar = async () => {
   const currentDate = new Date(Date.now());
   // set weekStart to previous sunday at midnight
   const weekStart = new Date();
-  weekStart.setUTCDate(currentDate.getDate() - currentDate.getDay());
+  weekStart.setUTCDate(currentDate.getDate() - currentDate.getDay() + 1);
   weekStart.setUTCHours(0, 0, 0, 0);
 
   // find a week tag with a null end date
