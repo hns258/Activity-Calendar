@@ -40,6 +40,7 @@ function createWindow() {
 app.whenReady().then(async () => {
   await initializeWeekTags();
   await initializeImageTypes();
+  await updateCalendar();
   await writeAllImages();
   createWindow();
 });
@@ -56,11 +57,15 @@ ipcMain.handle('load-images', async (event, category) => {
   return await readImages(category);
 });
 
-/* NEEDS updateFolderLocaton() added */
 // folder location changes
-ipcMain.handle('change-folder', async (event, category) => {
-  await writeImages(category);
-  return await readImages(category);
+ipcMain.handle('change-folder', async (event, category, path) => {
+  try {
+    await updateFolderLocation(category, path);
+    await writeImages(category);
+    return true;
+  } catch (e) {
+    return false;
+  }
 });
 
 // set an image copy

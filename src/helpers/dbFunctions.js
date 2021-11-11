@@ -95,35 +95,67 @@ const readImages = async (category) => {
   return imageArray;
 };
 
-/* NEEDS TESTING */
+const setEndDates = async (weekStart) => {
+  // find all weektags
+  const weektags = await WeekTag.findAll();
+  // for each week tag, if end date is null, set to 7 and 14 days out respectively
+  for (const weektag of weektags) {
+    await weektag.update({
+      EndDate: new Date(weekStart.setDate(weekStart.getDate() + 7)),
+    });
+  }
+};
+
 // Called when app loads (should run before getImageCopies())
 //    1. Checks for week passing
 //    2. Deletes all image copies with 'This Week' tag
 //    3. Changes image copies with 'Next Week' tag to 'This Week' tag
 const updateCalendar = async () => {
-  const check = new Date();
-  if (check.getDay() == 0 && check.getHours() == 0) {
-    const imageArray = [];
+  // get the current date
+  const currentDate = new Date(Date.now());
+  // set weekStart to previous sunday at midnight
+  const weekStart = new Date();
+  weekStart.setUTCDate(currentDate.getDate() - currentDate.getDay() + 1);
+  weekStart.setUTCHours(0, 0, 0, 0);
 
-    const imagesForRemoval = await ImageCopy.findAll({
-      where: { WeekTagID: 2 },
-    });
-    const imagesForUpdate = await ImageCopy.findAll({
-      where: { WeekTagID: 1 },
-    });
-    //remove images with 'this week' tag
-    for (const image of imagesForRemoval) {
-      await ImageCopy.destroy(image);
-    }
-    //update images with 'next week' tag
-    for (const image of imagesForUpdate) {
-      await image.update({
-        WeekTagID: 2,
+  // find and assign both weektags
+  const currentWeekTag = await WeekTag.findOne({ where: { ID: 1 } });
+  const nextWeekTag = await WeekTag.findOne({ where: { ID: 2 } });
+
+  // if an end date is null, set new end dates
+  if (currentWeekTag.EndDate === null) {
+    setEndDates(weekStart);
+  } else {
+    // if current date is past next week end date
+    if (nextWeekTag.EndDate < currentDate) {
+      // destroy all image copies
+      await ImageCopy.destroy({ truncate: true });
+      // set new end dates
+      setEndDates(weekStart);
+      return;
+    } else if (currentWeekTag.EndDate < currentDate) {
+      // destroy current week image copies
+      await ImageCopy.destroy({ where: { WeekTagID: 1 } });
+      // update next week image copies to this week
+      await ImageCopy.update(
+        { WeekTagID: 1 },
+        {
+          where: {
+            WeekTagID: 2,
+          },
+        }
+      );
+      // Set current week tag's end date to next week's
+      await currentWeekTag.update({ EndDate: new Date(nextWeekTag.EndDate) });
+      // Update next week tag's end date
+      const currentWeekEndDate = currentWeekTag.EndDate;
+      await nextWeekTag.update({
+        EndDate: new Date(
+          currentWeekEndDate.setDate(currentWeekEndDate.getDate() + 7)
+        ),
       });
     }
-
-    return imageArray;
-  } // end of if statement
+  }
 }; // end of function
 
 // Called when...
@@ -222,10 +254,12 @@ const getImageCopies = async (thisWeekTagID) => {
   return imageCopyArray;
 };
 
-/* NEEDS IMPLEMENTATION */
 // Called when folder path is changed for specific image type
 // Set customization flag in model
-const updateFolderLocation = () => {};
+const updateFolderLocation = async (category, typePath) => {
+  const imageType = await ImageType.findOne({ where: { Name: category } });
+  if (fs.existsSync(typePath)) imageType.update({ Location: typePath });
+};
 
 // Initialize image types if they don't exist
 const initializeImageTypes = async () => {
@@ -279,6 +313,15 @@ const initializeImageTypes = async () => {
     await type.update({
       Location: path.join(basePath, type.Name),
     });
+
+  // Fix image types with broken folder paths
+  const imageTypes = await ImageType.findAll();
+  for (const type of imageTypes) {
+    if (!fs.existsSync(type.Location))
+      await type.update({
+        Location: path.join(basePath, type.Name),
+      });
+  }
 };
 
 // Initialize week tags
