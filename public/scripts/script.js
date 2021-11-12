@@ -31,7 +31,7 @@ const containers = document.querySelectorAll('div.p1 table tr td');
 const draggables = document.querySelectorAll('div.sidemenu table tr td img');
 //test
 let imagesInLibrary = document.getElementsByClassName('img-lib');
-let imageArray = [];
+let imageArray;
 let deleteBox = document.getElementById('trash-box-container');
 
 /*****************************************************************/
@@ -82,11 +82,29 @@ const deleteImageCopy = async (imageCopyID) => {
 //    array[i][3] = position x
 //    array[i][4] = position y
 //    array[i][5] = file name
-const getImageCopyModels = async () => {
+async function getImageCopyModels() {
   ipcRenderer.invoke('load-image-copies', 1).then((imageCopyArray) => {
-    return imageCopyArray;
+    imageCopyArray.forEach((item) => {
+      let elem = document.createElement('img');
+      elem.src = item[0];
+      elem.id = item[1];
+      elem.alt = item[2];
+      elem.classList.add('img-lib');
+      elem.style.position = 'absolute';
+      elem.style.zIndex = 2;
+      elem.style.width = '4.9vw';
+      elem.style.width = '7.9vh';
+      elem.style.objectFit = 'scale-down';
+      elem.style.left = `${(item[3].offsetWidth / 2)}px`;
+      elem.style.top = `${((parseInt(item[4])).offsetWidth / 2)}px`;
+      //TODO: append image to page based on x and y coordinates
+      document.body.append(elem);
+    });
   });
 };
+
+//NOTE TO DEV: works but just appends image to top-left corner of screen for right now
+//getImageCopyModels();
 
 /*****************************************************************/
 
@@ -301,6 +319,7 @@ populateImageLibrary('activities');
 // Invoke all methods needed to boot up app
 setUpDate();
 moveIntoNextWeek();
+
 //check for new clones every 3 secs
 setInterval(() => {
   clickDrag();
