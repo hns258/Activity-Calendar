@@ -88,10 +88,11 @@ async function getImageCopyModels() {
     imageCopyArray.forEach((item) => {
       let elem = document.createElement('img');
       elem.src = item[0];
-      elem.id = item[1];
-      elem.alt = item[2];
+      elem.setAttribute('clone-id', item[1]);
+      elem.setAttribute('data-id', item[2]);
+      elem.alt = item[5];
       elem.classList.add('img-lib');
-      elem.classList.add('copy')
+      elem.classList.add('copy');
       elem.style.position = 'absolute';
       elem.style.zIndex = 0;
       elem.style.width = '4.9vw';
