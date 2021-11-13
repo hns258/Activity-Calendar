@@ -83,20 +83,22 @@ const deleteImageCopy = async (imageCopyID) => {
 //    array[i][4] = position y
 //    array[i][5] = file name
 async function getImageCopyModels() {
-  ipcRenderer.invoke('load-image-copies', 1).then((imageCopyArray) => {
+  let weekIndicator = document.querySelector("#hdnWeek").value;
+  ipcRenderer.invoke('load-image-copies', weekIndicator).then((imageCopyArray) => {
     imageCopyArray.forEach((item) => {
       let elem = document.createElement('img');
       elem.src = item[0];
       elem.id = item[1];
       elem.alt = item[2];
       elem.classList.add('img-lib');
+      elem.classList.add('copy')
       elem.style.position = 'absolute';
       elem.style.zIndex = 2;
       elem.style.width = '4.9vw';
       elem.style.width = '7.9vh';
       elem.style.objectFit = 'scale-down';
-      elem.style.left = `${(item[3].offsetWidth / 2)}px`;
-      elem.style.top = `${((parseInt(item[4])).offsetWidth / 2)}px`;
+      elem.style.left = `${(item[3])}px`;
+      elem.style.top = `${(item[4])}px`;
       //TODO: append image to page based on x and y coordinates
       document.body.append(elem);
     });
@@ -104,7 +106,7 @@ async function getImageCopyModels() {
 };
 
 //NOTE TO DEV: works but just appends image to top-left corner of screen for right now
-//getImageCopyModels();
+getImageCopyModels();
 
 /*****************************************************************/
 
