@@ -93,16 +93,22 @@ async function getImageCopyModels() {
       elem.alt = item[5];
       elem.classList.add('img-lib');
       elem.classList.add('copy');
+      elem.classList.add(`${item[6]}-imgs-row-copy`);
       elem.style.position = 'absolute';
       elem.style.zIndex = 0;
       elem.style.width = '4.9vw';
-      elem.style.width = '7.9vh';
+      elem.style.height = '7.9vh';
       elem.style.objectFit = 'scale-down';
-      elem.style.left = `${(item[3])}px`;
-      elem.style.top = `${(item[4])}px`;
-      elem.classList.add(`${item[6]}-imgs-row-copy`);
-      //TODO: append image to page based on x and y coordinates
       document.body.append(elem);
+      console.log(`TEST: ${elem.offsetWidth}, ${elem.offsetHeight}`);
+
+      //elem.style.left = `${(item[3])}px`;
+      //parseInt() + (elem.offsetWidth + elem.width) /2 + 'px'
+      elem.style.left = parseInt(item[3]) - elem.offsetWidth  / 2 + 'px';
+      //elem.style.top = `${(item[4])}px`;
+      elem.style.top = parseInt(item[4]) - elem.offsetHeight  / 2 + 'px';
+      //elem.style.display = "none";
+      console.log(`TEST 2: ${elem.offsetWidth}, ${elem.offsetHeight}`);
     });
   });
 };
@@ -214,7 +220,7 @@ function clickDrag() {
       image.style.position = 'absolute';
       image.style.zIndex = 2;
       image.style.width = '4.9vw';
-      image.style.width = '7.9vh';
+      image.style.height = '7.9vh';
       image.style.objectFit = 'scale-down';
       document.body.append(image);
 
