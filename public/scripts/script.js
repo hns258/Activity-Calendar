@@ -93,12 +93,13 @@ async function getImageCopyModels() {
       elem.classList.add('img-lib');
       elem.classList.add('copy')
       elem.style.position = 'absolute';
-      elem.style.zIndex = 2;
+      elem.style.zIndex = 0;
       elem.style.width = '4.9vw';
       elem.style.width = '7.9vh';
       elem.style.objectFit = 'scale-down';
       elem.style.left = `${(item[3])}px`;
       elem.style.top = `${(item[4])}px`;
+      elem.classList.add(`${item[6]}-imgs-row-copy`);
       //TODO: append image to page based on x and y coordinates
       document.body.append(elem);
     });
