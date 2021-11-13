@@ -247,6 +247,7 @@ const getImageCopies = async (thisWeekTagID) => {
       imageCopy.PosX,
       imageCopy.PosY,
       image.FileName,
+      type.Name,
     ]);
   }
 

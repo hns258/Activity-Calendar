@@ -8,7 +8,6 @@
 //gets current page
 var path = window.location.pathname;
 var page = path.split('/').pop();
-console.log(page);
 
 // Initializing variables and constants
 var open = false;
@@ -31,7 +30,7 @@ const containers = document.querySelectorAll('div.p1 table tr td');
 const draggables = document.querySelectorAll('div.sidemenu table tr td img');
 //test
 let imagesInLibrary = document.getElementsByClassName('img-lib');
-let imageArray = [];
+let imageArray;
 let deleteBox = document.getElementById('trash-box-container');
 
 /*****************************************************************/
@@ -82,11 +81,30 @@ const deleteImageCopy = async (imageCopyID) => {
 //    array[i][3] = position x
 //    array[i][4] = position y
 //    array[i][5] = file name
-const getImageCopyModels = async () => {
-  ipcRenderer.invoke('load-image-copies', 1).then((imageCopyArray) => {
-    return imageCopyArray;
+async function getImageCopyModels() {
+  let weekIndicator = document.querySelector("#hdnWeek").value;
+  ipcRenderer.invoke('load-image-copies', weekIndicator).then((imageCopyArray) => {
+    imageCopyArray.forEach((item) => {
+      let elem = document.createElement('img');
+      elem.src = item[0];
+      elem.setAttribute('clone-id', item[1]);
+      elem.setAttribute('data-id', item[2]);
+      elem.alt = item[5];
+      elem.classList.add('img-lib');
+      elem.classList.add('copy');
+      elem.classList.add(`${item[6]}-imgs-row-copy`);
+      elem.style.position = 'absolute';
+      elem.style.zIndex = 0;
+      elem.style.width = '4.9vw';
+      elem.style.height = '7.9vh';
+      elem.style.objectFit = 'scale-down';
+      document.body.append(elem);
+      elem.style.left = parseInt(item[3]) - elem.offsetWidth  / 2 + 'px';
+      elem.style.top = parseInt(item[4]) - elem.offsetHeight  / 2 + 'px';
+    });
   });
 };
+
 
 /*****************************************************************/
 
@@ -114,10 +132,6 @@ function setUpDate() {
 
 // Slide-in library menu functionality initialization
 function toggleSidemenu() {
-  console.log('sidebar has been clicked');
-  console.log(`open set to: ${open} and isLeft set to: ${isLeft}`);
-  console.log(sideMenu);
-
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
@@ -192,7 +206,7 @@ function clickDrag() {
       image.style.position = 'absolute';
       image.style.zIndex = 2;
       image.style.width = '4.9vw';
-      image.style.width = '7.9vh';
+      image.style.height = '7.9vh';
       image.style.objectFit = 'scale-down';
       document.body.append(image);
 
@@ -208,9 +222,6 @@ function clickDrag() {
         moveAt(
           moveEvent.targetTouches[0].pageX,
           moveEvent.targetTouches[0].pageY
-        );
-        console.log(
-          `Image Coordinates: ${moveEvent.targetTouches[0].pageX}, ${moveEvent.targetTouches[0].pageY}`
         );
       }
 
@@ -301,6 +312,8 @@ populateImageLibrary('activities');
 // Invoke all methods needed to boot up app
 setUpDate();
 moveIntoNextWeek();
+getImageCopyModels();
+
 //check for new clones every 3 secs
 setInterval(() => {
   clickDrag();
