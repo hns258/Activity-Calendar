@@ -8,7 +8,6 @@
 //gets current page
 var path = window.location.pathname;
 var page = path.split('/').pop();
-console.log(page);
 
 // Initializing variables and constants
 var open = false;
@@ -100,21 +99,12 @@ async function getImageCopyModels() {
       elem.style.height = '7.9vh';
       elem.style.objectFit = 'scale-down';
       document.body.append(elem);
-      console.log(`TEST: ${elem.offsetWidth}, ${elem.offsetHeight}`);
-
-      //elem.style.left = `${(item[3])}px`;
-      //parseInt() + (elem.offsetWidth + elem.width) /2 + 'px'
       elem.style.left = parseInt(item[3]) - elem.offsetWidth  / 2 + 'px';
-      //elem.style.top = `${(item[4])}px`;
       elem.style.top = parseInt(item[4]) - elem.offsetHeight  / 2 + 'px';
-      //elem.style.display = "none";
-      console.log(`TEST 2: ${elem.offsetWidth}, ${elem.offsetHeight}`);
     });
   });
 };
 
-//NOTE TO DEV: works but just appends image to top-left corner of screen for right now
-getImageCopyModels();
 
 /*****************************************************************/
 
@@ -142,10 +132,6 @@ function setUpDate() {
 
 // Slide-in library menu functionality initialization
 function toggleSidemenu() {
-  console.log('sidebar has been clicked');
-  console.log(`open set to: ${open} and isLeft set to: ${isLeft}`);
-  console.log(sideMenu);
-
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
@@ -237,9 +223,6 @@ function clickDrag() {
           moveEvent.targetTouches[0].pageX,
           moveEvent.targetTouches[0].pageY
         );
-        console.log(
-          `Image Coordinates: ${moveEvent.targetTouches[0].pageX}, ${moveEvent.targetTouches[0].pageY}`
-        );
       }
 
       // (2) move the image on mousemove
@@ -329,6 +312,7 @@ populateImageLibrary('activities');
 // Invoke all methods needed to boot up app
 setUpDate();
 moveIntoNextWeek();
+getImageCopyModels();
 
 //check for new clones every 3 secs
 setInterval(() => {
