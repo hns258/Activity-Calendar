@@ -96,7 +96,6 @@ async function getImageCopyModels() {
       elem.style.position = 'absolute';
       elem.style.zIndex = 0;
       elem.style.width = '4.9vw';
-      elem.style.height = '7.9vh';
       elem.style.objectFit = 'scale-down';
       document.body.append(elem);
       elem.style.left = parseInt(item[3]) - elem.offsetWidth  / 2 + 'px';
@@ -206,7 +205,6 @@ function clickDrag() {
       image.style.position = 'absolute';
       image.style.zIndex = 2;
       image.style.width = '4.9vw';
-      image.style.height = '7.9vh';
       image.style.objectFit = 'scale-down';
       document.body.append(image);
 
