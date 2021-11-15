@@ -285,22 +285,6 @@ function clickDrag() {
   });
 }
 
-// Fully implementing this/next week feature
-function moveIntoNextWeek() {
-  var dateToday = new Date();
-  if (dateToday.getDay() == 1 && localStorage.getItem('reset1?') == 'false') {
-    // It is monday and the week hasn't been reset yet so we need to move next week's schedule to this week
-    var newThisWeek = localStorage.setItem('latest version 2');
-    localStorage.setItem('latest version', newThisWeek);
-    localStorage.setItem('reset1?', 'true');
-  } else if (dateToday.getDay() != 1) {
-    // It is not monday, so we can say that the week hasn't been reset yet
-    localStorage.setItem('reset1?', 'false');
-  }
-  // Note: there is no option for if the day is monday and the week has been reset yet because we wouldn't
-  // need to do anything then
-}
-
 // Populate each category of image library
 populateImageLibrary('people');
 populateImageLibrary('transportation');
@@ -309,7 +293,6 @@ populateImageLibrary('activities');
 
 // Invoke all methods needed to boot up app
 setUpDate();
-moveIntoNextWeek();
 getImageCopyModels();
 
 //check for new clones every 3 secs
