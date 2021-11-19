@@ -20,8 +20,6 @@ const getFolderLocation = async (category) => {
     });
 };
 
-getFolderLocation('people').then((path) => console.log(path));
-
 // Call to update folder path in database
 // returns true if folder path update was successful
 const changeFolderLocation = async (category, path) => {
