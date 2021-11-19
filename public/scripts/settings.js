@@ -8,13 +8,28 @@
 
 /*****************************************************************/
 /* IPC FUNCTIONS */
+const ipcSettingsRenderer = require('electron').ipcRenderer;
+
+// Call to get folder path for specified category
+// returns folder path as a string
+const getFolderLocation = async (category) => {
+  return ipcSettingsRenderer
+    .invoke('get-folder', category)
+    .then((folderPath) => {
+      return folderPath;
+    });
+};
+
+getFolderLocation('people').then((path) => console.log(path));
 
 // Call to update folder path in database
 // returns true if folder path update was successful
 const changeFolderLocation = async (category, path) => {
-  ipcRenderer.invoke('change-folder', category, path).then((isUpdated) => {
-    return isUpdated;
-  });
+  return ipcSettingsRenderer
+    .invoke('change-folder', category, path)
+    .then((isUpdated) => {
+      return isUpdated;
+    });
 };
 
 /*****************************************************************/

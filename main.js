@@ -8,6 +8,7 @@ const {
   updateCalendar,
   setImageCopy,
   getImageCopies,
+  getFolderLocation,
   updateFolderLocation,
   initializeImageTypes,
   initializeWeekTags,
@@ -55,6 +56,11 @@ app.on('window-all-closed', async function () {
 // request to load images
 ipcMain.handle('load-images', async (event, category) => {
   return await readImages(category);
+});
+
+// get folder path
+ipcMain.handle('get-folder', async (event, category) => {
+  return await getFolderLocation(category);
 });
 
 // folder location changes
