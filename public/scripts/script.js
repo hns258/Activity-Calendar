@@ -58,7 +58,7 @@ const populateImageLibrary = async (category) => {
 // Call to save or update image copy in database
 // returns true if database save was successful
 const setImageCopy = async (imageCopyID, baseID, posX, posY, weekType) => {
-  await ipcRenderer
+  return ipcRenderer
     .invoke('set-image-copy', imageCopyID, baseID, posX, posY, weekType)
     .then((isSaved) => {
       return isSaved;
@@ -68,9 +68,11 @@ const setImageCopy = async (imageCopyID, baseID, posX, posY, weekType) => {
 // Call to delete image copy in database
 // returns true if database deletion was successful
 const deleteImageCopy = async (imageCopyID) => {
-  ipcRenderer.invoke('delete-image-copy', imageCopyID).then((isDeleted) => {
-    return isDeleted;
-  });
+  return ipcRenderer
+    .invoke('delete-image-copy', imageCopyID)
+    .then((isDeleted) => {
+      return isDeleted;
+    });
 };
 
 // Call to return image copy model from database
@@ -82,28 +84,29 @@ const deleteImageCopy = async (imageCopyID) => {
 //    array[i][4] = position y
 //    array[i][5] = file name
 async function getImageCopyModels() {
-  let weekIndicator = document.querySelector("#hdnWeek").value;
-  ipcRenderer.invoke('load-image-copies', weekIndicator).then((imageCopyArray) => {
-    imageCopyArray.forEach((item) => {
-      let elem = document.createElement('img');
-      elem.src = item[0];
-      elem.setAttribute('clone-id', item[1]);
-      elem.setAttribute('data-id', item[2]);
-      elem.alt = item[5];
-      elem.classList.add('img-lib');
-      elem.classList.add('copy');
-      elem.classList.add(`${item[6]}-imgs-row-copy`);
-      elem.style.position = 'absolute';
-      elem.style.zIndex = 0;
-      elem.style.width = '4.9vw';
-      elem.style.objectFit = 'scale-down';
-      document.body.append(elem);
-      elem.style.left = parseInt(item[3]) - elem.offsetWidth  / 2 + 'px';
-      elem.style.top = parseInt(item[4]) - elem.offsetHeight  / 2 + 'px';
+  let weekIndicator = document.querySelector('#hdnWeek').value;
+  ipcRenderer
+    .invoke('load-image-copies', weekIndicator)
+    .then((imageCopyArray) => {
+      imageCopyArray.forEach((item) => {
+        let elem = document.createElement('img');
+        elem.src = item[0];
+        elem.setAttribute('clone-id', item[1]);
+        elem.setAttribute('data-id', item[2]);
+        elem.alt = item[5];
+        elem.classList.add('img-lib');
+        elem.classList.add('copy');
+        elem.classList.add(`${item[6]}-imgs-row-copy`);
+        elem.style.position = 'absolute';
+        elem.style.zIndex = 0;
+        elem.style.width = '4.9vw';
+        elem.style.objectFit = 'scale-down';
+        document.body.append(elem);
+        elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + 'px';
+        elem.style.top = parseInt(item[4]) - elem.offsetHeight / 2 + 'px';
+      });
     });
-  });
-};
-
+}
 
 /*****************************************************************/
 
@@ -232,16 +235,14 @@ function clickDrag() {
         //check if in deletion area
         if (endEvent.changedTouches[0].pageY < 100 && open === false) {
           var copyImageId = image.getAttribute('clone-id');
-          deleteImageCopy(copyImageId).then(
-            function (value) {
-              // Maybe add save toast?
-              return value;
-            },
-            function (error) {
-              // Alert to be changed to boostrap toast
-              alert('An error occurred, the image could not be saved.');
-            }
-          );
+          deleteImageCopy(copyImageId).then(function (value) {
+            if (value) alert('Image deleted successfully');
+            // Maybe add save toast?
+            else
+              alert(
+                'An error occurred, the image could not be deleted from the database.'
+              );
+          });
           // image.style.display = 'none';
           document.removeChild(image);
           var parent = image.parentNode();
@@ -257,16 +258,11 @@ function clickDrag() {
             endEvent.changedTouches[0].pageX,
             endEvent.changedTouches[0].pageY,
             weekType
-          ).then(
-            function (value) {
-              // Maybe add save toast?
-              return value;
-            },
-            function (error) {
-              // Alert to be changed to boostrap toast
-              alert('An error occurred, the image could not be saved.');
-            }
-          );
+          ).then(function (value) {
+            if (value) alert('Image saved successfully');
+            // Maybe add save toast?
+            else alert('An error occurred, the image could not be saved.');
+          });
           image.style.zIndex = 0; //Drop the image below the sidebar
         }
 

@@ -255,11 +255,18 @@ const getImageCopies = async (thisWeekTagID) => {
   return imageCopyArray;
 };
 
+// Returns the folder location path of a specific image type
+const getFolderLocation = async (category) => {
+  const imageType = await ImageType.findOne({ where: { Name: category } });
+  return imageType.Location;
+};
+
 // Called when folder path is changed for specific image type
 // Set customization flag in model
 const updateFolderLocation = async (category, typePath) => {
   const imageType = await ImageType.findOne({ where: { Name: category } });
-  if (fs.existsSync(typePath)) imageType.update({ Location: typePath });
+  if (fs.existsSync(typePath))
+    imageType.update({ Location: typePath, IsCustomized: true });
 };
 
 // Initialize image types if they don't exist
@@ -321,6 +328,7 @@ const initializeImageTypes = async () => {
     if (!fs.existsSync(type.Location))
       await type.update({
         Location: path.join(basePath, type.Name),
+        IsCustomized: false,
       });
   }
 };
@@ -347,6 +355,7 @@ module.exports = {
   setImageCopy,
   deleteImageCopy,
   getImageCopies,
+  getFolderLocation,
   updateFolderLocation,
   initializeImageTypes,
   initializeWeekTags,
