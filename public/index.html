@@ -16,7 +16,7 @@
 			<div class="trash-box">DELETE <i class="fas fa-trash-alt"></i></div>
 		</div>
 		<table class="main-table">
-			<tr class="deletion-box" onmouseenter="initializeDeletionBox()" onmouseleave="removeDeletionBox()">
+			<tr class="deletion-box" ondragenter="consoleLog()" ondragleave="removeDeletionBox()">
 				<!--Change the 'th' class selectors to their proper days-->
 				<th class="this-week ">This Week</th>
 				<th class="monday-col "><img src="week_images/monday.png" class="day-segment" alt="Monday"></th>
@@ -63,7 +63,7 @@
 
 	</div>
 
-	<div class="sidemenu">
+	<div class="sidemenu" id="divSidemenu" sidemenu-is-visible="false">
 		<img src="misc/handle.png" alt="click" class="sidebar initSidebar" id="toggleBar" onclick="toggleSidemenu()">
 		<table>
 			<tr class="settings-area">
