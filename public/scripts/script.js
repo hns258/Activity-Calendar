@@ -139,20 +139,24 @@ function toggleSidemenu() {
       console.log('closing sidebar to right');
       sideMenu.style.right = '-29vw';
       open = false;
+      document.querySelector('#divSidemenu').setAttribute('sidemenu-is-visible', false);
     } else {
       console.log('opening sidebar to right');
       sideMenu.style.right = '0px';
       open = true;
+      document.querySelector('#divSidemenu').setAttribute('sidemenu-is-visible', true);
     }
   } else {
     if (open) {
       console.log('closing sidebar to left');
       sideMenu.style.left = '-28.5vw';
       open = false;
+      document.querySelector('#divSidemenu').setAttribute('sidemenu-is-visible', false);
     } else {
       console.log('opening sidebar to left');
       sideMenu.style.left = '0px';
       open = true;
+      document.querySelector('#divSidemenu').setAttribute('sidemenu-is-visible', true);
     }
   }
 
@@ -204,13 +208,16 @@ function clickDrag() {
         image.classList.add(`${parent.parentNode.getAttribute('id')}-copy`);
         image.setAttribute('clone-id', randomUUID());
       }
-
+      
       image.style.position = 'absolute';
       image.style.zIndex = 2;
       image.style.width = '4.9vw';
       image.style.objectFit = 'scale-down';
       document.body.append(image);
-
+      if (document.querySelector("#divSidemenu").getAttribute("sidemenu-is-visible") === "false") {
+        showDeletionBox();
+      }
+      
       function moveAt(pageX, pageY) {
         image.style.left = pageX - image.offsetWidth / 2 + 'px';
         image.style.top = pageY - image.offsetHeight / 2 + 'px';
@@ -231,22 +238,25 @@ function clickDrag() {
 
       // (3) drop the image, remove unneeded handlers
       const dragEnd = (endEvent) => {
+        hideDeletionBox();
         document.removeEventListener('touchmove', onTouchMove);
         //check if in deletion area
         if (endEvent.changedTouches[0].pageY < 100 && open === false) {
           var copyImageId = image.getAttribute('clone-id');
           deleteImageCopy(copyImageId).then(function (value) {
-            if (value) alert('Image deleted successfully');
-            // Maybe add save toast?
+            if (value) {
+              console.log(value);
+              document.body.removeChild(image);
+            }
             else
               alert(
                 'An error occurred, the image could not be deleted from the database.'
               );
           });
           // image.style.display = 'none';
-          document.removeChild(image);
-          var parent = image.parentNode();
-          parent.removeChild(image);
+          // document.removeChild(image);
+          // var parent = image.parentNode();
+          // parent.removeChild(image);
         } else {
           var copyImageId = image.getAttribute('clone-id');
           var baseId = image.getAttribute('data-id');
@@ -259,9 +269,12 @@ function clickDrag() {
             endEvent.changedTouches[0].pageY,
             weekType
           ).then(function (value) {
-            if (value) alert('Image saved successfully');
-            // Maybe add save toast?
-            else alert('An error occurred, the image could not be saved.');
+            if (value) {  
+                console.log(value);
+            }
+            else {
+              alert('An error occurred, the image could not be saved.');
+            }
           });
           image.style.zIndex = 0; //Drop the image below the sidebar
         }
@@ -279,6 +292,20 @@ function clickDrag() {
       image.setAttribute('listener', 'true');
     }
   });
+}
+
+function showDeletionBox() {
+  document.getElementById("trash-box-container").style.display = "flex"
+  console.log("Show deletion box triggered.")
+}
+
+function hideDeletionBox() {
+  document.getElementById("trash-box-container").style.display = "none"
+  console.log("Hide deletion box triggered.")
+}
+
+function consoleLog() { 
+  console.log("drag enter triggered");
 }
 
 // Populate each category of image library
