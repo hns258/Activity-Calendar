@@ -53,14 +53,14 @@ app.on('window-all-closed', async function () {
 });
 
 /* IPC */
-ipcMain.handle('select-folder', (event) => {
-  const path = dialog.showOpenDialog({ properties: ['openDirectory'] });
-  return path;
-});
-
 // request to load images
 ipcMain.handle('load-images', async (event, category) => {
   return await readImages(category);
+});
+
+ipcMain.handle('select-folder', (event) => {
+  const path = dialog.showOpenDialog({ properties: ['openDirectory'] });
+  return path;
 });
 
 // get folder path

@@ -9,8 +9,9 @@
 /*****************************************************************/
 /* IPC FUNCTIONS */
 const ipcSettingsRenderer = require('electron').ipcRenderer;
-// const { dialog } = require('electron');
 
+// Call to open electron dialog and select directory
+// returns new folder path as a string
 async function selectFolder() {
   return ipcSettingsRenderer.invoke('select-folder').then((newPath) => {
     return newPath.filePaths[0];
