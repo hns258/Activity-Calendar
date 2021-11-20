@@ -10,70 +10,47 @@
 /* IPC FUNCTIONS */
 const ipcSettingsRenderer = require('electron').ipcRenderer;
 
+// Call to open electron dialog and select directory
+// returns new folder path as a string
+async function selectFolder() {
+  return ipcSettingsRenderer.invoke('select-folder').then((newPath) => {
+    return newPath.filePaths[0];
+  });
+}
+
 // Call to get folder path for specified category
 // returns folder path as a string
-async function getFolderLocation(category){
+async function getFolderLocation(category) {
   return ipcSettingsRenderer
     .invoke('get-folder', category)
     .then((folderPath) => {
       return folderPath;
     });
-};
+}
 
 // Call to update folder path in database
 // returns true if folder path update was successful
-async function changeFolderLocation(category, path){
+async function changeFolderLocation(category, path) {
   return ipcSettingsRenderer
     .invoke('change-folder', category, path)
     .then((isUpdated) => {
       return isUpdated;
     });
-};
+}
 
 /*****************************************************************/
 
-function selectPeopleFolder(e, typeString) {
-  var theFiles = e.target.files;
-  var relativePath = theFiles[0].webkitRelativePath;
-  var pathShower = document.querySelector('.people-folder-path');
-  var folder = relativePath.split('/');
-  var folderPath = `C:/documents/activity calender/images/${folder[0]}`;
-  pathShower.innerHTML = folderPath;
-  //now saving folderPath to db
-  changeFolderLocation(typeString, folderPath);
-}
-
-function selectTransportFolder(e, typeString) {
-  var theFiles = e.target.files;
-  var relativePath = theFiles[0].webkitRelativePath;
-  var pathShower = document.querySelector('.transport-folder-path');
-  var folder = relativePath.split('/');
-  var folderPath = `C:/documents/activity calender/images/${folder[0]}`;
-  pathShower.innerHTML = folderPath;
-  //now saving folderPath to app-settings.json
-  changeFolderLocation(typeString, folderPath);
-}
-
-function selectPopularFolder(e, typeString) {
-  var theFiles = e.target.files;
-  var relativePath = theFiles[0].webkitRelativePath;
-  var pathShower = document.querySelector('.popular-folder-path');
-  var folder = relativePath.split('/');
-  var folderPath = `C:/documents/activity calender/images/${folder[0]}`;
-  pathShower.innerHTML = folderPath;
-  //now saving folderPath to app-settings.json
-  changeFolderLocation(typeString, folderPath);
-}
-
-function selectActivityFolder(e, typeString) {
-  var theFiles = e.target.files;
-  var relativePath = theFiles[0].webkitRelativePath;
-  var pathShower = document.querySelector('.activity-folder-path');
-  var folder = relativePath.split('/');
-  var folderPath = `C:/documents/activity calender/images/${folder[0]}`;
-  pathShower.innerHTML = folderPath;
-  //now saving folderPath to app-settings.json
-  changeFolderLocation(typeString, folderPath);
+function selectSettingsFolder(event) {
+  var type = event.currentTarget.id.split('-')[0];
+  console.log(type);
+  selectFolder().then((newPath) => {
+    var pathShower = document.querySelector(`.${type}-folder-path`);
+    changeFolderLocation(type, newPath).then((isUpdated) => {
+      if (isUpdated) {
+        pathShower.innerHTML = newPath;
+      }
+    });
+  });
 }
 
 //return to index.html page

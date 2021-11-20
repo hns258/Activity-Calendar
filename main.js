@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 
 // Load DB helpers
 const {
@@ -56,6 +56,11 @@ app.on('window-all-closed', async function () {
 // request to load images
 ipcMain.handle('load-images', async (event, category) => {
   return await readImages(category);
+});
+
+ipcMain.handle('select-folder', (event) => {
+  const path = dialog.showOpenDialog({ properties: ['openDirectory'] });
+  return path;
 });
 
 // get folder path

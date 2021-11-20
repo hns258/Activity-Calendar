@@ -13,10 +13,10 @@
 	<input style="display: none;" id="hdnWeek" value="1" />
 	<div class="p1" id="p1">
 		<div class="trash-box-container deletion-box" id="trash-box-container" style="display: none;">
-			<div class="trash-box">DELETE <i class="fas fa-trash-alt"></i></div>
+			<div class="trash-box">DELETE <i class="fas fa-trash-alt" aria-hidden="true"></i></div>
 		</div>
 		<table class="main-table">
-			<tr class="deletion-box" ondragenter="consoleLog()" ondragleave="removeDeletionBox()">
+			<tr class="deletion-box" ondragenter="showDeletionBox()" ondragleave="removeDeletionBox()">
 				<!--Change the 'th' class selectors to their proper days-->
 				<th class="this-week ">This Week</th>
 				<th class="monday-col "><img src="week_images/monday.png" class="day-segment" alt="Monday"></th>
@@ -56,7 +56,8 @@
 				<td class="friday-col"></td>
 				<td class="saturday-col"></td>
 				<td class="sunday-col">
-					<a class="next-week-link" href="next_week.html"><span>Next Week</span><i class="fas fa-arrow-right"></i></a>
+					<a class="next-week-link" href="next_week.html"><span>Next Week</span><i class="fas fa-arrow-right"
+							aria-hidden="true"></i></a>
 				</td>
 			</tr>
 		</table>
@@ -74,7 +75,7 @@
 					</label>
 				</td>
 				<td><span class="switch-title">Switch to left</span></td>
-				<td class="settings-icon"><i class="fas fa-cog" onclick="goToSettings()"></i></td>
+				<td class="settings-icon"><i class="fas fa-cog" onclick="goToSettings()" aria-hidden="true"></i></td>
 			</tr>
 			<!--"People" category-->
 			<tr id="people-imgs-row"></tr>
