@@ -48,6 +48,9 @@ function selectSettingsFolder(event) {
     changeFolderLocation(type, newPath).then((isUpdated) => {
       if (isUpdated) {
         pathShower.innerHTML = newPath;
+        setTimeout(()=>{
+          location.reload();
+        }, 500);
       }
     });
   });

@@ -315,9 +315,6 @@ function hideDeletionBox() {
   console.log('Hide deletion box triggered.');
 }
 
-function consoleLog() {
-  console.log('drag enter triggered');
-}
 
 // Populate each category of image library
 populateImageLibrary('people');
