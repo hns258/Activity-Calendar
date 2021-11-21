@@ -250,6 +250,7 @@ function clickDrag() {
 
       // (2) move the image on mousemove
       document.addEventListener('touchmove', onTouchMove);
+      var toggleBarPageX = document.getElementById("toggleBar").getBoundingClientRect().x;
 
       // (3) drop the image, remove unneeded handlers
       const dragEnd = (endEvent) => {
@@ -264,10 +265,10 @@ function clickDrag() {
               document.body.removeChild(image);
             } else alert('An error occurred, the image could not be deleted from the database.');
           });
-          // image.style.display = 'none';
-          // document.removeChild(image);
-          // var parent = image.parentNode();
-          // parent.removeChild(image);
+        } 
+        // Check if image dropped within sidebar and remove if true
+        else if ((open && endEvent.changedTouches[0].pageX > toggleBarPageX)) {
+          document.body.removeChild(image);
         } else {
           var copyImageId = image.getAttribute('clone-id');
           var baseId = image.getAttribute('data-id');
@@ -287,7 +288,7 @@ function clickDrag() {
             }
           });
           image.style.zIndex = 0; //Drop the image below the sidebar
-        }
+        };
 
         event.target.removeEventListener('touchend', dragEnd);
       };
