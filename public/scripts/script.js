@@ -238,6 +238,8 @@ function clickDrag() {
         image.style.top = pageY - image.offsetHeight / 2 + 'px';
       }
 
+      event.preventDefault();
+
       // move our absolutely positioned image under the pointer
       moveAt(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
 
