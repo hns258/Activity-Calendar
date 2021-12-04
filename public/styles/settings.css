@@ -28,7 +28,7 @@
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 20px;
   width: 20px;
   left: 8px;
@@ -60,53 +60,54 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-.settings-area td{
-    border: none !important;
+.settings-area td {
+  border: none !important;
 }
-.switch-title, .switch-title-left{
-    display: inline;
-    font-size: 0.8rem;
-    font-weight: 600;
+.switch-title,
+.switch-title-left {
+  display: inline;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
-.settings-icon{
-    color: #7c7a7d;
-    text-align: center;
-    font-size: 1.5rem;
+.settings-icon {
+  color: #7c7a7d;
+  text-align: center;
+  font-size: 1.5rem;
 }
-.settings-icon i{
-    cursor: pointer;
+.settings-icon i {
+  cursor: pointer;
 }
-.settings-icon i:hover{
-    opacity: 0.7;
+.settings-icon i:hover {
+  opacity: 0.7;
 }
 
 /* settings page styles */
-.settings-body{
+.settings-body {
   background-color: #fbeacc;
 }
-.my-settings{
+.my-settings {
   margin-left: 20px !important;
   margin-top: 20px !important;
 }
-.title{
+.title {
   margin-bottom: 20px;
 }
-.folder-dir{
+.folder-dir {
   margin: 20px auto;
   padding: 5px auto;
 }
-.folder-dir h3{
+.folder-dir h3 {
   font-size: 1rem;
   font-weight: 500;
-  font-family: 'Billionary';
+  font-family: 'Billionary', sans-serif;
 }
-.paths{
+.paths {
   display: block;
-  font-family: 'K Cyrillic Thin';
+  font-family: 'K Cyrillic Thin', sans-serif;
   letter-spacing: 1.5px;
 }
-.back-btn{
-  font-family: 'Billionary';
+.back-btn {
+  font-family: 'Billionary', sans-serif;
   background-color: #e31cf5 !important;
   border: none !important;
   outline: none !important;
@@ -115,12 +116,12 @@ input:checked + .slider:before {
   bottom: 0;
   left: 0;
 }
-.back-btn i{
+.back-btn i {
   margin-right: 10px;
 }
-.desc{
+.desc {
   margin-top: 20px;
-  font-family: 'Billionary';
+  font-family: 'Billionary', sans-serif;
   font-size: 0.8rem;
 }
 .btn-file {
@@ -130,7 +131,7 @@ input:checked + .slider:before {
   border: 1px solid black !important;
   color: black !important;
 }
-.btn-file input[type=file] {
+.btn-file input[type='file'] {
   position: absolute;
   top: 0;
   right: 0;
@@ -148,11 +149,11 @@ input:checked + .slider:before {
 
 /* MEDIA BREAKPOINTS */
 /* Large screens ----------- */
-@media only screen  and (min-width : 1824px) {
+@media only screen and (min-width: 1824px) {
   .switch {
     width: 100px !important;
     height: 50px !important;
-}
+  }
   .slider.round {
     border-radius: 54px;
   }
@@ -161,24 +162,26 @@ input:checked + .slider:before {
     width: 35px;
     left: 6px;
     bottom: 6px;
-}
-input:checked + .slider:before {
-  transform: translateX(45px);
-}
-    .switch-title, .switch-title-left {
-        font-size: 1.5rem;
-        text-align: left;
-        margin-left: -4vw;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: .8vh;
-        width: 220px;
-    }
-  .sidemenu table td, .menuOnLeft table td {
+  }
+  input:checked + .slider:before {
+    transform: translateX(45px);
+  }
+  .switch-title,
+  .switch-title-left {
+    font-size: 1.5rem;
+    text-align: left;
+    margin-left: -4vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.8vh;
+    width: 220px;
+  }
+  .sidemenu table td,
+  .menuOnLeft table td {
     font-size: 3rem;
   }
-  
+
   .settings-icon i {
     margin-right: 10px;
   }
@@ -187,16 +190,16 @@ input:checked + .slider:before {
   .settings-body {
     padding-top: 100px;
   }
-  .title{
+  .title {
     font-size: 3.5rem;
   }
-  .folder-dir{
+  .folder-dir {
     padding: 20px 0;
   }
-  .folder-dir h3{
+  .folder-dir h3 {
     font-size: 2.5rem;
   }
-  .folder-dir input{
+  .folder-dir input {
     font-size: 2.5rem;
   }
   .btn-file {
@@ -211,13 +214,13 @@ input:checked + .slider:before {
     font-size: 1.5rem;
     margin-bottom: 50px;
   }
-  .desc{
+  .desc {
     font-size: 1.5rem;
   }
-  .directory-form{
+  .directory-form {
     padding: 0;
   }
-  .back-btn{
+  .back-btn {
     height: 4%;
     width: 8%;
     font-size: 1.5rem !important;
