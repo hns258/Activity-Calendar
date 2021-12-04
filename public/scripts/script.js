@@ -43,7 +43,6 @@ const fs = require('fs');
 const { randomUUID } = require('crypto'); // returns random UUID as string on call
 
 // Populates image library with images from database
-// TODO: Change innerHTML to use code from image copy
 const populateImageLibrary = async (category) => {
   const row = document.getElementById(category + '-imgs-row');
   ipcRenderer.invoke('load-images', category).then((images) => {
@@ -133,8 +132,8 @@ function setUpDate() {
       }
     } else {
       days[day].style.backgroundColor = '#c5e6f5';
-      for (var i = day - 1; i < 21; i += 7) {
-        containers[i].style.backgroundColor = '#c5e6f5';
+      for (var j = day - 1; j < 21; j += 7) {
+        containers[j].style.backgroundColor = '#c5e6f5';
       }
     }
   }
@@ -180,28 +179,6 @@ function toggleSidemenu() {
     clickDrag(); //Bug fix: dragging image for the first time
   }
 }
-
-/* TODO: Switch touchstart, etc. events to their mouse-based equivalents
- * A list of some DOM JS event handlers can be found here:
- * https://www.w3schools.com/jsref/dom_obj_event.asp
- *
- * For now, the plan is:
- * > touchstart becomes dragstart
- * > touchmove becomes drag
- * > touchend becamse dragend
- *
- * Update September 18, 2021:
- *
- * See here on how to implement drag and drop with mouse events instead of drag events:
- * https://javascript.info/mouse-drag-and-drop
- *
- * Update September 19, 2021:
- *
- * The mouse event handlers need to be separated into their own functions,
- * possibly away from the for loops that added the event handlers in the first place.
- *
- * - Kyle
- */
 
 function clickDrag() {
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
@@ -294,12 +271,12 @@ function clickDrag() {
         ) {
           document.body.removeChild(image);
         } else {
-          var copyImageId = image.getAttribute('clone-id');
+          var tempCopyImageId = image.getAttribute('clone-id');
           var baseId = image.getAttribute('data-id');
           var weekType = document.getElementById('hdnWeek').value;
 
           setImageCopy(
-            copyImageId,
+            tempCopyImageId,
             baseId,
             endEvent.changedTouches[0].pageX,
             endEvent.changedTouches[0].pageY,
