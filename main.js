@@ -34,8 +34,6 @@ function createWindow() {
     },
   });
   win.loadFile('./public/index.html');
-
-  //win.webContents.openDevTools();
 }
 
 app.whenReady().then(async () => {
@@ -55,17 +53,16 @@ app.on('window-all-closed', async function () {
 /* IPC */
 // request to load images
 ipcMain.handle('load-images', async (event, category) => {
-  return await readImages(category);
+  return readImages(category);
 });
 
 ipcMain.handle('select-folder', (event) => {
-  const path = dialog.showOpenDialog({ properties: ['openDirectory'] });
-  return path;
+  return dialog.showOpenDialog({ properties: ['openDirectory'] });
 });
 
 // get folder path
 ipcMain.handle('get-folder', async (event, category) => {
-  return await getFolderLocation(category);
+  return getFolderLocation(category);
 });
 
 // folder location changes
@@ -104,5 +101,5 @@ ipcMain.handle('delete-image-copy', async (event, copyID) => {
 
 // load all image copies for current week
 ipcMain.handle('load-image-copies', async (event, weekTagID) => {
-  return await getImageCopies(weekTagID);
+  return getImageCopies(weekTagID);
 });
