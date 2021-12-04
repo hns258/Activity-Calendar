@@ -9,24 +9,24 @@
   width: 2vw; /*Larger sidebar changes: Sidebar toggle is slightly wider - Kyle*/
 }
 
-.sidebar::after{
-    height: 100%;
+.sidebar::after {
+  height: 100%;
 }
 
 .sidemenu {
-    position: absolute;
-    right: -29vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
-    /*right: -21vw;*/ /*Old size*/
-    background-color: #fbd988;
-    width: 29.5vw !important;
-    height: 100%;
-    transition: 0.4s;
-    /*overflow: scroll !important;*/
-    z-index: 1; /*Place in front of cloned image elemnts*/
+  position: absolute;
+  right: -29vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+  /*right: -21vw;*/ /*Old size*/
+  background-color: #fbd988;
+  width: 29.5vw !important;
+  height: 100%;
+  transition: 0.4s;
+  /*overflow: scroll !important;*/
+  z-index: 1; /*Place in front of cloned image elemnts*/
 }
 
 .sidemenu table,
-.menuOnLeft table{
+.menuOnLeft table {
   position: absolute;
   display: inline;
   height: 100%;
@@ -34,65 +34,68 @@
 }
 
 .sidemenu table td,
-.menuOnLeft table td{
+.menuOnLeft table td {
   padding: 0;
   margin: 0;
   height: 8vh; /*WIP sidebar table changes*/
 }
 
 .sidemenu table td img,
-.menuOnLeft table td img{
+.menuOnLeft table td img {
   padding: 0;
   width: 4.9vw;
   object-fit: scale-down;
   height: 6.9vh;
 }
 
-#transportation-imgs-row img{
+#transportation-imgs-row img {
   background-color: white;
   object-fit: cover;
   padding: 15px;
 }
 
-.copy{
+.copy {
   width: 4.9vw !important;
 }
 
-.transportation-imgs-row-copy{
+.transportation-imgs-row-copy {
   padding: 15px;
 }
 
 .activities-imgs-row-copy,
-.popular-imgs-row-copy{
+.popular-imgs-row-copy {
   width: 6.12vw !important;
 }
 
-#people-imgs-row, #popular-imgs-row, .settings-area {
-    display: grid;
-    grid-template-columns: repeat(4, 7.5vh);
-    grid-gap: 26px;
-    text-align: center;
-    margin: 30px 10px 10px 25px;
+#people-imgs-row,
+#popular-imgs-row,
+.settings-area {
+  display: grid;
+  grid-template-columns: repeat(4, 7.5vh);
+  grid-gap: 26px;
+  text-align: center;
+  margin: 30px 10px 10px 25px;
 }
 
-.settings-area td:nth-child(2){
+.settings-area td:nth-child(2) {
   grid-column: 2 / 4;
 }
-#transportation-imgs-row, #activities-imgs-row {
-    display: grid;
-    grid-template-columns: repeat(4, 7.5vh);
-    grid-gap: 26px;
-    text-align: center;
-    margin: 30px 10px 10px 25px;
+#transportation-imgs-row,
+#activities-imgs-row {
+  display: grid;
+  grid-template-columns: repeat(4, 7.5vh);
+  grid-gap: 26px;
+  text-align: center;
+  margin: 30px 10px 10px 25px;
 }
 
 .settings-area {
-    margin-top: 2vh;
-    grid-template-rows: 2vh;
+  margin-top: 2vh;
+  grid-template-rows: 2vh;
 }
 
-.img-row-title{
-    text-align: left;
+.img-row-title {
+  text-align: left;
 }
 
 /* left toggle settings */
@@ -102,7 +105,6 @@
   direction: rtl;
   background-color: #fbd988;
   width: 30.5vw;
-  height: 65vh;
   transition: 0.4s;
   overflow: scroll;
   height: 100vh;
@@ -118,17 +120,17 @@
 }
 
 #activities-imgs-row img,
-#popular-imgs-row img{
+#popular-imgs-row img {
   width: 6.12vw !important;
   object-fit: scale-down;
   height: 8vh;
 }
 
-@media only screen  and (min-width : 1824px) {
+@media only screen and (min-width: 1824px) {
   .settings-area td:nth-child(2) {
     margin-left: 80px;
   }
-  .img-row-title{
+  .img-row-title {
     font-size: 1.5rem;
     text-align: left;
     padding-left: 1vw;
@@ -140,29 +142,32 @@
     width: 30.3vw !important;
   }
 
-    #people-imgs-row, #popular-imgs-row, .settings-area {
-      grid-gap: 2vh 3.5vh;
-      margin: 30px 20px;
-    }
+  #people-imgs-row,
+  #popular-imgs-row,
+  .settings-area {
+    grid-gap: 2vh 3.5vh;
+    margin: 30px 20px;
+  }
 
-    #transportation-imgs-row, #activities-imgs-row{
-        grid-gap: 2vh 3.28vh;
-        margin: 20px 20px;
-    }
+  #transportation-imgs-row,
+  #activities-imgs-row {
+    grid-gap: 2vh 3.28vh;
+    margin: 20px 20px;
+  }
 
-    #transportation-imgs-row {
-        /*grid-template-rows: 6vh 6vh;*/
-        grid-template-columns: repeat(4, 7.5vh);
-    }
+  #transportation-imgs-row {
+    /*grid-template-rows: 6vh 6vh;*/
+    grid-template-columns: repeat(4, 7.5vh);
+  }
 
-    #activities-imgs-row {
-        /*grid-auto-rows: 6vh;*/
-        grid-template-columns: repeat(4, 7.5vh);
-    }
+  #activities-imgs-row {
+    /*grid-auto-rows: 6vh;*/
+    grid-template-columns: repeat(4, 7.5vh);
+  }
 
-    .settings-area{
-        margin-top: 1vh;
-        grid-template-rows: 3vh;
-        grid-template-columns: 3vw 3vw 3vw 22vw; 
-    }
+  .settings-area {
+    margin-top: 1vh;
+    grid-template-rows: 3vh;
+    grid-template-columns: 3vw 3vw 3vw 22vw;
+  }
 }
