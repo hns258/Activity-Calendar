@@ -107,8 +107,10 @@ async function getImageCopyModels() {
           elem.style.width = '4.9vw';
           elem.style.objectFit = 'scale-down';
           document.body.append(elem);
-          elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + 'px';
-          elem.style.top = parseInt(item[4]) - elem.offsetHeight / 2 + 'px';
+          setTimeout(() => {
+            elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + 'px';
+            elem.style.top = parseInt(item[4]) - elem.offsetHeight / 2 + 'px';
+          }, 0.00001);
         }
       });
     });
