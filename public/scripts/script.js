@@ -33,6 +33,9 @@ let imagesInLibrary = document.getElementsByClassName('img-lib');
 let imageArray;
 let deleteBox = document.getElementById('trash-box-container');
 
+// delay variable for image hold
+let delay;
+
 /*****************************************************************/
 /* IPC FUNCTIONS + Node Imports */
 const ipcRenderer = require('electron').ipcRenderer;
@@ -104,8 +107,10 @@ async function getImageCopyModels() {
           elem.style.width = '4.9vw';
           elem.style.objectFit = 'scale-down';
           document.body.append(elem);
-          elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + 'px';
-          elem.style.top = parseInt(item[4]) - elem.offsetHeight / 2 + 'px';
+          setTimeout(() => {
+            elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + 'px';
+            elem.style.top = parseInt(item[4]) - elem.offsetHeight / 2 + 'px';
+          }, 0.00001);
         }
       });
     });
@@ -200,7 +205,15 @@ function toggleSidemenu() {
 
 function clickDrag() {
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
+    function removeDelayChecks(event) {
+      clearTimeout(delay);
+      image.removeEventListener('touchend', removeDelayChecks);
+      document.removeEventListener('touchmove', removeDelayChecks);
+    }
+
     const dragStart = (event) => {
+      removeDelayChecks(event);
+
       if (!image.classList.contains('copy')) {
         console.log('making clone and moving copy');
         //clone itself and append clone in its original spot
@@ -215,6 +228,8 @@ function clickDrag() {
         imageArray = imageArray.filter((element) => element !== image);
         imageArray.push(clone);
         //finally add copy class to image
+        image.removeEventListener('touchstart', dragDelay);
+        image.addEventListener('touchstart', dragStart);
         image.classList.add('copy');
         image.classList.add(`${parent.parentNode.getAttribute('id')}-copy`);
         image.setAttribute('clone-id', randomUUID());
@@ -252,7 +267,9 @@ function clickDrag() {
 
       // (2) move the image on mousemove
       document.addEventListener('touchmove', onTouchMove);
-      var toggleBarPageX = document.getElementById("toggleBar").getBoundingClientRect().x;
+      var toggleBarPageX = document
+        .getElementById('toggleBar')
+        .getBoundingClientRect().x;
 
       // (3) drop the image, remove unneeded handlers
       const dragEnd = (endEvent) => {
@@ -267,9 +284,14 @@ function clickDrag() {
               document.body.removeChild(image);
             } else alert('An error occurred, the image could not be deleted from the database.');
           });
-        } 
+        }
         // Check if image dropped within sidebar and remove if true
-        else if ((open && !isLeft && endEvent.changedTouches[0].pageX > toggleBarPageX) || (open && isLeft && endEvent.changedTouches[0].pageX < toggleBarPageX)) {
+        else if (
+          (open &&
+            !isLeft &&
+            endEvent.changedTouches[0].pageX > toggleBarPageX) ||
+          (open && isLeft && endEvent.changedTouches[0].pageX < toggleBarPageX)
+        ) {
           document.body.removeChild(image);
         } else {
           var copyImageId = image.getAttribute('clone-id');
@@ -290,7 +312,7 @@ function clickDrag() {
             }
           });
           image.style.zIndex = 0; //Drop the image below the sidebar
-        };
+        }
 
         event.target.removeEventListener('touchend', dragEnd);
       };
@@ -300,8 +322,19 @@ function clickDrag() {
         return false;
       };
     };
+
+    function dragDelay(event) {
+      delay = setTimeout(dragStart, 300, event);
+      image.addEventListener('touchend', removeDelayChecks);
+      document.addEventListener('touchmove', removeDelayChecks);
+    }
+
     if (image.getAttribute('listener') !== 'true') {
-      image.addEventListener('touchstart', dragStart);
+      if (image.classList.contains('copy')) {
+        image.addEventListener('touchstart', dragStart);
+      } else {
+        image.addEventListener('touchstart', dragDelay);
+      }
       image.setAttribute('listener', 'true');
     }
   });
@@ -316,7 +349,6 @@ function hideDeletionBox() {
   document.getElementById('trash-box-container').style.display = 'none';
   console.log('Hide deletion box triggered.');
 }
-
 
 // Populate each category of image library
 populateImageLibrary('people');
