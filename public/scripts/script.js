@@ -269,7 +269,7 @@ function clickDrag() {
           });
         } 
         // Check if image dropped within sidebar and remove if true
-        else if ((open && endEvent.changedTouches[0].pageX > toggleBarPageX)) {
+        else if ((open && !isLeft && endEvent.changedTouches[0].pageX > toggleBarPageX) || (open && isLeft && endEvent.changedTouches[0].pageX < toggleBarPageX)) {
           document.body.removeChild(image);
         } else {
           var copyImageId = image.getAttribute('clone-id');
