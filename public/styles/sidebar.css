@@ -165,6 +165,15 @@
     grid-template-columns: repeat(4, 7.5vh);
   }
 
+  #people-imgs-row{
+    margin-left: 33.4px;
+  }
+
+  .menuOnLeft table #people-imgs-row{
+    margin-left: 20px;
+    margin-right: 33.4px;
+  }
+
   .settings-area {
     margin-top: 1vh;
     grid-template-rows: 3vh;
