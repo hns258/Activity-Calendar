@@ -103,7 +103,7 @@ input:checked + .slider:before {
 }
 .paths {
   display: block;
-  font-family: 'K Cyrillic Thin', sans-serif;
+  font-family: 'K Cyrillic Light', sans-serif;
   letter-spacing: 1.5px;
 }
 .back-btn {

@@ -15,7 +15,7 @@
 
 .sidemenu {
   position: absolute;
-  right: -29vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+  right: -30vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
   /*right: -21vw;*/ /*Old size*/
   background-color: #fbd988;
   width: 29.5vw !important;
@@ -24,12 +24,17 @@
   /*overflow: scroll !important;*/
   z-index: 1; /*Place in front of cloned image elemnts*/
 }
+.menuOnLeft table::-webkit-scrollbar,
+.sidemenu table::-webkit-scrollbar{
+  display: none !important;
+}
 
 .sidemenu table,
 .menuOnLeft table {
   position: absolute;
   display: inline;
   height: 100%;
+  width: 30.1vw;
   overflow: scroll !important;
 }
 
@@ -102,13 +107,11 @@
 .menuOnLeft {
   position: absolute;
   left: 0px;
-  direction: rtl;
   background-color: #fbd988;
-  width: 30.5vw;
+  width: 31.3vw;
   transition: 0.4s;
-  overflow: scroll;
   height: 100vh;
-  z-index: 1; /*Place in front of cloned image elemnts*/
+  z-index: 1;
 }
 .barOnLeft {
   padding: 0;
@@ -139,7 +142,7 @@
 
   .sidemenu {
     padding-right: 15px;
-    width: 30.3vw !important;
+    width: 31.3vw !important;
   }
 
   #people-imgs-row,
@@ -163,6 +166,15 @@
   #activities-imgs-row {
     /*grid-auto-rows: 6vh;*/
     grid-template-columns: repeat(4, 7.5vh);
+  }
+
+  #people-imgs-row{
+    margin-left: 33.4px;
+  }
+
+  .menuOnLeft table #people-imgs-row{
+    margin-left: 20px;
+    margin-right: 33.4px;
   }
 
   .settings-area {
