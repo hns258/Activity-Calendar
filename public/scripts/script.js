@@ -144,7 +144,7 @@ function toggleSidemenu() {
   if (!isLeft) {
     if (open) {
       console.log('closing sidebar to right');
-      sideMenu.style.right = '-29vw';
+      sideMenu.style.right = '-30vw';
       open = false;
       document
         .querySelector('#divSidemenu')
@@ -160,7 +160,7 @@ function toggleSidemenu() {
   } else {
     if (open) {
       console.log('closing sidebar to left');
-      sideMenu.style.left = '-28.5vw';
+      sideMenu.style.left = '-29.5vw';
       open = false;
       document
         .querySelector('#divSidemenu')

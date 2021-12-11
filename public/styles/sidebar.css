@@ -15,7 +15,7 @@
 
 .sidemenu {
   position: absolute;
-  right: -29vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
+  right: -30vw; /*Larger sidebar changes: Offset more to the left for new size - Kyle*/
   /*right: -21vw;*/ /*Old size*/
   background-color: #fbd988;
   width: 29.5vw !important;
@@ -24,13 +24,17 @@
   /*overflow: scroll !important;*/
   z-index: 1; /*Place in front of cloned image elemnts*/
 }
+.menuOnLeft table::-webkit-scrollbar,
+.sidemenu table::-webkit-scrollbar{
+  display: none !important;
+}
 
 .sidemenu table,
 .menuOnLeft table {
   position: absolute;
   display: inline;
   height: 100%;
-  width: 100vw;
+  width: 30.1vw;
   overflow: scroll !important;
 }
 
@@ -104,7 +108,7 @@
   position: absolute;
   left: 0px;
   background-color: #fbd988;
-  width: 31.5vw;
+  width: 31.3vw;
   transition: 0.4s;
   height: 100vh;
   z-index: 1;
@@ -138,7 +142,7 @@
 
   .sidemenu {
     padding-right: 15px;
-    width: 30.3vw !important;
+    width: 31.3vw !important;
   }
 
   #people-imgs-row,
