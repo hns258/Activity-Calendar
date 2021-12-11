@@ -30,6 +30,7 @@
   position: absolute;
   display: inline;
   height: 100%;
+  width: 100vw;
   overflow: scroll !important;
 }
 
@@ -102,13 +103,11 @@
 .menuOnLeft {
   position: absolute;
   left: 0px;
-  direction: rtl;
   background-color: #fbd988;
-  width: 30.5vw;
+  width: 31.5vw;
   transition: 0.4s;
-  overflow: scroll;
   height: 100vh;
-  z-index: 1; /*Place in front of cloned image elemnts*/
+  z-index: 1;
 }
 .barOnLeft {
   padding: 0;
