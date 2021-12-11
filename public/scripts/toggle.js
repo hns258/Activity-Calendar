@@ -16,6 +16,7 @@ function switchToLeft(){
     //when toggle is clicked
     if(!isLeft){
         //left settings should be on
+        document.querySelector('.next-week-link').style.right = 0;
         //swap classes to -left
         leftSideMenu.classList.remove("sidemenu");
         leftSideMenu.classList.add("menuOnLeft");
@@ -41,6 +42,7 @@ function switchToLeft(){
         console.log("finished!!!");
     }else{
         //left settings should be off
+        document.querySelector('.next-week-link').style.right = '1.5%'
         leftSideMenu.style = "";
         //swap classes to default
         leftSideMenu.classList.remove("menuOnLeft");
