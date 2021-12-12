@@ -6,6 +6,10 @@ let switchTitle = document.querySelector(".switch-title");
 var isLeft = false;
 const sideToggleBtn = document.querySelector(".isLeftToggle");
 
+//gets current page
+var path = window.location.pathname;
+var page = path.split('/').pop();
+
 // this function is to transition settings sidebar from right to left side of screen
 function switchToLeft(){
     console.log(leftSideMenu);
@@ -16,7 +20,9 @@ function switchToLeft(){
     //when toggle is clicked
     if(!isLeft){
         //left settings should be on
-        document.querySelector('.next-week-link').style.right = 0;
+        if (page === 'index.html') {
+            document.querySelector('.next-week-link').style.right = 0;
+        }
         //swap classes to -left
         leftSideMenu.classList.remove("sidemenu");
         leftSideMenu.classList.add("menuOnLeft");
@@ -42,7 +48,9 @@ function switchToLeft(){
         console.log("finished!!!");
     }else{
         //left settings should be off
-        document.querySelector('.next-week-link').style.right = '1.5%'
+        if (page === 'index.html') {
+            document.querySelector('.next-week-link').style.right = '1.5%'
+        }
         leftSideMenu.style = "";
         //swap classes to default
         leftSideMenu.classList.remove("menuOnLeft");

@@ -20,7 +20,7 @@
 
 /*WIP column changes: thinner time of day column*/
 .main-table tr th.time-of-day{
-    width: 9.2vw;
+    width: 7.7vw;
     column-width: 1vw;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .main-table th img {
-  width: 9vw; /*WIP column changes: smaller time of day images - Kyle*/
+  width: 7.344vw;
 }
 .time-of-day img {
   position: relative;

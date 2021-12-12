@@ -25,7 +25,7 @@ var toDrag = null;
 // Array of elements that have already been dragged onto the calendar from the library
 var copies = [];
 // Cells of the calendar table
-const containers = document.querySelectorAll('div.p1 table tr td');
+const containers = document.querySelectorAll('div.p1 table tr td:not(.extra-col)');
 // Images that can be dragged from the library
 const draggables = document.querySelectorAll('div.sidemenu table tr td img');
 //test
@@ -123,7 +123,10 @@ function setUpDate() {
   if (page === 'index.html') {
     var dateToday = new Date();
     var day = dateToday.getDay();
-    const days = document.querySelectorAll('div.p1 table tr th');
+    const days = document.querySelectorAll('div.p1 table tr th:not(.extra-col)');
+    //exclude extra-col from list
+    console.log(days);
+    console.log(containers);
     if (day == 0) {
       var sunday = 7;
       days[sunday].style.backgroundColor = '#c5e6f5';
