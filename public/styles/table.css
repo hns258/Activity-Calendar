@@ -20,7 +20,7 @@
 
 /*WIP column changes: thinner time of day column*/
 .main-table tr th.time-of-day{
-    width: 7.7vw;
+    width: 7.4305vw;
     column-width: 1vw;
 }
 
@@ -56,6 +56,11 @@
 .main-table th img {
   width: 7.344vw;
 }
+
+#sunday-col img {
+  width: 8.073vw !important;
+}
+
 .time-of-day img {
   position: relative;
   width: 1vw;
