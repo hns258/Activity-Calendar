@@ -36,6 +36,7 @@
   height: 100%;
   width: 30.1vw;
   overflow: scroll !important;
+  overflow-x: hidden !important;
 }
 
 .sidemenu table td,

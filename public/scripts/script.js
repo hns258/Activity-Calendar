@@ -223,7 +223,7 @@ function clickDrag() {
       if (
         document
           .querySelector('#divSidemenu')
-          .getAttribute('sidemenu-is-visible') === 'false'
+          //.getAttribute('sidemenu-is-visible') === 'false'
       ) {
         showDeletionBox();
       }
@@ -256,7 +256,7 @@ function clickDrag() {
         hideDeletionBox();
         document.removeEventListener('touchmove', onTouchMove);
         //check if in deletion area
-        if (endEvent.changedTouches[0].pageY < 100 && open === false) {
+        if (endEvent.changedTouches[0].pageY < 100) {
           var copyImageId = image.getAttribute('clone-id');
           deleteImageCopy(copyImageId).then(function (value) {
             if (value) {
