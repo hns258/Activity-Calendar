@@ -4,6 +4,7 @@ const { readdir } = require('fs/promises');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const app = require('electron').app;
+const { Op } = require('sequelize');
 
 // Import Models
 const Image = require('../models/Image');
@@ -187,7 +188,12 @@ const setImageCopy = async (
     if (image.ImageTypeID === 3) {
       // check if a base image exists in "activities"
       baseImage = await Image.findOne({
-        where: { FileName: image.FileName, ImageTypeID: 4 },
+        where: {
+          FileName: image.FileName,
+          ImageTypeID: {
+            [Op.not]: 3,
+          },
+        },
       });
     }
 
@@ -305,8 +311,40 @@ const initializeImageTypes = async () => {
         Location: path.join(basePath, 'popular'),
       },
       {
-        Name: 'activities',
-        Location: path.join(basePath, 'activities'),
+        Name: 'cafe-restaurants',
+        Location: path.join(basePath, 'cafe-restaurants'),
+      },
+      {
+        Name: 'parks-greenspace',
+        Location: path.join(basePath, 'parks-greenspace'),
+      },
+      {
+        Name: 'arts-education',
+        Location: path.join(basePath, 'arts-education'),
+      },
+      {
+        Name: 'volunteering-community',
+        Location: path.join(basePath, 'volunteering-community'),
+      },
+      {
+        Name: 'entertainment',
+        Location: path.join(basePath, 'entertainment'),
+      },
+      {
+        Name: 'activities-sports',
+        Location: path.join(basePath, 'activities-sports'),
+      },
+      {
+        Name: 'holiday-travel',
+        Location: path.join(basePath, 'holiday-travel'),
+      },
+      {
+        Name: 'places',
+        Location: path.join(basePath, 'places'),
+      },
+      {
+        Name: 'other',
+        Location: path.join(basePath, 'other'),
       },
     ]);
   }

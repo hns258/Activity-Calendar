@@ -34,6 +34,7 @@ function createWindow() {
     },
   });
   win.loadFile('./public/index.html');
+  win.webContents.openDevTools();
 }
 
 app.whenReady().then(async () => {
