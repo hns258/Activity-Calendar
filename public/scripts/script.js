@@ -25,7 +25,9 @@ var toDrag = null;
 // Array of elements that have already been dragged onto the calendar from the library
 var copies = [];
 // Cells of the calendar table
-const containers = document.querySelectorAll('div.p1 table tr td:not(.extra-col)');
+const containers = document.querySelectorAll(
+  'div.p1 table tr td:not(.extra-col)'
+);
 // Images that can be dragged from the library
 const draggables = document.querySelectorAll('div.sidemenu table tr td img');
 //test
@@ -44,10 +46,42 @@ const { randomUUID } = require('crypto'); // returns random UUID as string on ca
 
 // Populates image library with images from database
 const populateImageLibrary = async (category) => {
-  const row = document.getElementById(category + '-imgs-row');
+  if (
+    category === 'people' ||
+    category === 'transportation' ||
+    category === 'popular'
+  ) {
+    const row = document.getElementById(category + '-imgs-row');
+    populateRow(row, category);
+  } else {
+    const tableBody = document.getElementById('img-library-table');
+    const th = document.createElement('th');
+    const tr = document.createElement('tr');
+    th.setAttribute('colspan', '4');
+    th.setAttribute('id', 'activities-img-row-title');
+    th.classList.add('img-row-title');
+    const title = category.split('-');
+    let newTitle = '';
+    for (let i = 0; i < title.length; i++) {
+      title[i] = title[i].charAt(0).toUpperCase() + title[i].slice(1);
+      if (i === title.length - 1) {
+        newTitle += title[i];
+      } else newTitle += title[i] + ' & ';
+    }
+    th.innerHTML = newTitle;
+    tr.appendChild(th);
+    tableBody.appendChild(tr);
+    const imgRow = document.createElement('tr');
+    imgRow.setAttribute('id', 'activities-imgs-row');
+    tableBody.appendChild(imgRow);
+    populateRow(imgRow, category);
+  }
+};
+
+const populateRow = (rowToModify, category) => {
   ipcRenderer.invoke('load-images', category).then((images) => {
     for (const image of images) {
-      row.innerHTML +=
+      rowToModify.innerHTML +=
         '<td>' +
         `<img src="${image[0]}" ` +
         `data-id="${image[1]}" ` +
@@ -123,7 +157,9 @@ function setUpDate() {
   if (page === 'index.html') {
     var dateToday = new Date();
     var day = dateToday.getDay();
-    const days = document.querySelectorAll('div.p1 table tr th:not(.extra-col)');
+    const days = document.querySelectorAll(
+      'div.p1 table tr th:not(.extra-col)'
+    );
     //exclude extra-col from list
     console.log(days);
     console.log(containers);
@@ -221,9 +257,8 @@ function clickDrag() {
       image.style.objectFit = 'scale-down';
       document.body.append(image);
       if (
-        document
-          .querySelector('#divSidemenu')
-          //.getAttribute('sidemenu-is-visible') === 'false'
+        document.querySelector('#divSidemenu')
+        //.getAttribute('sidemenu-is-visible') === 'false'
       ) {
         showDeletionBox();
       }
@@ -334,7 +369,15 @@ function hideDeletionBox() {
 populateImageLibrary('people');
 populateImageLibrary('transportation');
 populateImageLibrary('popular');
-populateImageLibrary('activities');
+populateImageLibrary('cafe-restaurants');
+populateImageLibrary('parks-greenspace');
+populateImageLibrary('arts-education');
+populateImageLibrary('volunteering-community');
+populateImageLibrary('entertainment');
+populateImageLibrary('activities-sports');
+populateImageLibrary('holiday-travel');
+populateImageLibrary('places');
+populateImageLibrary('other');
 
 // Invoke all methods needed to boot up app
 setUpDate();

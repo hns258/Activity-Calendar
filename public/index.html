@@ -64,8 +64,8 @@
 				<td class="saturday-col"></td>
 				<td class="sunday-col">
 				<td class="extra-col"></td>
-					<a class="next-week-link" href="next_week.html"><span>Next Week</span><i class="fas fa-arrow-right"
-							aria-hidden="true"></i></a>
+				<a class="next-week-link" href="next_week.html"><span>Next Week</span><i class="fas fa-arrow-right"
+						aria-hidden="true"></i></a>
 				</td>
 			</tr>
 		</table>
@@ -75,30 +75,27 @@
 	<div class="sidemenu" id="divSidemenu" sidemenu-is-visible="false">
 		<img src="misc/handle.png" alt="click" class="sidebar initSidebar" id="toggleBar" onclick="toggleSidemenu()">
 		<table aria-describedby="Sidebar Table">
-			<tr class="settings-area">
-				<td>
-					<label class="switch">
-						<input type="checkbox" class="isLeftToggle">
-						<span class="slider round" onclick="switchToLeft()"></span>
-					</label>
-				</td>
-				<td><span class="switch-title">Switch to left</span></td>
-				<td class="settings-icon"><i class="fas fa-cog" onclick="goToSettings()" aria-hidden="true"></i></td>
-			</tr>
-			<!--"People" category-->
-			<tr id="people-imgs-row"></tr>
-			<!--"Transportation" category-->
-			<tr id="transportation-imgs-row"></tr>
-			<!--"Activities" category-->
-			<tr>
-				<th colspan="4" id="popular-img-row-title" class="img-row-title">Popular</th>
-			</tr>
-			<tr id="popular-imgs-row"></tr>
-			<tr>
-				<th colspan="4" id="activities-img-row-title" class="img-row-title">A-Z</th>
-			</tr>
-			<tr id="activities-imgs-row"></tr>
-
+			<tbody id="img-library-table">
+				<tr class="settings-area">
+					<td>
+						<label class="switch">
+							<input type="checkbox" class="isLeftToggle">
+							<span class="slider round" onclick="switchToLeft()"></span>
+						</label>
+					</td>
+					<td><span class="switch-title">Switch to left</span></td>
+					<td class="settings-icon"><i class="fas fa-cog" onclick="goToSettings()" aria-hidden="true"></i></td>
+				</tr>
+				<!--"People" category-->
+				<tr id="people-imgs-row"></tr>
+				<!--"Transportation" category-->
+				<tr id="transportation-imgs-row"></tr>
+				<!--"Activities" category-->
+				<tr>
+					<th colspan="4" id="popular-img-row-title" class="img-row-title">Popular</th>
+				</tr>
+				<tr id="popular-imgs-row"></tr>
+			</tbody>
 		</table>
 	</div>
 	<script type="text/javascript" src="./scripts/script.js"></script>
