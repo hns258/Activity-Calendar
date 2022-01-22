@@ -42,15 +42,19 @@ async function changeFolderLocation(category, path) {
 
 function selectSettingsFolder(event) {
   var type = event.currentTarget.id.split('-')[0];
+  var cat = type;
+  if(type === 'activities'){
+    cat = document.querySelector('#category-dropdown').value;
+  }
   console.log(type);
   selectFolder().then((newPath) => {
     var pathShower = document.querySelector(`.${type}-folder-path`);
-    changeFolderLocation(type, newPath).then((isUpdated) => {
+    changeFolderLocation(cat, newPath).then((isUpdated) => {
       if (isUpdated) {
         pathShower.innerHTML = newPath;
-        setTimeout(()=>{
-          location.reload();
-        }, 500);
+        // setTimeout(()=>{
+        //   location.reload();
+        // }, 500);
       }
     });
   });
@@ -84,7 +88,11 @@ function initializeSettings() {
       locationDisplayArr[2].innerHTML = value;
     });
 
-    getFolderLocation('activities').then((value) => {
+    //get option from dropdown 
+    let chosenActivityType = document.querySelector('#category-dropdown').value;
+    console.log(chosenActivityType);
+
+    getFolderLocation(chosenActivityType).then((value) => {
       //now load the data into the spans
       locationDisplayArr[3].innerHTML = value;
     });
