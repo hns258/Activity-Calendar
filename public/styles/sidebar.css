@@ -69,7 +69,8 @@
 }
 
 .activities-imgs-row-copy,
-.popular-imgs-row-copy {
+.popular-imgs-row-copy,
+[class*='-imgs-row-copy']:not(.transportation-imgs-row-copy, .people-imgs-row-copy, .popular-imgs-row-copy){
   width: 6.12vw !important;
 }
 

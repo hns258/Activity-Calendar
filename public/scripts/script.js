@@ -134,7 +134,17 @@ async function getImageCopyModels() {
           elem.alt = item[5];
           elem.classList.add('img-lib');
           elem.classList.add('copy');
-          elem.classList.add(`${item[6]}-imgs-row-copy`);
+          switch (item[6]) {
+            case 'transportation':
+            case 'people':
+            case 'popular':
+              elem.classList.add(`${item[6]}-imgs-row-copy`);
+              break;
+          
+            default:
+              elem.classList.add(`activities-imgs-row-copy`);
+              break;
+          }
           elem.style.position = 'absolute';
           elem.style.zIndex = 0;
           elem.style.width = '4.9vw';
