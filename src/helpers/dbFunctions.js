@@ -80,7 +80,7 @@ const readImages = async (category) => {
 	// for each image...
 	for (const image of images) {
 		// get the absolute path of the image
-		const imagePath = type.Location + '\\' + image.FileName + image.FileType;
+		const imagePath = path.join(type.Location, image.FileName + image.FileType);
 		// if image still exists, push the path onto the image path array
 		if (fs.existsSync(imagePath))
 			imageArray.push([imagePath, image.ID, image.FileName]);
