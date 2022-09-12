@@ -66,7 +66,7 @@ function switchToLeft(){
         leftSideMenu = document.querySelector(".sidemenu");
 
         // Leave side menu open after toggling
-        // leftSideMenu.style.right = "0px";
+        leftSideMenu.style.right = "0px";
 
         sideBarImg = document.querySelector(".sidebar");
         //set toggle to OFF (grey)
