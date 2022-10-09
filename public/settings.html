@@ -21,6 +21,12 @@
 <body class="settings-body">
 	<div class="container-fluid my-settings">
 		<h2 class="title">Settings</h2>
+		<div>
+			<span class="btn btn-primary btn-file" onclick="goToSymbolCreator()" name="people-folder-loc"
+					id="people-folder-loc">
+			Symbol Creator
+			</span>
+		</div>
 		<form class="directory-form">
 			<div class="folder-dir people-folder">
 				<h3>Choose folder where the people images are</h3>
@@ -74,6 +80,19 @@
 				<input type="range" class="form-range w-25" min="0" max="1000" id="delayRange" />
 			</div>
 			<span>Delay: <span id="delayValue"></span></span>
+		</div>
+
+		<br>
+
+		<!--Theme selector-->
+		<div>
+			<label class="form-label h3" for="themeSelector">Theme</label>
+			<br>
+			<select name="themeSelector" id="themeSelector">
+				<option value="Default">Default</option>
+				<option value="Dark">Dark</option>
+				<!-- <option value=""></option> -->
+			</select>
 		</div>
 
 		<button class="btn btn-primary back-btn" onclick="returnToMain()"><i class="fas fa-arrow-left"></i>Back</button>
