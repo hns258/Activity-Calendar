@@ -26,6 +26,6 @@
     "electron-is-dev": "^2.0.0",
     "sequelize": "^6.7.0",
     "sqlite": "^4.0.23",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.1.2"
   }
 }
