@@ -1,5 +1,5 @@
 {
-  "name": "Activity-Calendar",
+  "name": "activity-calendar",
   "version": "1.0.0",
   "description": "Activity Calendar App",
   "main": "main.js",
@@ -15,7 +15,6 @@
       "public/base_images/**/*"
     ]
   },
-  "author": "Azhya Knox",
   "license": "MIT",
   "devDependencies": {
     "electron": "^15.1.2",
