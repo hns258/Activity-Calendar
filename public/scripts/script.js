@@ -6,6 +6,9 @@
  */
 
 //gets current page
+
+import { moduleFunction } from './fnModule.mjs';
+
 var path = window.location.pathname;
 var page = path.split('/').pop();
 
@@ -26,7 +29,7 @@ var toDrag = null;
 var copies = [];
 // Cells of the calendar table
 const containers = document.querySelectorAll(
-	'div.p1 table tr td:not(.extra-col)'
+	'div#p1 table tr td:not(.extra-col)'
 );
 // Images that can be dragged from the library
 const draggables = document.querySelectorAll('div.sidemenu table tr td img');
@@ -43,7 +46,7 @@ let touchDelay;
 /* IPC FUNCTIONS + Node Imports */
 const ipcRenderer = require('electron').ipcRenderer;
 const fs = require('fs');
-const {randomUUID} = require('crypto'); // returns random UUID as string on call
+const { randomUUID } = require('crypto'); // returns random UUID as string on call
 
 ipcRenderer.invoke('get-hold-value').then((holdValue) => {
 	touchDelay = holdValue;
@@ -60,11 +63,6 @@ const populateImageLibrary = async (category) => {
 		populateRow(row, category);
 	} else {
 		const tableBody = document.getElementById('img-library-table');
-		const th = document.createElement('th');
-		const tr = document.createElement('tr');
-		th.setAttribute('colspan', '4');
-		th.setAttribute('id', 'activities-img-row-title');
-		th.classList.add('img-row-title');
 		const title = category.split('-');
 		let newTitle = '';
 		for (let i = 0; i < title.length; i++) {
@@ -73,11 +71,13 @@ const populateImageLibrary = async (category) => {
 				newTitle += title[i];
 			} else newTitle += title[i] + ' & ';
 		}
-		th.innerHTML = newTitle;
-		tr.appendChild(th);
-		tableBody.appendChild(tr);
-		const imgRow = document.createElement('tr');
-		imgRow.setAttribute('id', 'activities-imgs-row');
+		tableBody.appendChild(moduleFunction.stringToHtml(`
+				<h3 id="${category}-img-row-title" class="fw-semibold mt-2 px-3">${newTitle}</h3>
+				`))
+		const imgRow = moduleFunction.stringToHtml(`
+				<div id="${category}-imgs-row" class="d-flex row px-2 py-3 my-2 w-100 activities-img-row">
+				`);
+
 		tableBody.appendChild(imgRow);
 		populateRow(imgRow, category);
 	}
@@ -86,12 +86,15 @@ const populateImageLibrary = async (category) => {
 const populateRow = (rowToModify, category) => {
 	ipcRenderer.invoke('load-images', category).then((images) => {
 		for (const image of images) {
-			rowToModify.innerHTML +=
-				'<td>' +
-				`<img src="${image[0]}" ` +
-				`data-id="${image[1]}" ` +
-				`alt="${image[2]}" ` +
-				'class="img-lib"></td>';
+			rowToModify.appendChild(moduleFunction.stringToHtml(`
+			<div class="img-wrapper ms-2 my-2 d-flex img-lib col-2 col-xl-3"
+			data-id="${image[1]}"
+			>
+				<img class="w-100"
+				src="${image[0]}"
+				alt="${image[2]}">
+			</div>
+			`))
 		}
 	});
 };
@@ -132,8 +135,10 @@ async function getImageCopyModels() {
 		.then((imageCopyArray) => {
 			imageCopyArray.forEach((item) => {
 				if (fs.existsSync(item[0])) {
-					let elem = document.createElement('img');
-					elem.src = item[0];
+					let elem = document.createElement('div');
+					let img = document.createElement("img");
+					img.src = item[0];
+					elem.appendChild(img)
 					elem.setAttribute('clone-id', item[1]);
 					elem.setAttribute('data-id', item[2]);
 					elem.alt = item[5];
@@ -150,10 +155,7 @@ async function getImageCopyModels() {
 							elem.classList.add(`activities-imgs-row-copy`);
 							break;
 					}
-					elem.style.position = 'absolute';
-					elem.style.zIndex = 0;
-					elem.style.width = '4.9vw';
-					elem.style.objectFit = 'scale-down';
+					elem.classList.add("appended-img");
 					document.body.append(elem);
 					setTimeout(() => {
 						elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + 'px';
@@ -164,6 +166,7 @@ async function getImageCopyModels() {
 		});
 }
 
+
 /*****************************************************************/
 
 // Initializing the date functionality of the app
@@ -173,7 +176,7 @@ function setUpDate() {
 		var dateToday = new Date();
 		var day = dateToday.getDay();
 		const days = document.querySelectorAll(
-			'div.p1 table tr th:not(.extra-col)'
+			'div#p1 table tr th:not(.extra-col)'
 		);
 		//exclude extra-col from list
 		console.log(days);
@@ -194,18 +197,24 @@ function setUpDate() {
 }
 
 // Slide-in library menu functionality initialization
+
+document.querySelector("#toggleBar").addEventListener("click", toggleSidemenu);
+
 function toggleSidemenu() {
+	const menuContentWrapper = document.querySelector("#divSidemenu #menuWrapper")
 	if (!isLeft) {
 		if (open) {
 			console.log('closing sidebar to right');
-			sideMenu.style.right = '-30vw';
+			// sideMenu.style.right = '';
+			menuContentWrapper.classList.add("d-none")
 			open = false;
 			document
 				.querySelector('#divSidemenu')
 				.setAttribute('sidemenu-is-visible', false);
 		} else {
 			console.log('opening sidebar to right');
-			sideMenu.style.right = '0px';
+			sideMenu.style.right = '0';
+			menuContentWrapper.classList.remove("d-none")
 			open = true;
 			document
 				.querySelector('#divSidemenu')
@@ -215,6 +224,7 @@ function toggleSidemenu() {
 		if (open) {
 			console.log('closing sidebar to left');
 			sideMenu.style.left = '-29.5vw';
+			menuContentWrapper.classList.add("d-none")
 			open = false;
 			document
 				.querySelector('#divSidemenu')
@@ -222,6 +232,7 @@ function toggleSidemenu() {
 		} else {
 			console.log('opening sidebar to left');
 			sideMenu.style.left = '0px';
+			menuContentWrapper.classList.remove("d-none")
 			open = true;
 			document
 				.querySelector('#divSidemenu')
@@ -241,7 +252,7 @@ const dragEndEvents = ['touchend', 'mouseup'];
 function clickDrag() {
 	Array.prototype.forEach.call(imagesInLibrary, (image) => {
 		function removeDelayChecks(event) {
-				clearTimeout(delay);
+			clearTimeout(delay);
 
 			dragEndEvents.forEach(event => image.removeEventListener(event, removeDelayChecks));
 			dragMoveEvents.forEach(event => document.removeEventListener(event, removeDelayChecks));
@@ -274,14 +285,10 @@ function clickDrag() {
 				image.setAttribute('clone-id', randomUUID());
 			}
 
-			image.style.position = 'absolute';
-			image.style.zIndex = 2;
-			image.style.width = '4.9vw';
-			image.style.objectFit = 'scale-down';
+			image.classList.add("appended-img")
 			document.body.append(image);
 			if (
 				document.querySelector('#divSidemenu')
-				//.getAttribute('sidemenu-is-visible') === 'false'
 			) {
 				showDeletionBox();
 			}
@@ -294,7 +301,7 @@ function clickDrag() {
 			event.preventDefault();
 
 			function centerImageUnderPointer(event) {
-				const {pageX, pageY} = event instanceof TouchEvent ?
+				const { pageX, pageY } = event instanceof TouchEvent ?
 					event.changedTouches[0] :
 					event;
 				centerImageAt(pageX, pageY);
@@ -318,13 +325,14 @@ function clickDrag() {
 			console.debug(`DeletionBox bottom (Y coord): ${deletionBoxBottom}`);
 
 			// (3) drop the image, remove unneeded handlers
+			const dayColumnPageX = document.querySelector("#morning-row").getBoundingClientRect().right
 			const dragEnd = (endEvent) => {
 				hideDeletionBox();
 				dragMoveEvents.forEach(event =>
 					document.removeEventListener(event, centerImageUnderPointer));
 
 				//check if in deletion area
-				const {pageX, pageY} = endEvent instanceof TouchEvent ?
+				const { pageX, pageY } = endEvent instanceof TouchEvent ?
 					endEvent.changedTouches[0] :
 					endEvent;
 
@@ -332,16 +340,14 @@ function clickDrag() {
 
 				if (pageY < deletionBoxBottom) {
 					const copyImageId = image.getAttribute('clone-id');
-					deleteImageCopy(copyImageId).then(function(value) {
+					deleteImageCopy(copyImageId).then(function (value) {
 						if (value) {
 							console.log(value);
-							document.body.removeChild(image);
+							document.body.contains(image) ? document.body.removeChild(image) : null;
 						} else alert('An error occurred, the image could not be deleted from the database.');
 					});
-				// Check if image dropped within sidebar and remove if true
-				} else if (open && (pageX < toggleBarPageX) == isLeft) {
-					document.body.removeChild(image);
-				} else {
+				}
+				else if (endEvent.changedTouches[0].pageX > dayColumnPageX) {
 					var tempCopyImageId = image.getAttribute('clone-id');
 					var baseId = image.getAttribute('data-id');
 					var weekType = document.getElementById('hdnWeek').value;
@@ -352,7 +358,7 @@ function clickDrag() {
 						pageX,
 						pageY,
 						weekType,
-					).then(function(value) {
+					).then(function (value) {
 						if (value) {
 							console.log(value);
 						} else {
@@ -360,13 +366,22 @@ function clickDrag() {
 						}
 					});
 					image.style.zIndex = 0; //Drop the image below the sidebar
+				} else if (endEvent.changedTouches[0].pageX < dayColumnPageX) {
+					var copyImageId = image.getAttribute('clone-id');
+					deleteImageCopy(copyImageId).then(function (value) {
+						if (value) {
+							console.log(value);
+							document.body.contains(image) ? document.body.removeChild(image) : null;
+
+						} else alert('An error occurred, the image could not be deleted from the database.');
+					});
 				}
 				dragEndEvents.forEach(dragEndEvent =>
 					event.target.removeEventListener(dragEndEvent, dragEnd));
 			};
 			dragEndEvents.forEach(event => image.addEventListener(event, dragEnd));
 
-			image.ondragstart = function() {
+			image.ondragstart = function () {
 				return false;
 			};
 		};
@@ -392,12 +407,18 @@ function clickDrag() {
 }
 
 function showDeletionBox() {
+	const isLeft = document.querySelector("#toggle_left").checked
 	document.getElementById('trash-box-container').style.display = 'flex';
+	document.querySelector("#divSidemenu").style.zIndex = -1
+	isLeft ? document.querySelector("#divSidemenu").style.left = "-100%" : document.querySelector("#divSidemenu").style.right = "-100%"
 	console.log('Show deletion box triggered.');
 }
 
 function hideDeletionBox() {
+	const isLeft = document.querySelector("#toggle_left").checked
 	document.getElementById('trash-box-container').style.display = 'none';
+	isLeft ? document.querySelector("#divSidemenu").style.left = "0" : document.querySelector("#divSidemenu").style.right = "0"
+	document.querySelector("#divSidemenu").style.zIndex = 1
 	console.log('Hide deletion box triggered.');
 }
 
@@ -423,3 +444,69 @@ getImageCopyModels();
 setInterval(() => {
 	clickDrag();
 }, 1000);
+
+document.querySelectorAll(".vertical-scroll , .horizontal-scroll").forEach(element => {
+	const isVertical = element.classList.contains(".vertical-scroll")
+	let position = {
+		top: 0,
+		left: 0,
+		x: 0,
+		y: 0
+	}
+
+	const mousemoveHandler = (e) => {
+		const xCurrent = e.clientX - position.x
+		const yCurrent = e.clientY - position.y
+		if (isVertical) {
+			element.scrollTop = position.top - yCurrent;
+			return;
+		}
+		element.scrollLeft = position.left - xCurrent
+	}
+
+	const mouseUpHandler = (e) => {
+		document.removeEventListener("mousemove", mousemoveHandler)
+		document.removeEventListener("mouseup", mouseUpHandler)
+
+		element.style.cursor = 'grab'
+		element.style.removeProperty('user-select')
+	}
+
+	element.addEventListener("mousedown", (e) => {
+		position = {
+			left: element.scrollLeft,
+			top: element.scrollTop,
+			x: e.clientX,
+			y: e.clientY
+		}
+		element.style.cursor = 'grabbing'
+		element.style.userSelect = 'none'
+		document.addEventListener("mousemove", mousemoveHandler)
+		document.addEventListener("mouseup", mouseUpHandler)
+	})
+})
+
+document.querySelector("#switch_week_button").addEventListener("mouseup", (e) => {
+	const button = e.currentTarget
+	const weekInput = document.querySelector("#hdnWeek");
+	const weekText = document.querySelector("#this-week");
+	if (weekInput.value === "1") {
+		weekInput.value = 2;
+		weekText.textContent = "Next week";
+		button.querySelector("span").textContent = "Previous week"
+		button.querySelector("i").classList.remove("fa-arrow-right")
+		button.querySelector("i").classList.add("fa-arrow-left")
+	} else {
+		weekInput.value = 1;
+		weekText.textContent = "This Week"
+		button.querySelector("span").textContent = "Next week"
+		button.querySelector("i").classList.remove("fa-arrow-left")
+		button.querySelector("i").classList.add("fa-arrow-right")
+	}
+	document.querySelectorAll(".copy[clone-id]").forEach(item => {
+		item.remove();
+	})
+
+	getImageCopyModels();
+
+})

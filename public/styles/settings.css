@@ -85,10 +85,7 @@ input:checked + .slider:before {
 .settings-body {
   background-color: #fbeacc;
 }
-.my-settings {
-  margin-left: 20px !important;
-  margin-top: 20px !important;
-}
+
 .title {
   margin-bottom: 20px;
 }
@@ -243,4 +240,8 @@ input:checked + .slider:before {
     text-align: center;
     font-size: 1.25rem !important;
   }
+}
+
+[dt-option-container]{
+  z-index: 1;
 }
