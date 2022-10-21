@@ -388,7 +388,7 @@ const initializeWeekTags = async () => {
 
 const getSettings = async () => {
 	if (!(await Settings.findOne())) {
-		Settings.create();
+		return Settings.create();
 	}
 
 	const settings = await Settings.findOne();
