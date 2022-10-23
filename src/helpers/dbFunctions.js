@@ -387,12 +387,9 @@ const initializeWeekTags = async () => {
 };
 
 const getSettings = async () => {
-	if (!(await Settings.findOne())) {
-		return Settings.create();
-	}
-
-	const settings = await Settings.findOne();
-	return settings.HoldValue;
+	return Settings.findOrCreate({ where: {} }).then(res => {
+		return res.HoldValue;
+	});
 };
 
 const setSettings = async (newHoldValue) => {
