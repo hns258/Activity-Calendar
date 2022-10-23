@@ -7,7 +7,6 @@ const getBaseDir = require('../base-dir.js');
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: path.join(getBaseDir(), 'src', 'database', 'database.sqlite3'),
-  logging: false,
   logQueryParameters: true,
 });
 

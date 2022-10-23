@@ -2,20 +2,20 @@ const DataTypes = require('sequelize');
 
 module.exports = (sequelize) => {
 	sequelize.define('imageType', {
-		ID: {
+		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 			allowNull: false,
 		},
-		Name: {
+		name: {
 			type: DataTypes.STRING(150),
 			allowNull: false,
 		},
-		Location: {
+		location: {
 			type: DataTypes.STRING(500),
 		},
-		IsCustomized: {
+		isCustomized: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},

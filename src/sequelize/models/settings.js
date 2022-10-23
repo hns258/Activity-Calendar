@@ -2,7 +2,7 @@ const DataTypes = require('sequelize');
 
 module.exports = (sequelize) => {
 	sequelize.define('settings', {
-		HoldValue: {
+		holdValue: {
 			type: DataTypes.INTEGER,
 			defaultValue: 300,
 		},
