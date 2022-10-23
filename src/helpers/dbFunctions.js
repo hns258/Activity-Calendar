@@ -397,7 +397,7 @@ const getSettings = async () => {
 
 const setSettings = async (newHoldValue) => {
 	const settings = await Settings.findOne();
-	settings.update({ HoldValue: newHoldValue });
+	return settings.update({ HoldValue: newHoldValue });
 };
 
 module.exports = {
