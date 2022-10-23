@@ -57,16 +57,10 @@ const initializeImageTypes = async () => {
 };
 
 const initializeWeekTags = async () => {
-    // check if any week tags exist
-    const weekTagsInitialized = await models.weekTag.findOne();
-
-    // if not, initialize them
-    if (!weekTagsInitialized) {
-        await models.weekTag.bulkCreate([
-            { description: 'This Week' },
-            { description: 'Next Week' },
-        ]);
-    }
+    return models.weekTag.bulkCreate([
+        { description: 'This Week' },
+        { description: 'Next Week' },
+    ], { ignoreDuplicates: true });
 };
 
 // Called when folder location changes
@@ -179,7 +173,6 @@ const seed = async () => {
     await initializeImageTypes();
     await updateCalendar();
     await writeAllImages();
-
 };
 
 module.exports = seed;
