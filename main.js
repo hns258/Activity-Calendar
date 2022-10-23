@@ -2,28 +2,19 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 
 // Load DB helpers
 const {
-	writeImages,
-	writeAllImages,
 	readImages,
-	updateCalendar,
 	setImageCopy,
 	getImageCopies,
 	getFolderLocation,
 	updateFolderLocation,
-	initializeImageTypes,
-	initializeWeekTags,
 	deleteImageCopy,
 	getSettings,
 	setSettings,
 } = require('./src/activity-calendar');
 
-const sequelize = require('./src/sequelize');
+const seed = require('./src/seed');
 
-async function initDatabase() {
-	return sequelize.authenticate().then(() => {
-		return sequelize.sync();
-	});
-}
+const sequelize = require('./src/sequelize');
 
 function createWindow() {
 	const win = new BrowserWindow({
@@ -39,11 +30,9 @@ function createWindow() {
 }
 
 app.whenReady().then(async () => {
-	await initDatabase();
-	await initializeWeekTags();
-	await initializeImageTypes();
-	await updateCalendar();
-	await writeAllImages();
+	await sequelize.authenticate();
+	await sequelize.sync();
+	await seed();
 	createWindow();
 });
 
