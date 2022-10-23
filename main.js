@@ -15,7 +15,7 @@ const {
 	deleteImageCopy,
 	getSettings,
 	setSettings,
-} = require('./src/helpers/dbFunctions');
+} = require('./src/activity-calendar');
 
 const sequelize = require('./src/sequelize');
 

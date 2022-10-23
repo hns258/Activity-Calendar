@@ -2,9 +2,9 @@ const fs = require('fs');
 const { readdir } = require('fs/promises');
 const path = require('path');
 const Sequelize = require('sequelize');
-const getBaseDir = require('../base-dir');
+const getBaseDir = require('./base-dir');
 
-const { models } = require('../sequelize');
+const { models } = require('./sequelize');
 
 // Called when folder location changes
 // Adds new images to the database

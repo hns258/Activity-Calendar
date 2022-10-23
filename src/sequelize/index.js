@@ -1,5 +1,4 @@
 const { Sequelize } = require('sequelize');
-const isDev = require('electron-is-dev');
 const path = require('path');
 const associations = require('./associations');
 const getBaseDir = require('../base-dir.js');
