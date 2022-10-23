@@ -1,34 +1,22 @@
 const { Sequelize } = require('sequelize');
 const isDev = require('electron-is-dev');
 const path = require('path');
-const app = require('electron').app;
 const associations = require('./associations');
-
-let dbFile = isDev ?
-  path.join(app.getAppPath(), 'src', 'database', 'database.sqlite3') :
-  path.join(
-    app.getAppPath(),
-    '..',
-    '..',
-    'resources',
-    'app.asar.unpacked',
-    'src',
-    'database',
-    'database.sqlite3'
-  );
+const getBaseDir = require('../base-dir.js');
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: dbFile,
+  storage: path.join(getBaseDir(), 'src', 'database', 'database.sqlite3'),
+  logging: false,
   logQueryParameters: true,
 });
 
 const modelDefiners = [
   require('./models/image'),
-  require('./models/imageCopy'),
-  require('./models/imageType'),
+  require('./models/image-copy'),
+  require('./models/image-type'),
   require('./models/settings'),
-  require('./models/weekTag'),
+  require('./models/week-tag'),
 ];
 
 for (const modelDefiner of modelDefiners) {
