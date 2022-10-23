@@ -1,9 +1,8 @@
 const fs = require('fs');
 const { readdir } = require('fs/promises');
-const isDev = require('electron-is-dev');
 const path = require('path');
-const app = require('electron').app;
 const Sequelize = require('sequelize');
+const getBaseDir = require('../base-dir');
 
 const { models } = require('../sequelize');
 
@@ -275,20 +274,7 @@ const initializeImageTypes = async () => {
 	// See if any image types exist
 	const imageTypesInitialized = await models.imageType.findOne();
 
-	let basePath;
-	if (isDev) {
-		basePath = path.join(app.getAppPath(), 'public', 'base_images');
-	} else {
-		basePath = path.join(
-			app.getAppPath(),
-			'..',
-			'..',
-			'resources',
-			'app.asar.unpacked',
-			'public',
-			'base_images'
-		);
-	}
+	const basePath = path.join(getBaseDir(), 'public', 'base_images')
 
 	// if no image types exist, initialize them in database
 	if (!imageTypesInitialized) {
