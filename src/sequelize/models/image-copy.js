@@ -2,16 +2,16 @@ const DataTypes = require('sequelize');
 
 module.exports = (sequelize) => {
   return sequelize.define('imageCopy', {
-    ID: {
+    id: {
       type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
     },
-    PosX: {
+    posX: {
       type: DataTypes.STRING(20),
       allowNull: false,
     },
-    PosY: {
+    posY: {
       type: DataTypes.STRING(20),
       allowNull: false,
     },
