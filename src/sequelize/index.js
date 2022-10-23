@@ -25,10 +25,10 @@ const sequelize = new Sequelize({
 
 const modelDefiners = [
   require('./models/image'),
-  require('./models/imageCopy'),
-  require('./models/imageType'),
+  require('./models/image-copy'),
+  require('./models/image-type'),
   require('./models/settings'),
-  require('./models/weekTag'),
+  require('./models/week-tag'),
 ];
 
 for (const modelDefiner of modelDefiners) {
