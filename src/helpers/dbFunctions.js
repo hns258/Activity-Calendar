@@ -393,8 +393,7 @@ const getSettings = async () => {
 };
 
 const setSettings = async (newHoldValue) => {
-	const settings = await Settings.findOne();
-	return settings.update({ HoldValue: newHoldValue });
+	return Settings.update({ HoldValue: newHoldValue }, { where: {} });
 };
 
 module.exports = {
