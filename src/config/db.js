@@ -22,5 +22,5 @@ if (isDev) {
 module.exports = new Sequelize({
   dialect: 'sqlite',
   storage: dbFile,
-  logging: false,
+  logQueryParameters: true,
 });

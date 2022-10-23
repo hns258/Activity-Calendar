@@ -1,4 +1,4 @@
-const { DataTypes, Deferrable } = require('sequelize');
+const DataTypes = require('sequelize');
 const db = require('../config/db');
 
 const ImageCopy = require('./ImageCopy');
@@ -20,7 +20,6 @@ const Image = db.define('image', {
   },
   ImageTypeID: {
     type: DataTypes.INTEGER,
-    deferrable: Deferrable.INITIALLY_DEFERRED,
     allowNull: false,
   },
 });

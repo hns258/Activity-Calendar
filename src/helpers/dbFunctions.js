@@ -298,56 +298,24 @@ const initializeImageTypes = async () => {
 
 	// if no image types exist, initialize them in database
 	if (!imageTypesInitialized) {
-		await ImageType.bulkCreate([
-			{
-				Name: 'people',
-				Location: path.join(basePath, 'people'),
-			},
-			{
-				Name: 'transportation',
-				Location: path.join(basePath, 'transportation'),
-			},
-			{
-				Name: 'popular',
-				Location: path.join(basePath, 'popular'),
-			},
-			{
-				Name: 'cafe-restaurants',
-				Location: path.join(basePath, 'cafe-restaurants'),
-			},
-			{
-				Name: 'parks-greenspace',
-				Location: path.join(basePath, 'parks-greenspace'),
-			},
-			{
-				Name: 'arts-education',
-				Location: path.join(basePath, 'arts-education'),
-			},
-			{
-				Name: 'volunteering-community',
-				Location: path.join(basePath, 'volunteering-community'),
-			},
-			{
-				Name: 'entertainment',
-				Location: path.join(basePath, 'entertainment'),
-			},
-			{
-				Name: 'activities-sports',
-				Location: path.join(basePath, 'activities-sports'),
-			},
-			{
-				Name: 'holiday-travel',
-				Location: path.join(basePath, 'holiday-travel'),
-			},
-			{
-				Name: 'places',
-				Location: path.join(basePath, 'places'),
-			},
-			{
-				Name: 'other',
-				Location: path.join(basePath, 'other'),
-			},
-		]);
+		const imageTypeNames = [
+			'people',
+			'transportation',
+			'popular',
+			'cafe-restaurants',
+			'parks-greenspace',
+			'arts-education',
+			'volunteering-community',
+			'entertainment',
+			'activities-sports',
+			'holiday-travel',
+			'places',
+			'other'
+		];
+
+		await ImageType.bulkCreate(imageTypeNames.map(name => {
+			return { Name: name, Location: path.join(basePath, name) }
+		}));
 	}
 
 	// find all image types that don't have customized location
@@ -387,17 +355,13 @@ const initializeWeekTags = async () => {
 };
 
 const getSettings = async () => {
-	if (!(await Settings.findOne())) {
-		Settings.create();
-	}
-
-	const settings = await Settings.findOne();
-	return settings.HoldValue;
+	return Settings.findOrCreate({ where: {} }).then(res => {
+		return res.HoldValue;
+	});
 };
 
 const setSettings = async (newHoldValue) => {
-	const settings = await Settings.findOne();
-	settings.update({ HoldValue: newHoldValue });
+	return Settings.update({ HoldValue: newHoldValue }, { where: {} });
 };
 
 module.exports = {
