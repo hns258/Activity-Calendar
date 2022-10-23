@@ -1,23 +1,17 @@
-const sequelize = require('sequelize');
 const fs = require('fs');
 const { readdir } = require('fs/promises');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const app = require('electron').app;
-const { Op } = require('sequelize');
+const Sequelize = require('sequelize');
 
-// Import Models
-const Image = require('../models/Image');
-const ImageCopy = require('../models/ImageCopy');
-const ImageType = require('../models/ImageType');
-const Settings = require('../models/Settings');
-const WeekTag = require('../models/WeekTag');
+const { models } = require('../sequelize');
 
 // Called when folder location changes
 // Adds new images to the database
 const writeImages = async (category) => {
 	// find image type by passed in image type name (e.g. 'activities')
-	const type = await ImageType.findOne({
+	const type = await models.imageType.findOne({
 		raw: true,
 		where: { Name: category },
 	});
@@ -30,16 +24,16 @@ const writeImages = async (category) => {
 			const extension = file.substring(file.length - 4);
 
 			// check if the image already exists
-			const image = await Image.findOne({
-				where: { FileName: name, ImageTypeID: type.ID },
+			const image = await models.image.findOne({
+				where: { FileName: name, imageTypeID: type.ID },
 			});
 
 			// if the image doesn't exist, add it to the database
 			if (!image) {
-				await Image.create({
+				await models.image.create({
 					FileName: name,
 					FileType: extension,
-					ImageTypeID: type.ID,
+					imageTypeID: type.ID,
 				});
 			}
 		}
@@ -51,7 +45,7 @@ const writeImages = async (category) => {
 // Called from back end when app loads
 // Adds new images to database from each image type
 const writeAllImages = async () => {
-	const types = await ImageType.findAll();
+	const types = await models.imageType.findAll();
 	for (const type of types) await writeImages(type.Name);
 };
 
@@ -64,16 +58,16 @@ const readImages = async (category) => {
 	const imageArray = [];
 
 	// find image type by passed in image type name (e.g. 'activities')
-	const type = await ImageType.findOne({
+	const type = await models.imageType.findOne({
 		where: { Name: category },
 	});
 
 	// get all images matching image type in alphabetical order
-	const images = await Image.findAll({
-		order: [[sequelize.fn('lower', sequelize.col('FileName')), 'ASC']],
+	const images = await models.image.findAll({
+		order: [[Sequelize.fn('lower', Sequelize.col('FileName')), 'ASC']],
 		raw: true,
 		where: {
-			ImageTypeID: type.ID,
+			imageTypeID: type.ID,
 		},
 	});
 
@@ -86,10 +80,10 @@ const readImages = async (category) => {
 			imageArray.push([imagePath, image.ID, image.FileName]);
 		// if image doesn't exist, destroy its copies and the image
 		else {
-			await ImageCopy.destroy({
-				where: { ImageID: image.ID },
+			await models.imageCopy.destroy({
+				where: { imageID: image.ID },
 			});
-			await Image.destroy({ where: { ID: image.ID } });
+			await models.image.destroy({ where: { ID: image.ID } });
 		}
 	}
 
@@ -99,7 +93,7 @@ const readImages = async (category) => {
 
 const setEndDates = async (weekStart) => {
 	// find all weektags
-	const weektags = await WeekTag.findAll();
+	const weektags = await models.weekTag.findAll();
 	// for each week tag, if end date is null, set to 7 and 14 days out respectively
 	for (const weektag of weektags) {
 		await weektag.update({
@@ -121,8 +115,8 @@ const updateCalendar = async () => {
 	weekStart.setUTCHours(0, 0, 0, 0);
 
 	// find and assign both weektags
-	const currentWeekTag = await WeekTag.findOne({ where: { ID: 1 } });
-	const nextWeekTag = await WeekTag.findOne({ where: { ID: 2 } });
+	const currentWeekTag = await models.weekTag.findOne({ where: { ID: 1 } });
+	const nextWeekTag = await models.weekTag.findOne({ where: { ID: 2 } });
 
 	// if an end date is null, set new end dates
 	if (currentWeekTag.EndDate === null) {
@@ -131,19 +125,19 @@ const updateCalendar = async () => {
 		// if current date is past next week end date
 		if (nextWeekTag.EndDate < currentDate) {
 			// destroy all image copies
-			await ImageCopy.destroy({ truncate: true });
+			await models.imageCopy.destroy({ truncate: true });
 			// set new end dates
 			setEndDates(weekStart);
 			return;
 		} else if (currentWeekTag.EndDate < currentDate) {
 			// destroy current week image copies
-			await ImageCopy.destroy({ where: { WeekTagID: 1 } });
+			await models.imageCopy.destroy({ where: { weekTagID: 1 } });
 			// update next week image copies to this week
-			await ImageCopy.update(
-				{ WeekTagID: 1 },
+			await models.imageCopy.update(
+				{ weekTagID: 1 },
 				{
 					where: {
-						WeekTagID: 2,
+						weekTagID: 2,
 					},
 				}
 			);
@@ -158,7 +152,7 @@ const updateCalendar = async () => {
 			});
 		}
 	}
-}; // end of function
+};
 
 // Called when...
 //    Image is dragged onto calendar
@@ -172,7 +166,7 @@ const setImageCopy = async (
 	thisWeekTagID
 ) => {
 	// Try to find an already existing image copy with passed in ID
-	const imageCopy = await ImageCopy.findOne({ where: { ID: copyID } });
+	const imageCopy = await models.imageCopy.findOne({ where: { ID: copyID } });
 
 	// If one exists, update posX and posY
 	if (imageCopy) {
@@ -181,18 +175,18 @@ const setImageCopy = async (
 		await imageCopy.save();
 	} else {
 		// Find image with passed in ID
-		const image = await Image.findOne({ where: { ID: baseID } });
+		const image = await models.image.findOne({ where: { ID: baseID } });
 		// Original image stored in activities (if popular)
 		let baseImage;
 
 		// If the image is of type "popular"
-		if (image.ImageTypeID === 3) {
+		if (image.imageTypeID === 3) {
 			// check if a base image exists in "activities"
-			baseImage = await Image.findOne({
+			baseImage = await models.image.findOne({
 				where: {
 					FileName: image.FileName,
-					ImageTypeID: {
-						[Op.not]: 3,
+					imageTypeID: {
+						[Sequelize.Op.not]: 3,
 					},
 				},
 			});
@@ -202,12 +196,12 @@ const setImageCopy = async (
 		const imageID = baseImage ? baseImage.ID : image.ID;
 
 		// Create image copy with set variables
-		await ImageCopy.create({
+		await models.imageCopy.create({
 			ID: copyID,
 			PosX: thisPosX,
 			PosY: thisPosY,
-			ImageID: imageID,
-			WeekTagID: thisWeekTagID,
+			imageID,
+			weekTagID: thisWeekTagID,
 		});
 	}
 };
@@ -217,7 +211,7 @@ const setImageCopy = async (
 // Takes in image copy name
 const deleteImageCopy = async (id) => {
 	// Delete Image copy found by passed in array
-	await ImageCopy.destroy({ where: { ID: id } });
+	await models.imageCopy.destroy({ where: { ID: id } });
 };
 
 // Called when app loads
@@ -227,21 +221,21 @@ const getImageCopies = async (thisWeekTagID) => {
 	const imageCopyArray = [];
 
 	// get all images matching image type in order of created date
-	const imageCopies = await ImageCopy.findAll({
-		order: [[sequelize.fn('lower', sequelize.col('createdAt')), 'ASC']],
+	const imageCopies = await models.imageCopy.findAll({
+		order: [[Sequelize.fn('lower', Sequelize.col('createdAt')), 'ASC']],
 		raw: true,
 		where: {
-			WeekTagID: thisWeekTagID,
+			weekTagID: thisWeekTagID,
 		},
 	});
 
 	// for each image copy...
 	for (const imageCopy of imageCopies) {
 		// Find base image
-		const image = await Image.findOne({ where: { ID: imageCopy.ImageID } });
+		const image = await models.image.findOne({ where: { ID: imageCopy.imageID } });
 
 		// Find image type
-		const type = await ImageType.findOne({ where: { ID: image.ImageTypeID } });
+		const type = await models.imageType.findOne({ where: { ID: image.imageTypeID } });
 
 		// get the absolute path of the image
 		const imagePath = type.Location + '\\' + image.FileName + image.FileType;
@@ -250,7 +244,7 @@ const getImageCopies = async (thisWeekTagID) => {
 		imageCopyArray.push([
 			imagePath,
 			imageCopy.ID,
-			imageCopy.ImageID,
+			imageCopy.imageID,
 			imageCopy.PosX,
 			imageCopy.PosY,
 			image.FileName,
@@ -264,14 +258,14 @@ const getImageCopies = async (thisWeekTagID) => {
 
 // Returns the folder location path of a specific image type
 const getFolderLocation = async (category) => {
-	const imageType = await ImageType.findOne({ where: { Name: category } });
+	const imageType = await models.imageType.findOne({ where: { Name: category } });
 	return imageType.Location;
 };
 
 // Called when folder path is changed for specific image type
 // Set customization flag in model
 const updateFolderLocation = async (category, typePath) => {
-	const imageType = await ImageType.findOne({ where: { Name: category } });
+	const imageType = await models.imageType.findOne({ where: { Name: category } });
 	if (fs.existsSync(typePath))
 		imageType.update({ Location: typePath, IsCustomized: true });
 };
@@ -279,7 +273,7 @@ const updateFolderLocation = async (category, typePath) => {
 // Initialize image types if they don't exist
 const initializeImageTypes = async () => {
 	// See if any image types exist
-	const imageTypesInitialized = await ImageType.findOne();
+	const imageTypesInitialized = await models.imageType.findOne();
 
 	let basePath;
 	if (isDev) {
@@ -313,13 +307,13 @@ const initializeImageTypes = async () => {
 			'other'
 		];
 
-		await ImageType.bulkCreate(imageTypeNames.map(name => {
+		await models.imageType.bulkCreate(imageTypeNames.map(name => {
 			return { Name: name, Location: path.join(basePath, name) }
 		}));
 	}
 
 	// find all image types that don't have customized location
-	const uncustomizedTypes = await ImageType.findAll({
+	const uncustomizedTypes = await models.imageType.findAll({
 		where: { IsCustomized: false },
 	});
 
@@ -330,7 +324,7 @@ const initializeImageTypes = async () => {
 		});
 
 	// Fix image types with broken folder paths
-	const imageTypes = await ImageType.findAll();
+	const imageTypes = await models.imageType.findAll();
 	for (const type of imageTypes) {
 		if (!fs.existsSync(type.Location))
 			await type.update({
@@ -343,11 +337,11 @@ const initializeImageTypes = async () => {
 // Initialize week tags
 const initializeWeekTags = async () => {
 	// check if any week tags exist
-	const weekTagsInitialized = await WeekTag.findOne();
+	const weekTagsInitialized = await models.weekTag.findOne();
 
 	// if not, initialize them
 	if (!weekTagsInitialized) {
-		await WeekTag.bulkCreate([
+		await models.weekTag.bulkCreate([
 			{ Description: 'This Week' },
 			{ Description: 'Next Week' },
 		]);
@@ -355,13 +349,13 @@ const initializeWeekTags = async () => {
 };
 
 const getSettings = async () => {
-	return Settings.findOrCreate({ where: {} }).then(res => {
+	return models.settings.findOrCreate({ where: {} }).then(res => {
 		return res.HoldValue;
 	});
 };
 
 const setSettings = async (newHoldValue) => {
-	return Settings.update({ HoldValue: newHoldValue }, { where: {} });
+	return models.settings.update({ HoldValue: newHoldValue }, { where: {} });
 };
 
 module.exports = {

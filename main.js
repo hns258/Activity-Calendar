@@ -17,13 +17,13 @@ const {
 	setSettings,
 } = require('./src/helpers/dbFunctions');
 
-// Import database
-const db = require('./src/config/db');
+const sequelize = require('./src/sequelize');
 
-// Connect to database
-db.authenticate()
-	.then(console.log('Database connected...'))
-	.catch((err) => console.log('DB Error: ' + err.message));
+async function initDatabase() {
+	return sequelize.authenticate().then(() => {
+		return sequelize.sync();
+	});
+}
 
 function createWindow() {
 	const win = new BrowserWindow({
@@ -39,6 +39,7 @@ function createWindow() {
 }
 
 app.whenReady().then(async () => {
+	await initDatabase();
 	await initializeWeekTags();
 	await initializeImageTypes();
 	await updateCalendar();
