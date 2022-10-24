@@ -164,7 +164,7 @@ const updateFolderLocation = async (category, typePath) => {
 
 
 const getSettings = async () => {
-	return models.settings.findOrCreate({ where: {} }).then(res => {
+	return models.settings.findOrCreate({ where: {} }).then(([res]) => {
 		return res.holdValue;
 	});
 };
