@@ -2,7 +2,6 @@ const { readdir } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
 
-const getBaseDir = require('./base-dir');
 const { models } = require('./sequelize');
 
 // Initialize image types if they don't exist
@@ -10,7 +9,7 @@ const initializeImageTypes = async () => {
     // See if any image types exist
     const imageTypesInitialized = await models.imageType.findOne();
 
-    const basePath = path.join(getBaseDir(), 'public', 'base_images')
+    const basePath = path.join(__dirname, '..', 'public', 'base_images');
 
     // if no image types exist, initialize them in database
     if (!imageTypesInitialized) {
