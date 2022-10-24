@@ -167,8 +167,25 @@ const updateCalendar = async () => {
     }
 };
 
+// Initialize categories if they don't exist
+const initializeCategories = async () => {
+    return models.category.bulkCreate([
+        { name: 'Popular' },
+        { name: 'Cafe & Restaurants' },
+        { name: 'Parks & Greenspace' },
+        { name: 'Arts & Education' },
+        { name: 'Volunteering & Community' },
+        { name: 'Entertainment' },
+        { name: 'Activities & Sports' },
+        { name: 'Holiday & Travel' },
+        { name: 'Places' },
+        { name: 'Other' },
+    ], { ignoreDuplicates: true });
+};
+
 const seed = async () => {
     await initializeWeekTags();
+    await initializeCategories();
     await initializeImageTypes();
     await updateCalendar();
     await writeAllImages();
