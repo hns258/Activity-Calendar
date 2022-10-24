@@ -9,16 +9,10 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "build": {
-    "asarUnpack": [
-      "src/database/database.sqlite3",
-      "public/base_images/**/*"
-    ]
-  },
   "license": "MIT",
   "devDependencies": {
     "electron": "^15.1.2",
-    "electron-builder": "^22.13.1"
+    "electron-builder": "^23.6.0"
   },
   "dependencies": {
     "bootstrap": "^5.1.3",

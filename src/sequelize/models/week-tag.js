@@ -11,6 +11,7 @@ module.exports = (sequelize) => {
     description: {
       type: DataTypes.ENUM('This Week', 'Next Week'),
       allowNull: false,
+      unique: true,
     },
     endDate: {
       type: DataTypes.DATE,
