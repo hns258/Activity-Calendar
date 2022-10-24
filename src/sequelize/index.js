@@ -5,7 +5,7 @@ const getUserDataDir = require('../user-data-dir.js');
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: path.join(getUserDataDir(), 'src', 'database', 'database.sqlite3'),
+  storage: path.join(getUserDataDir(), 'database', 'database.sqlite3'),
   logQueryParameters: true,
 });
 
