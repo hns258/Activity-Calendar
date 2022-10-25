@@ -37,16 +37,16 @@ let deleteBox = document.getElementById('trash-box-container');
 
 // delay variable for image hold
 let delay;
-let delayValue;
+let touchDelay;
 
 /*****************************************************************/
 /* IPC FUNCTIONS + Node Imports */
 const ipcRenderer = require('electron').ipcRenderer;
 const fs = require('fs');
-const { randomUUID } = require('crypto'); // returns random UUID as string on call
+const {randomUUID} = require('crypto'); // returns random UUID as string on call
 
 ipcRenderer.invoke('get-hold-value').then((holdValue) => {
-	delayValue = holdValue;
+	touchDelay = holdValue;
 });
 
 // Populates image library with images from database
@@ -234,12 +234,17 @@ function toggleSidemenu() {
 	}
 }
 
+const dragStartEvents = ['touchstart', 'mousedown'];
+const dragMoveEvents = ['touchmove', 'mousemove'];
+const dragEndEvents = ['touchend', 'mouseup'];
+
 function clickDrag() {
 	Array.prototype.forEach.call(imagesInLibrary, (image) => {
 		function removeDelayChecks(event) {
-			clearTimeout(delay);
-			image.removeEventListener('touchend', removeDelayChecks);
-			document.removeEventListener('touchmove', removeDelayChecks);
+				clearTimeout(delay);
+
+			dragEndEvents.forEach(event => image.removeEventListener(event, removeDelayChecks));
+			dragMoveEvents.forEach(event => document.removeEventListener(event, removeDelayChecks));
 		}
 
 		const dragStart = (event) => {
@@ -259,8 +264,11 @@ function clickDrag() {
 				imageArray = imageArray.filter((element) => element !== image);
 				imageArray.push(clone);
 				//finally add copy class to image
-				image.removeEventListener('touchstart', dragDelay);
-				image.addEventListener('touchstart', dragStart);
+				dragStartEvents.forEach(event => {
+					image.removeEventListener(event, dragDelay);
+					image.addEventListener(event, dragStart);
+				});
+
 				image.classList.add('copy');
 				image.classList.add(`${parent.parentNode.getAttribute('id')}-copy`);
 				image.setAttribute('clone-id', randomUUID());
@@ -278,50 +286,60 @@ function clickDrag() {
 				showDeletionBox();
 			}
 
-			function moveAt(pageX, pageY) {
+			function centerImageAt(pageX, pageY) {
 				image.style.left = pageX - image.offsetWidth / 2 + 'px';
 				image.style.top = pageY - image.offsetHeight / 2 + 'px';
 			}
 
 			event.preventDefault();
 
-			// move our absolutely positioned image under the pointer
-			moveAt(event.targetTouches[0].pageX, event.targetTouches[0].pageY);
-
-			function onTouchMove(moveEvent) {
-				moveAt(
-					moveEvent.targetTouches[0].pageX,
-					moveEvent.targetTouches[0].pageY
-				);
+			function centerImageUnderPointer(event) {
+				const {pageX, pageY} = event instanceof TouchEvent ?
+					event.changedTouches[0] :
+					event;
+				centerImageAt(pageX, pageY);
 			}
 
+			centerImageUnderPointer(event);
+
 			// (2) move the image on mousemove
-			document.addEventListener('touchmove', onTouchMove);
+			dragMoveEvents.forEach(event =>
+				document.addEventListener(event, centerImageUnderPointer));
 			var toggleBarPageX = document
 				.getElementById('toggleBar')
 				.getBoundingClientRect().x;
 
+			const deletionContainer = document.getElementsByClassName('trash-box-container');
+			if (deletionContainer.length == 0) { // this shouldn't happen but just in case
+				throw new Error('Unable to find element trash-box-container by class name');
+			}
+			const deletionBox = document.getElementsByClassName('trash-box-container')[0];
+			const deletionBoxBottom = deletionBox.getBoundingClientRect().bottom;
+			console.debug(`DeletionBox bottom (Y coord): ${deletionBoxBottom}`);
+
 			// (3) drop the image, remove unneeded handlers
 			const dragEnd = (endEvent) => {
 				hideDeletionBox();
-				document.removeEventListener('touchmove', onTouchMove);
+				dragMoveEvents.forEach(event =>
+					document.removeEventListener(event, centerImageUnderPointer));
+
 				//check if in deletion area
-				if (endEvent.changedTouches[0].pageY < 100) {
-					var copyImageId = image.getAttribute('clone-id');
-					deleteImageCopy(copyImageId).then(function (value) {
+				const {pageX, pageY} = endEvent instanceof TouchEvent ?
+					endEvent.changedTouches[0] :
+					endEvent;
+
+				console.debug(`Image (x, y): (${pageX}, ${pageY})`);
+
+				if (pageY < deletionBoxBottom) {
+					const copyImageId = image.getAttribute('clone-id');
+					deleteImageCopy(copyImageId).then(function(value) {
 						if (value) {
 							console.log(value);
 							document.body.removeChild(image);
 						} else alert('An error occurred, the image could not be deleted from the database.');
 					});
-				}
 				// Check if image dropped within sidebar and remove if true
-				else if (
-					(open &&
-						!isLeft &&
-						endEvent.changedTouches[0].pageX > toggleBarPageX) ||
-					(open && isLeft && endEvent.changedTouches[0].pageX < toggleBarPageX)
-				) {
+				} else if (open && (pageX < toggleBarPageX) == isLeft) {
 					document.body.removeChild(image);
 				} else {
 					var tempCopyImageId = image.getAttribute('clone-id');
@@ -331,10 +349,10 @@ function clickDrag() {
 					setImageCopy(
 						tempCopyImageId,
 						baseId,
-						endEvent.changedTouches[0].pageX,
-						endEvent.changedTouches[0].pageY,
-						weekType
-					).then(function (value) {
+						pageX,
+						pageY,
+						weekType,
+					).then(function(value) {
 						if (value) {
 							console.log(value);
 						} else {
@@ -343,29 +361,31 @@ function clickDrag() {
 					});
 					image.style.zIndex = 0; //Drop the image below the sidebar
 				}
-
-				event.target.removeEventListener('touchend', dragEnd);
+				dragEndEvents.forEach(dragEndEvent =>
+					event.target.removeEventListener(dragEndEvent, dragEnd));
 			};
-			image.addEventListener('touchend', dragEnd);
+			dragEndEvents.forEach(event => image.addEventListener(event, dragEnd));
 
-			image.ondragstart = function () {
+			image.ondragstart = function() {
 				return false;
 			};
 		};
 
 		function dragDelay(event) {
-			console.log(delayValue);
-			delay = setTimeout(dragStart, delayValue, event);
-			image.addEventListener('touchend', removeDelayChecks);
-			document.addEventListener('touchmove', removeDelayChecks);
+			console.log(`touchDelay: ${touchDelay}`);
+			if (event instanceof MouseEvent) {
+				dragStart(event);
+			} else {
+				delay = setTimeout(dragStart, touchDelay, event);
+			}
+
+			dragEndEvents.forEach(event => image.addEventListener(event, removeDelayChecks));
+			dragMoveEvents.forEach(event => document.addEventListener(event, removeDelayChecks));
 		}
 
 		if (image.getAttribute('listener') !== 'true') {
-			if (image.classList.contains('copy')) {
-				image.addEventListener('touchstart', dragStart);
-			} else {
-				image.addEventListener('touchstart', dragDelay);
-			}
+			const dragEvent = image.classList.contains('copy') ? dragStart : dragDelay;
+			dragStartEvents.forEach(event => image.addEventListener(event, dragEvent));
 			image.setAttribute('listener', 'true');
 		}
 	});
