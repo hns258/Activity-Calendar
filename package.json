@@ -6,13 +6,17 @@
   "scripts": {
     "postinstall": "install-app-deps",
     "start": "electron .",
+    "test": "mocha",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
   "license": "MIT",
   "devDependencies": {
+    "chai": "^4.3.7",
     "electron": "^15.1.2",
-    "electron-builder": "^23.6.0"
+    "electron-builder": "^23.6.0",
+    "memfs": "^3.4.10",
+    "mocha": "^10.1.0"
   },
   "dependencies": {
     "bootstrap": "^5.1.3",

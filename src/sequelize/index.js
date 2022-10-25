@@ -1,7 +1,6 @@
 const { Sequelize } = require('sequelize');
 const path = require('path');
 const app = require('electron').app;
-const fs = require('fs');
 
 const associations = require('./associations');
 
@@ -9,16 +8,17 @@ const databaseDir = app && app.isPackaged
   ? path.join(process.resourcesPath, 'database')
   : path.join(__dirname, '..', '..', 'database');
 
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: path.join(databaseDir, 'database.sqlite3'),
-  logQueryParameters: true,
-});
+const storage = process.env.NODE_ENV == "test" ?
+  ":memory:" : path.join(databaseDir, 'database.sqlite3');
 
-const symbolImagesDir = path.join(databaseDir, 'symbol-images');
+console.log(`Storing db in ${storage}`);
 
-console.log(`Creating symbol images dir if it doesn't exist: ${symbolImagesDir}`);
-fs.mkdirSync(symbolImagesDir, { recursive: true });
+const sequelize = new Sequelize(
+  {
+    dialect: 'sqlite',
+    storage,
+    logging: false,
+  });
 
 const modelDefiners = [
   require('./models/image'),
@@ -37,5 +37,4 @@ for (const modelDefiner of modelDefiners) {
 
 associations(sequelize);
 
-// We export the sequelize connection instance to be used around our app.
-module.exports = sequelize;
+module.exports = { sequelize, databaseDir };

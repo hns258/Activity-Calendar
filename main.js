@@ -10,11 +10,14 @@ const {
 	deleteImageCopy,
 	getSettings,
 	setSettings,
+	ActivityCalendar,
 } = require('./src/activity-calendar');
 
 const seed = require('./src/seed');
 
-const sequelize = require('./src/sequelize');
+const { sequelize } = require('./src/sequelize');
+
+const calendar = new ActivityCalendar();
 
 function createWindow() {
 	const win = new BrowserWindow({
@@ -107,4 +110,12 @@ ipcMain.handle('set-hold-value', async (event, newHoldValue) => {
 	} catch (e) {
 		return false;
 	}
+});
+
+ipcMain.handle('get-symbols', async () => {
+	return calendar.getSymbols();
+});
+
+ipcMain.handle('create-symbol', async (event, imagePath, name, type, posX, posY, zoom, categoryId) => {
+	return calendar.createSymbol(imagePath, name, type, posX, posY, zoom, categoryId);
 });

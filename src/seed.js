@@ -2,7 +2,7 @@ const { readdir } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
 
-const { models } = require('./sequelize');
+const { models } = require('./sequelize').sequelize;
 
 // Initialize image types if they don't exist
 const initializeImageTypes = async () => {
