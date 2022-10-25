@@ -3,9 +3,9 @@
 }
 .trash-box {
   background-color: #ca6754;
-  z-index: 4;
+  z-index: 0;
   column-span: all;
-  height: 100px;
+  height: auto;
   width: 100vw;
   text-align: center;
   display: flex;
@@ -13,10 +13,10 @@
   align-items: center;
   border: 3px solid black;
   border-style: dashed;
-  font-size: 3rem;
+  font-size: 2vw;
 }
 .trash-box-container {
-  z-index: 3;
+  z-index: 2;
   column-span: all;
   height: 6%;
   width: 100vw;
