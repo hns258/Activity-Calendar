@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
     image.hasMany(imageCopy);
     imageCopy.belongsTo(image);
 
-    imageType.hasOne(image);
+    imageType.hasMany(image);
     image.belongsTo(imageType);
 
     weekTag.hasMany(imageCopy);
