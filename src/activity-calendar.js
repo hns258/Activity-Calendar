@@ -1,8 +1,10 @@
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 
-const { models } = require('./sequelize');
+const { sequelize, databaseDir } = require('./sequelize');
+const { models } = sequelize;
 
 // Called when folder location changes
 // Get all images of certain type in alphabetical order
@@ -162,15 +164,51 @@ const updateFolderLocation = async (category, typePath) => {
 		imageType.update({ location: typePath, isCustomized: true });
 };
 
+class ActivityCalendar {
+	constructor(fs = require('fs')) {
+		this.fs = fs;
+		this.symbolImagesDir = path.join(databaseDir, 'symbol-images');
+		console.log(`Creating symbol images dir if it doesn't exist: ${this.symbolImagesDir}`);
+		this.fs.mkdirSync(this.symbolImagesDir, { recursive: true });
+	}
 
-const getSettings = async () => {
-	return models.settings.findOrCreate({ where: {} }).then(([res]) => {
-		return res.holdValue;
-	});
-};
+	async getSettings() {
+		return models.settings.findOne({ where: {} }).then((res) => {
+			return res.holdValue;
+		});
+	};
 
-const setSettings = async (holdValue) => {
-	return models.settings.update({ holdValue }, { where: {} });
+	async setSettings(holdValue) {
+		return models.settings.update({ holdValue }, { where: {} });
+	};
+
+	async getSymbols() {
+		return models.symbol.findAll({
+			order: [[Sequelize.fn('lower', Sequelize.col('symbol.name')), 'ASC']],
+			include: models.category,
+		});
+	};
+
+	async createSymbol(imagePath, name, type, posX, posY, zoom, categoryId) {
+		const ext = path.parse(imagePath).ext;
+
+		// The output file name will is a random 50 character string (including the ext).
+		const destFileName = crypto.randomBytes(50 - ext.length).toString('hex') + ext;
+		const destFilePath = path.join(this.symbolImagesDir, destFileName);
+
+		// By using COPYFILE_EXCL, the copy will fail in the incredibly rare collision case.
+		await this.fs.promises.copyFile(imagePath, destFilePath, fs.constants.COPYFILE_EXCL);
+
+		return models.symbol.create({
+			name,
+			imageFileName: destFileName,
+			type,
+			posX,
+			posY,
+			zoom,
+			categoryId
+		});
+	};
 };
 
 module.exports = {
@@ -180,6 +218,5 @@ module.exports = {
 	getImageCopies,
 	getFolderLocation,
 	updateFolderLocation,
-	getSettings,
-	setSettings,
+	ActivityCalendar,
 };

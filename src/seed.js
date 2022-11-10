@@ -2,7 +2,7 @@ const { readdir } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
 
-const { models } = require('./sequelize');
+const { models } = require('./sequelize').sequelize;
 
 // Initialize image types if they don't exist
 const initializeImageTypes = async () => {
@@ -167,11 +167,29 @@ const updateCalendar = async () => {
     }
 };
 
+// Initialize categories if they don't exist
+const initializeCategories = async () => {
+    return models.category.bulkCreate([
+        { name: 'Popular' },
+        { name: 'Cafe & Restaurants' },
+        { name: 'Parks & Greenspace' },
+        { name: 'Arts & Education' },
+        { name: 'Volunteering & Community' },
+        { name: 'Entertainment' },
+        { name: 'Activities & Sports' },
+        { name: 'Holiday & Travel' },
+        { name: 'Places' },
+        { name: 'Other' },
+    ], { ignoreDuplicates: true });
+};
+
 const seed = async () => {
     await initializeWeekTags();
+    await initializeCategories();
     await initializeImageTypes();
     await updateCalendar();
     await writeAllImages();
+    await models.settings.findOrCreate({ where: {}});
 };
 
 module.exports = seed;
