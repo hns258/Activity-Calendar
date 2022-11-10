@@ -4,27 +4,28 @@ let leftSideMenu = document.querySelector(".sidemenu");
 let sideBarImg = document.querySelector(".sidebar");
 let switchTitle = document.querySelector(".switch-title");
 var isLeft = false;
-const sideToggleBtn = document.querySelector("#toggle_left");
+const sideToggleBtn = document.querySelector(".isLeftToggle");
 
 //gets current page
 var path = window.location.pathname;
 var page = path.split('/').pop();
 
 // this function is to transition settings sidebar from right to left side of screen
-function switchToLeft() {
+function switchToLeft(){
     console.log(leftSideMenu);
     console.log("toggle has been clicked!");
     //reset isLeft based on 
     isLeft = sideToggleBtn.checked;
-
+    console.log(isLeft);
     //when toggle is clicked
-    if (!isLeft) {
-
+    if(!isLeft){
         //left settings should be on
+        if (page === 'index.html') {
+            document.querySelector('.next-week-link').style.right = 0;
+        }
         //swap classes to -left
         leftSideMenu.classList.remove("sidemenu");
         leftSideMenu.classList.add("menuOnLeft");
-
         //swap classes and text of the "Switch to..." title
         switchTitle.classList.remove("switch-title");
         switchTitle.classList.add("switch-title-left");
@@ -35,12 +36,8 @@ function switchToLeft() {
         //set the toggle btn based on new class
         leftSideMenu = document.querySelector(".menuOnLeft");
         sideBarImg = document.querySelector(".barOnLeft");
-
-        /* Switch position of menu toggle */
-        document.querySelector("#divSidemenu").insertBefore(document.querySelector("#menuWrapper"), document.querySelector("#toggleBar"));
-
         //set the toggle to ON (blue)
-        setTimeout(() => {
+        setTimeout(()=>{
             sideToggleBtn.checked = true;
             console.log(sideToggleBtn);
             console.log(sideToggleBtn.checked);
@@ -49,8 +46,11 @@ function switchToLeft() {
         }, 1500);
         isLeft = true;
         console.log("finished!!!");
-    } else {
+    }else{
         //left settings should be off
+        if (page === 'index.html') {
+            document.querySelector('.next-week-link').style.right = '1.5%'
+        }
         leftSideMenu.style = "";
         //swap classes to default
         leftSideMenu.classList.remove("menuOnLeft");
@@ -67,19 +67,15 @@ function switchToLeft() {
 
         // Leave side menu open after toggling
         leftSideMenu.style.right = "0px";
+
         sideBarImg = document.querySelector(".sidebar");
-
-
-        /* Switch position of menu toggle */
-        document.querySelector("#divSidemenu").insertBefore(document.querySelector("#toggleBar"), document.querySelector("#menuWrapper"));
-
         //set toggle to OFF (grey)
-        setTimeout(() => {
+        setTimeout(()=>{
             sideToggleBtn.checked = false;
             console.log(sideToggleBtn);
             console.log(sideToggleBtn.checked);
             //set isLeft boolean to FALSE
-
+            
             console.log("done 2")
         }, 1500);
         isLeft = false;
@@ -88,7 +84,7 @@ function switchToLeft() {
 }
 
 //open the settings page from the sidebar button
-function goToSettings() {
+function goToSettings(){
     console.log("settings cog has been clicked.");
     window.location.href = "settings.html";
 }
