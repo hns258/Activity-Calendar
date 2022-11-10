@@ -8,8 +8,6 @@ const {
 	getFolderLocation,
 	updateFolderLocation,
 	deleteImageCopy,
-	getSettings,
-	setSettings,
 	ActivityCalendar,
 } = require('./src/activity-calendar');
 
@@ -100,12 +98,12 @@ ipcMain.handle('load-image-copies', async (event, weekTagID) => {
 });
 
 ipcMain.handle('get-hold-value', async (event) => {
-	return getSettings();
+	return calendar.getSettings();
 });
 
 ipcMain.handle('set-hold-value', async (event, newHoldValue) => {
 	try {
-		await setSettings(newHoldValue);
+		await calendar.setSettings(newHoldValue);
 		return true;
 	} catch (e) {
 		return false;

@@ -164,17 +164,6 @@ const updateFolderLocation = async (category, typePath) => {
 		imageType.update({ location: typePath, isCustomized: true });
 };
 
-
-const getSettings = async () => {
-	return models.settings.findOrCreate({ where: {} }).then(([res]) => {
-		return res.holdValue;
-	});
-};
-
-const setSettings = async (holdValue) => {
-	return models.settings.update({ holdValue }, { where: {} });
-};
-
 class ActivityCalendar {
 	constructor(fs = require('fs')) {
 		this.fs = fs;
@@ -182,6 +171,16 @@ class ActivityCalendar {
 		console.log(`Creating symbol images dir if it doesn't exist: ${this.symbolImagesDir}`);
 		this.fs.mkdirSync(this.symbolImagesDir, { recursive: true });
 	}
+
+	async getSettings() {
+		return models.settings.findOne({ where: {} }).then((res) => {
+			return res.holdValue;
+		});
+	};
+
+	async setSettings(holdValue) {
+		return models.settings.update({ holdValue }, { where: {} });
+	};
 
 	async getSymbols() {
 		return models.symbol.findAll({
@@ -219,7 +218,5 @@ module.exports = {
 	getImageCopies,
 	getFolderLocation,
 	updateFolderLocation,
-	getSettings,
-	setSettings,
 	ActivityCalendar,
 };

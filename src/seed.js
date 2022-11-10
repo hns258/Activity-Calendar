@@ -189,6 +189,7 @@ const seed = async () => {
     await initializeImageTypes();
     await updateCalendar();
     await writeAllImages();
+    await models.settings.findOrCreate({ where: {}});
 };
 
 module.exports = seed;

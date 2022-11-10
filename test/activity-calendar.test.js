@@ -41,6 +41,20 @@ afterEach(async function () {
     await sequelize.drop();
 });
 
+describe('settings', async function () {
+    it('is initialized with a default', async function () {
+        const defaultHoldValue = await activityCalendar.getSettings();
+        assert.strictEqual(defaultHoldValue, 300);
+    });
+
+    it('set properly updates', async function () {
+        await activityCalendar.setSettings(500);
+
+        const holdValue = await activityCalendar.getSettings();
+        assert.strictEqual(holdValue, 500);
+    });
+});
+
 describe('getSymbols()', async function () {
     it('returns nothing if there are no symbols', async function () {
         const symbols = await activityCalendar.getSymbols();
