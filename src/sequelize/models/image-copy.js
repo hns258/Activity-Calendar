@@ -1,7 +1,7 @@
-const DataTypes = require('sequelize');
+const DataTypes = require("sequelize");
 
 module.exports = (sequelize) => {
-  return sequelize.define('imageCopy', {
+  return sequelize.define("imageCopy", {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,

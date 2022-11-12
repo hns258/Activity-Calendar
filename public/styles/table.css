@@ -19,9 +19,9 @@
 }
 
 /*WIP column changes: thinner time of day column*/
-.main-table tr th.time-of-day{
-    width: 7.4305vw;
-    column-width: 1vw;
+.main-table tr th.time-of-day {
+  width: 7.4305vw;
+  column-width: 1vw;
 }
 
 .main-table tr td {
@@ -70,7 +70,7 @@
   color: #d191da;
   font-size: 2vw; /*WIP column changes: smaller "This Week" title text*/
 }
-.next-week{
+.next-week {
   color: #38b9f6;
   font-size: 2vw; /*WIP column changes: smaller "Next Week" title text*/
 }
