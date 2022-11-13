@@ -8,256 +8,339 @@ const { createFsFromVolume, Volume } = require("memfs");
 const { sequelize } = require("../src/sequelize");
 const { ActivityCalendar } = require("../src/activity-calendar");
 
-// We create a new ActivityCalendar with fresh in-memory fs for each test.
-const vol = new Volume();
+describe("ActivityCalendar", async function () {
+  // We create a new ActivityCalendar with fresh in-memory fs for each test.
+  const vol = new Volume();
 
-let activityCalendar = null,
-  popularCategory = null;
+  let activityCalendar = null,
+    popularCategory = null;
 
-beforeEach(async function () {
-  vol.fromJSON({ "/images/1.jpg": "123", "/images/2.jpg": "456" });
+  beforeEach(async function () {
+    vol.fromJSON({ "/images/1.jpg": "123", "/images/2.jpg": "456" });
 
-  await sequelize.sync();
+    await sequelize.sync();
 
-  activityCalendar = new ActivityCalendar(createFsFromVolume(vol));
+    activityCalendar = new ActivityCalendar(createFsFromVolume(vol));
 
-  popularCategory = await sequelize.models.category.create({
-    name: "Popular",
-  });
-});
-
-afterEach(async function () {
-  // Remove all changes made to our fake fs during the test.
-  vol.reset();
-
-  await sequelize.drop();
-});
-
-describe("settings", async function () {
-  it("is initialized with a default", async function () {
-    const defaultHoldValue = await activityCalendar.getSettings();
-    assert.strictEqual(defaultHoldValue, 300);
+    popularCategory = await sequelize.models.category.create({
+      name: "Popular",
+    });
   });
 
-  it("set properly updates", async function () {
-    await activityCalendar.setSettings(500);
-    assert.strictEqual(await activityCalendar.getSettings(), 500);
+  afterEach(async function () {
+    // Remove all changes made to our fake fs during the test.
+    vol.reset();
 
-    await activityCalendar.setSettings(700);
-    assert.strictEqual(await activityCalendar.getSettings(), 700);
-  });
-});
-
-describe("getSymbols()", async function () {
-  it("returns nothing if there are no symbols", async function () {
-    const symbols = await activityCalendar.getSymbols();
-    assert.strictEqual(symbols.length, 0);
+    await sequelize.drop();
   });
 
-  it("returns created symbols", async function () {
-    const symbol = await activityCalendar.createSymbol(
-      "/images/1.jpg",
-      "foo",
-      "Person",
-      "10px",
-      "5px",
-      0,
-      popularCategory.id
-    );
+  describe("settings", async function () {
+    it("is initialized with a default", async function () {
+      const defaultHoldValue = await activityCalendar.getSettings();
+      assert.strictEqual(defaultHoldValue, 300);
+    });
 
-    const symbols = await activityCalendar.getSymbols();
-    assert.strictEqual(symbols.length, 1);
-    assert.deepInclude(symbols[0].dataValues, symbol.dataValues);
+    it("set properly updates", async function () {
+      await activityCalendar.setSettings(500);
+      assert.strictEqual(await activityCalendar.getSettings(), 500);
+
+      await activityCalendar.setSettings(700);
+      assert.strictEqual(await activityCalendar.getSettings(), 700);
+    });
   });
-});
 
-describe("createSymbol()", async function () {
-  it("create is successful", async function () {
-    const createSymbol = async (name) => {
-      return activityCalendar.createSymbol(
+  describe("getSymbols()", async function () {
+    it("returns nothing if there are no symbols", async function () {
+      const symbols = await activityCalendar.getSymbols();
+      assert.strictEqual(symbols.length, 0);
+    });
+
+    it("returns created symbols", async function () {
+      const symbol = await activityCalendar.createSymbol(
         "/images/1.jpg",
-        name,
-        "Person",
+        "foo",
+        "Activities",
         "10px",
         "5px",
         0,
         popularCategory.id
       );
-    };
 
-    const [symbol1, symbol2] = await Promise.all([
-      createSymbol("activity1"),
-      createSymbol("activity2"),
-    ]);
-
-    // Verify the image path was actually copied rather than using the same image path.
-    assert.notStrictEqual(symbol1.imageFilePath, "/images/1.jpg");
-    assert.notStrictEqual(symbol1.imageFilePath, symbol2.imageFilePath);
-
-    const validateCommon = (symbol, expectedName) => {
-      // Verify that the extension was kept, so that it renders properly when referenced on the frontend.
-      assert.match(symbol.imageFilePath, /.jpg/);
-
-      assert.strictEqual(
-        vol.readFileSync(symbol.imageFilePath, "utf-8"),
-        "123"
-      );
-
-      assert.include(symbol.dataValues, {
-        name: expectedName,
-        type: "Person",
-        posX: "10px",
-        posY: "5px",
-        zoom: 0,
-        categoryId: popularCategory.id,
-      });
-    };
-
-    validateCommon(symbol1, "activity1");
-    validateCommon(symbol2, "activity2");
-
-    // Verify that the symbols didn't overwrite each other.
-    const savedSymbols = await activityCalendar.getSymbols();
-    assert.strictEqual(savedSymbols.length, 2);
+      const symbols = await activityCalendar.getSymbols();
+      assert.strictEqual(symbols.length, 1);
+      assert.deepInclude(symbols[0].dataValues, symbol.dataValues);
+    });
   });
 
-  it("create with invalid image path", async function () {
-    await node_assert.rejects(
-      async () => {
+  describe("createSymbol()", async function () {
+    it("create is successful", async function () {
+      const createSymbol = async (name) => {
         return activityCalendar.createSymbol(
-          "/images/invalid.jpg",
-          "foo",
-          "Person",
+          "/images/1.jpg",
+          name,
+          "Activities",
           "10px",
           "5px",
           0,
           popularCategory.id
         );
-      },
-      {
-        name: "Error",
-        message:
-          "ENOENT: no such file or directory, open '/images/invalid.jpg'",
-      }
-    );
-  });
-});
+      };
 
-describe("symbol placements", async function () {
-  async function createSymbol(name) {
-    return activityCalendar.createSymbol(
-      "/images/1.jpg",
-      name,
-      "Person",
-      "10px",
-      "5px",
-      0,
-      popularCategory.id
-    );
-  }
+      const [symbol1, symbol2] = await Promise.all([
+        createSymbol("activity1"),
+        createSymbol("activity2"),
+      ]);
 
-  it("get with no placements", async function () {
-    const placements = await activityCalendar.getSymbolPlacements(
-      /*inCurrentWeek=*/ true
-    );
-    assert.strictEqual(placements.length, 0);
-  });
+      // Verify the image path was actually copied rather than using the same image path.
+      assert.notStrictEqual(symbol1.imageFilePath, "/images/1.jpg");
+      assert.notStrictEqual(symbol1.imageFilePath, symbol2.imageFilePath);
 
-  it("create is succesful", async function () {
-    const symbol = await createSymbol("foo");
+      const validateCommon = (symbol, expectedName) => {
+        // Verify that the extension was kept, so that it renders properly when referenced on the frontend.
+        assert.match(symbol.imageFilePath, /.jpg/);
 
-    const placement = await activityCalendar.createSymbolPlacement(
-      symbol.id,
-      "10px",
-      "20px",
-      /*inCurrentWeek=*/ true
-    );
+        assert.strictEqual(
+          vol.readFileSync(symbol.imageFilePath, "utf-8"),
+          "123"
+        );
 
-    const placements = await activityCalendar.getSymbolPlacements(
-      /*inCurrentWeek=*/ true
-    );
-    assert.deepInclude(placements[0].dataValues, placement.dataValues);
+        assert.include(symbol.dataValues, {
+          name: expectedName,
+          type: "Activities",
+          posX: "10px",
+          posY: "5px",
+          zoom: 0,
+          categoryId: popularCategory.id,
+        });
+      };
 
-    const nextWeekPlacements = await activityCalendar.getSymbolPlacements(
-      /*inCurrentWeek=*/ false
-    );
-    assert.strictEqual(nextWeekPlacements.length, 0);
-  });
+      validateCommon(symbol1, "activity1");
+      validateCommon(symbol2, "activity2");
 
-  it("create with invalid args", async function () {
-    await node_assert.rejects(
-      async () => {
-        return activityCalendar.createSymbolPlacement(-1, "10px", "20px", -1);
-      },
-      {
-        name: "SequelizeForeignKeyConstraintError",
-        message: "SQLITE_CONSTRAINT: FOREIGN KEY constraint failed",
-      }
-    );
-  });
+      // Verify that the symbols didn't overwrite each other.
+      const savedSymbols = await activityCalendar.getSymbols();
+      assert.strictEqual(savedSymbols.length, 2);
+    });
 
-  it("update existing", async function () {
-    const symbol = await createSymbol("foo");
+    it("create non-activity with category", async function () {
+      const assertSymbolFail = async (type) => {
+        await node_assert.rejects(
+          async () => {
+            return activityCalendar.createSymbol(
+              "/images/1.jpg",
+              "foo",
+              type,
+              "10px",
+              "5px",
+              0,
+              popularCategory.id
+            );
+          },
+          {
+            name: "SequelizeValidationError",
+            message: "Validation error: Only Activities can have a category.",
+          }
+        );
+      };
 
-    const placement = await activityCalendar.createSymbolPlacement(
-      symbol.id,
-      "10px",
-      "20px",
-      /*inCurrentWeek=*/ true
-    );
+      assertSymbolFail("People");
+      assertSymbolFail("Transport");
+    });
 
-    await activityCalendar.updateSymbolPlacement(placement.id, "20px", "40px");
+    it("create without category", async function () {
+      const createSymbol = async (name, type) => {
+        return activityCalendar.createSymbol(
+          "/images/1.jpg",
+          name,
+          type,
+          "10px",
+          "5px",
+          0
+        );
+      };
 
-    const placements = await activityCalendar.getSymbolPlacements(
-      /*inCurrentWeek=*/ true
-    );
-    assert.deepInclude(placements[0].dataValues, {
-      posX: "20px",
-      posY: "40px",
+      const person = await createSymbol("symbol1", "People");
+      assert.strictEqual(person.category, undefined);
+
+      const activity = await createSymbol("symbol2", "Transport");
+      assert.strictEqual(activity.category, undefined);
+
+      await node_assert.rejects(
+        async () => {
+          return createSymbol("symbol3", "Activities");
+        },
+        {
+          name: "SequelizeValidationError",
+          message: "Validation error: Activities must have a category.",
+        }
+      );
+    });
+
+    it("create with invalid type", async function () {
+      await node_assert.rejects(
+        async () => {
+          return activityCalendar.createSymbol(
+            "/images/1.jpg",
+            "foo",
+            "Blah",
+            "10px",
+            "5px",
+            0
+          );
+        },
+        {
+          name: "SequelizeValidationError",
+          message: "Validation error: type must be one of the enum values.",
+        }
+      );
+    });
+
+    it("create with invalid image path", async function () {
+      await node_assert.rejects(
+        async () => {
+          return activityCalendar.createSymbol(
+            "/images/invalid.jpg",
+            "foo",
+            "Activities",
+            "10px",
+            "5px",
+            0,
+            popularCategory.id
+          );
+        },
+        {
+          name: "Error",
+          message:
+            "ENOENT: no such file or directory, open '/images/invalid.jpg'",
+        }
+      );
     });
   });
 
-  it("update non-existent", async function () {
-    await node_assert.rejects(
-      async () => {
-        return activityCalendar.updateSymbolPlacement(-1, "5px", "10px");
-      },
-      {
-        name: "Error",
-        message:
-          "Unable to find existing to update symbol placement with id -1.",
-      }
-    );
-  });
+  describe("symbol placements", async function () {
+    async function createSymbol(name) {
+      return activityCalendar.createSymbol(
+        "/images/1.jpg",
+        name,
+        "Activities",
+        "10px",
+        "5px",
+        0,
+        popularCategory.id
+      );
+    }
 
-  it("delete existing", async function () {
-    const symbol = await createSymbol("foo");
+    it("get with no placements", async function () {
+      const placements = await activityCalendar.getSymbolPlacements(
+        /*inCurrentWeek=*/ true
+      );
+      assert.strictEqual(placements.length, 0);
+    });
 
-    const placement = await activityCalendar.createSymbolPlacement(
-      symbol.id,
-      "10px",
-      "20px",
-      /*inCurrentWeek=*/ true
-    );
+    it("create is succesful", async function () {
+      const symbol = await createSymbol("foo");
 
-    await activityCalendar.deleteSymbolPlacement(placement.id, "20px", "40px");
+      const placement = await activityCalendar.createSymbolPlacement(
+        symbol.id,
+        "10px",
+        "20px",
+        /*inCurrentWeek=*/ true
+      );
 
-    const placements = await activityCalendar.getSymbolPlacements(
-      /*inCurrentWeek=*/ true
-    );
-    assert.strictEqual(placements.length, 0);
-  });
+      const placements = await activityCalendar.getSymbolPlacements(
+        /*inCurrentWeek=*/ true
+      );
+      assert.deepInclude(placements[0].dataValues, placement.dataValues);
 
-  it("delete non-existent", async function () {
-    await node_assert.rejects(
-      async () => {
-        return activityCalendar.deleteSymbolPlacement(-1, "5px", "10px");
-      },
-      {
-        name: "Error",
-        message:
-          "Unable to find existing to delete symbol placement with id -1.",
-      }
-    );
+      const nextWeekPlacements = await activityCalendar.getSymbolPlacements(
+        /*inCurrentWeek=*/ false
+      );
+      assert.strictEqual(nextWeekPlacements.length, 0);
+    });
+
+    it("create with invalid args", async function () {
+      await node_assert.rejects(
+        async () => {
+          return activityCalendar.createSymbolPlacement(-1, "10px", "20px", -1);
+        },
+        {
+          name: "SequelizeForeignKeyConstraintError",
+          message: "SQLITE_CONSTRAINT: FOREIGN KEY constraint failed",
+        }
+      );
+    });
+
+    it("update existing", async function () {
+      const symbol = await createSymbol("foo");
+
+      const placement = await activityCalendar.createSymbolPlacement(
+        symbol.id,
+        "10px",
+        "20px",
+        /*inCurrentWeek=*/ true
+      );
+
+      await activityCalendar.updateSymbolPlacement(
+        placement.id,
+        "20px",
+        "40px"
+      );
+
+      const placements = await activityCalendar.getSymbolPlacements(
+        /*inCurrentWeek=*/ true
+      );
+      assert.deepInclude(placements[0].dataValues, {
+        posX: "20px",
+        posY: "40px",
+      });
+    });
+
+    it("update non-existent", async function () {
+      await node_assert.rejects(
+        async () => {
+          return activityCalendar.updateSymbolPlacement(-1, "5px", "10px");
+        },
+        {
+          name: "Error",
+          message:
+            "Unable to find existing to update symbol placement with id -1.",
+        }
+      );
+    });
+
+    it("delete existing", async function () {
+      const symbol = await createSymbol("foo");
+
+      const placement = await activityCalendar.createSymbolPlacement(
+        symbol.id,
+        "10px",
+        "20px",
+        /*inCurrentWeek=*/ true
+      );
+
+      await activityCalendar.deleteSymbolPlacement(
+        placement.id,
+        "20px",
+        "40px"
+      );
+
+      const placements = await activityCalendar.getSymbolPlacements(
+        /*inCurrentWeek=*/ true
+      );
+      assert.strictEqual(placements.length, 0);
+    });
+
+    it("delete non-existent", async function () {
+      await node_assert.rejects(
+        async () => {
+          return activityCalendar.deleteSymbolPlacement(-1, "5px", "10px");
+        },
+        {
+          name: "Error",
+          message:
+            "Unable to find existing to delete symbol placement with id -1.",
+        }
+      );
+    });
   });
 });

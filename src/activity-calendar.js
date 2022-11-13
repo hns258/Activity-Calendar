@@ -175,10 +175,11 @@ const updateFolderLocation = async (category, typePath) => {
 class ActivityCalendar {
   static _USER_SETTINGS_ID = 1;
 
-  constructor(fs = require("fs")) {
+  constructor(fs = require("fs"), verbose = false) {
     this.fs = fs;
+    this.verbose = verbose;
     this.symbolImagesDir = path.join(databaseDir, "symbol-images");
-    console.log(
+    this._log(
       `Creating symbol images dir if it doesn't exist: ${this.symbolImagesDir}`
     );
     this.fs.mkdirSync(this.symbolImagesDir, { recursive: true });
@@ -206,6 +207,7 @@ class ActivityCalendar {
     });
   }
 
+  // `categoryId` is only valid for Activities.
   async createSymbol(imagePath, name, type, posX, posY, zoom, categoryId) {
     const ext = path.parse(imagePath).ext;
 
@@ -265,6 +267,12 @@ class ActivityCalendar {
       throw Error(
         `Unable to find existing to delete symbol placement with id ${id}.`
       );
+    }
+  }
+
+  _log(message) {
+    if (this.verbose) {
+      console.log(message);
     }
   }
 }

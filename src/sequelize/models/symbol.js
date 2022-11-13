@@ -20,8 +20,24 @@ module.exports = (sequelize, databaseDir) => {
       allowNull: false,
     },
     type: {
-      type: DataTypes.ENUM("Person", "Transport", "Activity"),
+      type: DataTypes.ENUM("People", "Transport", "Activities"),
       allowNull: false,
+      validate: {
+        isIn: {
+          args: [["People", "Transport", "Activities"]],
+          msg: "type must be one of the enum values.",
+        },
+        // Only Activities can and must have categories.
+        customValidator(value) {
+          if (value === "Activities") {
+            if (this.categoryId === undefined) {
+              throw new Error("Activities must have a category.");
+            }
+          } else if (this.categoryId !== undefined) {
+            throw new Error("Only Activities can have a category.");
+          }
+        },
+      },
     },
     posX: {
       type: DataTypes.STRING(20),
