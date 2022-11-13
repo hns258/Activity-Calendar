@@ -1,4 +1,4 @@
-# Activity Calender
+# Activity Calendar
 
 ## Overview
 
