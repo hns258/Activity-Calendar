@@ -13,9 +13,6 @@ module.exports = (sequelize, databaseDir) => {
       type: DataTypes.STRING(24),
       unique: true,
       allowNull: false,
-      validate: {
-        isAlpha: true,
-      },
     },
     imageFileName: {
       type: DataTypes.STRING(50),
