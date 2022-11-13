@@ -2,64 +2,64 @@ var mouseInArea = false;
 var mouseInArea2 = false;
 
 function initializeDeletionBox() {
-  var myObj = document.getElementById('trash-box-container');
+  var myObj = document.getElementById("trash-box-container");
   mouseInArea = true;
 
-  var element = document.querySelector('.sidemenu') || null;
+  var element = document.querySelector(".sidemenu") || null;
   if (element === null) {
     //call reverse check here
-    console.log('DEV, YOU NEED TO DO A REVERSE CHECK BECAUSE CLASS DNE!');
+    console.log("DEV, YOU NEED TO DO A REVERSE CHECK BECAUSE CLASS DNE!");
     initializeDeletionBox_L();
   } else {
-    console.log(element.computedStyleMap().get('right'));
+    console.log(element.computedStyleMap().get("right"));
     var isClosed = false;
-    if (element.computedStyleMap().get('right') < '0px') {
+    if (element.computedStyleMap().get("right") < "0px") {
       console.log("i'm negative!!!");
       isClosed = true;
-    } else if (element.computedStyleMap().get('right') >= '0px') {
+    } else if (element.computedStyleMap().get("right") >= "0px") {
       console.log("i'm positive boo");
     }
 
     if (mouseInArea === true && isClosed === true) {
-      console.log('mouse in deletion area');
-      myObj.style.display = 'flex';
+      console.log("mouse in deletion area");
+      myObj.style.display = "flex";
     } else {
-      console.log('mouse in deletion area BUT menu is also opened!!!');
+      console.log("mouse in deletion area BUT menu is also opened!!!");
     }
   }
 }
 
 function initializeDeletionBox_L() {
-  var myObj2 = document.getElementById('trash-box-container');
+  var myObj2 = document.getElementById("trash-box-container");
   mouseInArea2 = true;
 
-  var element2 = document.querySelector('.menuOnLeft');
+  var element2 = document.querySelector(".menuOnLeft");
 
-  console.log(element2.computedStyleMap().get('left'));
+  console.log(element2.computedStyleMap().get("left"));
   var isClosed2 = false;
-  if (element2.computedStyleMap().get('left') < '0px') {
+  if (element2.computedStyleMap().get("left") < "0px") {
     console.log("i'm negative!!!");
     isClosed2 = true;
-  } else if (element2.computedStyleMap().get('left') >= '0px') {
+  } else if (element2.computedStyleMap().get("left") >= "0px") {
     console.log("i'm positive boo");
   }
 
   if (mouseInArea2 === true && isClosed2 === true) {
-    console.log('mouse in deletion area');
-    myObj2.style.display = 'flex';
+    console.log("mouse in deletion area");
+    myObj2.style.display = "flex";
   } else {
-    console.log('mouse in deletion area BUT menu is also opened!!!');
+    console.log("mouse in deletion area BUT menu is also opened!!!");
   }
 }
 
 function removeDeletionBox() {
-  var myObj = document.getElementById('trash-box-container');
+  var myObj = document.getElementById("trash-box-container");
   setTimeout(() => {
     mouseInArea = false;
-    myObj.style.display = 'none';
-    console.log('mouse position in trash area has been reset');
+    myObj.style.display = "none";
+    console.log("mouse position in trash area has been reset");
   }, 200);
   setTimeout(() => {
-    myObj.classList.remove('trash-box-container-inside');
+    myObj.classList.remove("trash-box-container-inside");
   }, 1000);
 }

@@ -1,106 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title>Activity Calendar</title>
+    <link rel="stylesheet" type="text/css" href="./styles/main.css" />
+    <script
+      src="https://kit.fontawesome.com/b825c1b0e8.js"
+      crossorigin="anonymous"
+    ></script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline';"
+    />
+  </head>
 
-<head>
-	<title>Activity Calendar</title>
-	<link rel="stylesheet" type="text/css" href="./styles/main.css">
-	<script src="https://kit.fontawesome.com/b825c1b0e8.js" crossorigin="anonymous"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-</head>
+  <body>
+    <input style="display: none" id="hdnWeek" value="1" />
+    <div class="p1" id="p1">
+      <div
+        class="trash-box-container deletion-box"
+        id="trash-box-container"
+        style="display: none"
+      >
+        <div class="trash-box">
+          DELETE <i class="fas fa-trash-alt" aria-hidden="true"></i>
+        </div>
+      </div>
+      <table class="main-table" aria-describedby="Calendar Table">
+        <tr
+          class="deletion-box"
+          ondragenter="showDeletionBox()"
+          ondragleave="removeDeletionBox()"
+        >
+          <!--Change the 'th' class selectors to their proper days-->
+          <th class="this-week" id="this-week">This Week</th>
+          <th class="monday-col" id="monday-col">
+            <img
+              src="week_images/monday.png"
+              class="day-segment"
+              alt="Monday"
+            />
+          </th>
+          <th class="tuesday-col" id="tuesday-col">
+            <img
+              src="week_images/tuesday.png"
+              class="day-segment"
+              alt="Tueday"
+            />
+          </th>
+          <th class="monday-col" id="wednesday-col">
+            <img
+              src="week_images/wednesday.png"
+              class="day-segment"
+              alt="Wednesday"
+            />
+          </th>
+          <th class="tuesday-col" id="thursday-col">
+            <img
+              src="week_images/thursday.png"
+              class="day-segment"
+              alt="Thursday"
+            />
+          </th>
+          <th class="monday-col" id="friday-col">
+            <img
+              src="week_images/friday.png"
+              class="day-segment"
+              alt="Friday"
+            />
+          </th>
+          <th class="tuesday-col" id="saturday-col">
+            <img
+              src="week_images/saturday.png"
+              class="day-segment"
+              alt="Saturday"
+            />
+          </th>
+          <th class="monday-col" id="sunday-col">
+            <img
+              src="week_images/sunday.png"
+              class="day-segment"
+              alt="Sunday"
+            />
+          </th>
+          <th class="tuesday-col" id="extra-col" style="width: 43px"></th>
+        </tr>
+        <tr>
+          <th class="time-of-day" id="morning-row">
+            <img src="time_of_day/morning.png" alt="Morning" />
+          </th>
+          <td class="monday-col"></td>
+          <td class="tuesday-col"></td>
+          <td class="wednesday-col"></td>
+          <td class="thursday-col"></td>
+          <td class="friday-col"></td>
+          <td class="saturday-col"></td>
+          <td class="sunday-col"></td>
+          <td
+            class="extra-col"
+            style="
+              border-bottom: 2px solid transparent;
+              border-top: 2px solid transparent;
+            "
+          ></td>
+        </tr>
+        <tr class="border-row">
+          <th class="time-of-day" id="afternoon-row">
+            <img src="time_of_day/afternoon.png" alt="Afternoon" />
+          </th>
+          <td class="monday-col"></td>
+          <td class="tuesday-col"></td>
+          <td class="wednesday-col"></td>
+          <td class="thursday-col"></td>
+          <td class="friday-col"></td>
+          <td class="saturday-col"></td>
+          <td class="sunday-col"></td>
+          <td
+            class="extra-col"
+            style="
+              border-bottom: 2px solid transparent;
+              border-top: 2px solid transparent;
+            "
+          ></td>
+        </tr>
+        <tr>
+          <th class="time-of-day" id="evening-row">
+            <img src="time_of_day/evening.png" alt="Evening" />
+          </th>
+          <td class="monday-col"></td>
+          <td class="tuesday-col"></td>
+          <td class="wednesday-col"></td>
+          <td class="thursday-col"></td>
+          <td class="friday-col"></td>
+          <td class="saturday-col"></td>
+          <td class="sunday-col"></td>
+          <td class="extra-col"></td>
+        </tr>
+      </table>
+      <a class="next-week-link" href="next_week.html"
+        ><span>Next Week</span
+        ><i class="fas fa-arrow-right" aria-hidden="true"></i
+      ></a>
+    </div>
 
-<body>
-	<input style="display: none;" id="hdnWeek" value="1" />
-	<div class="p1" id="p1">
-		<div class="trash-box-container deletion-box" id="trash-box-container" style="display: none;">
-			<div class="trash-box">DELETE <i class="fas fa-trash-alt" aria-hidden="true"></i></div>
-		</div>
-		<table class="main-table" aria-describedby="Calendar Table">
-			<tr class="deletion-box" ondragenter="showDeletionBox()" ondragleave="removeDeletionBox()">
-				<!--Change the 'th' class selectors to their proper days-->
-				<th class="this-week" id="this-week">This Week</th>
-				<th class="monday-col" id="monday-col"><img src="week_images/monday.png" class="day-segment" alt="Monday"></th>
-				<th class="tuesday-col" id="tuesday-col"><img src="week_images/tuesday.png" class="day-segment" alt="Tueday">
-				</th>
-				<th class="monday-col" id="wednesday-col"><img src="week_images/wednesday.png" class="day-segment"
-						alt="Wednesday"></th>
-				<th class="tuesday-col" id="thursday-col"><img src="week_images/thursday.png" class="day-segment"
-						alt="Thursday"></th>
-				<th class="monday-col" id="friday-col"><img src="week_images/friday.png" class="day-segment" alt="Friday"></th>
-				<th class="tuesday-col" id="saturday-col"><img src="week_images/saturday.png" class="day-segment"
-						alt="Saturday"></th>
-				<th class="monday-col" id="sunday-col"><img src="week_images/sunday.png" class="day-segment" alt="Sunday"></th>
-				<th class="tuesday-col" id="extra-col" style="width: 43px;"></th>
-			</tr>
-			<tr>
-				<th class="time-of-day" id="morning-row"><img src="time_of_day/morning.png" alt="Morning"></th>
-				<td class="monday-col"></td>
-				<td class="tuesday-col"></td>
-				<td class="wednesday-col"></td>
-				<td class="thursday-col"></td>
-				<td class="friday-col"></td>
-				<td class="saturday-col"></td>
-				<td class="sunday-col"></td>
-				<td class="extra-col" style="border-bottom: 2px solid transparent; border-top: 2px solid transparent;"></td>
-			</tr>
-			<tr class="border-row">
-				<th class="time-of-day" id="afternoon-row"><img src="time_of_day/afternoon.png" alt="Afternoon"></th>
-				<td class="monday-col"></td>
-				<td class="tuesday-col"></td>
-				<td class="wednesday-col"></td>
-				<td class="thursday-col"></td>
-				<td class="friday-col"></td>
-				<td class="saturday-col"></td>
-				<td class="sunday-col"></td>
-				<td class="extra-col" style="border-bottom: 2px solid transparent; border-top: 2px solid transparent;"></td>
-			</tr>
-			<tr>
-				<th class="time-of-day" id="evening-row"><img src="time_of_day/evening.png" alt="Evening"></th>
-				<td class="monday-col"></td>
-				<td class="tuesday-col"></td>
-				<td class="wednesday-col"></td>
-				<td class="thursday-col"></td>
-				<td class="friday-col"></td>
-				<td class="saturday-col"></td>
-				<td class="sunday-col">
-				<td class="extra-col"></td>
-				<a class="next-week-link" href="next_week.html"><span>Next Week</span><i class="fas fa-arrow-right"
-						aria-hidden="true"></i></a>
-				</td>
-			</tr>
-		</table>
-
-	</div>
-
-	<div class="sidemenu" id="divSidemenu" sidemenu-is-visible="false">
-		<img src="misc/handle.png" alt="click" class="sidebar initSidebar" id="toggleBar" onclick="toggleSidemenu()">
-		<table aria-describedby="Sidebar Table">
-			<tbody id="img-library-table">
-				<tr class="settings-area">
-					<td>
-						<label class="switch">
-							<input type="checkbox" class="isLeftToggle">
-							<span class="slider round" onclick="switchToLeft()"></span>
-						</label>
-					</td>
-					<td><span class="switch-title">Switch to left</span></td>
-					<td class="settings-icon"><i class="fas fa-cog" onclick="goToSettings()" aria-hidden="true"></i></td>
-				</tr>
-				<!--"People" category-->
-				<tr id="people-imgs-row"></tr>
-				<!--"Transportation" category-->
-				<tr id="transportation-imgs-row"></tr>
-				<!--"Activities" category-->
-				<tr>
-					<th colspan="4" id="popular-img-row-title" class="img-row-title">Popular</th>
-				</tr>
-				<tr id="popular-imgs-row"></tr>
-			</tbody>
-		</table>
-	</div>
-	<script type="text/javascript" src="./scripts/script.js"></script>
-	<script type="text/javascript" src="./scripts/toggle.js"></script>
-	<script type="text/javascript" src="./scripts/deletion-box.js"></script>
-</body>
-
+    <div class="sidemenu" id="divSidemenu" sidemenu-is-visible="false">
+      <img
+        src="misc/handle.png"
+        alt="click"
+        class="sidebar initSidebar"
+        id="toggleBar"
+        onclick="toggleSidemenu()"
+      />
+      <table aria-describedby="Sidebar Table">
+        <tbody id="img-library-table">
+          <tr class="settings-area">
+            <td>
+              <label class="switch">
+                <input type="checkbox" class="isLeftToggle" />
+                <span class="slider round" onclick="switchToLeft()"></span>
+              </label>
+            </td>
+            <td><span class="switch-title">Switch to left</span></td>
+            <td class="settings-icon">
+              <i
+                class="fas fa-cog"
+                onclick="goToSettings()"
+                aria-hidden="true"
+              ></i>
+            </td>
+          </tr>
+          <!--"People" category-->
+          <tr id="people-imgs-row"></tr>
+          <!--"Transportation" category-->
+          <tr id="transportation-imgs-row"></tr>
+          <!--"Activities" category-->
+          <tr>
+            <th colspan="4" id="popular-img-row-title" class="img-row-title">
+              Popular
+            </th>
+          </tr>
+          <tr id="popular-imgs-row"></tr>
+        </tbody>
+      </table>
+    </div>
+    <script type="text/javascript" src="./scripts/script.js"></script>
+    <script type="text/javascript" src="./scripts/toggle.js"></script>
+    <script type="text/javascript" src="./scripts/deletion-box.js"></script>
+  </body>
 </html>

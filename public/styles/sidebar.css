@@ -25,7 +25,7 @@
   z-index: 1; /*Place in front of cloned image elemnts*/
 }
 .menuOnLeft table::-webkit-scrollbar,
-.sidemenu table::-webkit-scrollbar{
+.sidemenu table::-webkit-scrollbar {
   display: none !important;
 }
 
@@ -70,7 +70,7 @@
 
 .activities-imgs-row-copy,
 .popular-imgs-row-copy,
-[class*='-imgs-row-copy']:not(.transportation-imgs-row-copy, .people-imgs-row-copy, .popular-imgs-row-copy){
+[class*="-imgs-row-copy"]:not(.transportation-imgs-row-copy, .people-imgs-row-copy, .popular-imgs-row-copy) {
   width: 6.12vw !important;
 }
 
@@ -170,11 +170,11 @@
     grid-template-columns: repeat(4, 7.5vh);
   }
 
-  #people-imgs-row{
+  #people-imgs-row {
     margin-left: 33.4px;
   }
 
-  .menuOnLeft table #people-imgs-row{
+  .menuOnLeft table #people-imgs-row {
     margin-left: 20px;
     margin-right: 33.4px;
   }

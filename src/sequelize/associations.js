@@ -1,33 +1,26 @@
-
 module.exports = (sequelize) => {
-    const {
-        image,
-        imageCopy,
-        imageType,
-        weekTag,
-        category,
-        symbol,
-        symbolPlacement
-    } = sequelize.models;
+  const {
+    image,
+    imageCopy,
+    imageType,
+    weekTag,
+    category,
+    symbol,
+    symbolPlacement,
+  } = sequelize.models;
 
-    imageType.hasMany(image);
-    image.belongsTo(imageType);
+  imageType.hasMany(image);
+  image.belongsTo(imageType);
 
-    image.hasMany(imageCopy);
-    imageCopy.belongsTo(image);
+  image.hasMany(imageCopy);
+  imageCopy.belongsTo(image);
 
-    weekTag.hasMany(imageCopy);
-    imageCopy.belongsTo(weekTag);
+  weekTag.hasMany(imageCopy);
+  imageCopy.belongsTo(weekTag);
 
-    category.hasMany(symbol);
-    symbol.belongsTo(category);
+  category.hasMany(symbol);
+  symbol.belongsTo(category);
 
-    symbol.hasMany(symbolPlacement);
-    symbolPlacement.belongsTo(symbol);
-
-    image.hasMany(symbolPlacement);
-    symbolPlacement.belongsTo(image);
-
-    weekTag.hasMany(symbolPlacement);
-    symbolPlacement.belongsTo(weekTag);
+  symbol.hasMany(symbolPlacement);
+  symbolPlacement.belongsTo(symbol);
 };

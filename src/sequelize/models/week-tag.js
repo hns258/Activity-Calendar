@@ -1,7 +1,7 @@
-const DataTypes = require('sequelize');
+const DataTypes = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define('weekTag', {
+  sequelize.define("weekTag", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     description: {
-      type: DataTypes.ENUM('This Week', 'Next Week'),
+      type: DataTypes.ENUM("This Week", "Next Week"),
       allowNull: false,
       unique: true,
     },
@@ -19,5 +19,4 @@ module.exports = (sequelize) => {
       defaultValue: null,
     },
   });
-  
 };
