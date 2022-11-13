@@ -173,6 +173,8 @@ const updateFolderLocation = async (category, typePath) => {
 };
 
 class ActivityCalendar {
+  static _USER_SETTINGS_ID = 1;
+
   constructor(fs = require("fs")) {
     this.fs = fs;
     this.symbolImagesDir = path.join(databaseDir, "symbol-images");
@@ -183,13 +185,18 @@ class ActivityCalendar {
   }
 
   async getSettings() {
-    return models.settings.findOne({ where: {} }).then((res) => {
-      return res.holdValue;
-    });
+    return models.settings
+      .findOrCreate({ where: { id: ActivityCalendar._USER_SETTINGS_ID } })
+      .then(([res]) => {
+        return res.holdValue;
+      });
   }
 
   async setSettings(holdValue) {
-    return models.settings.update({ holdValue }, { where: {} });
+    return models.settings.upsert({
+      id: ActivityCalendar._USER_SETTINGS_ID,
+      holdValue,
+    });
   }
 
   async getSymbols() {
@@ -225,16 +232,16 @@ class ActivityCalendar {
     });
   }
 
-  async getSymbolPlacements(weekTagId) {
-    return models.symbolPlacement.findAll({ where: { weekTagId } });
+  async getSymbolPlacements(inCurrentWeek) {
+    return models.symbolPlacement.findAll({ where: { inCurrentWeek } });
   }
 
-  async createSymbolPlacement(symbolId, posX, posY, weekTagId) {
+  async createSymbolPlacement(symbolId, posX, posY, inCurrentWeek) {
     return models.symbolPlacement.create({
       symbolId,
       posX,
       posY,
-      weekTagId,
+      inCurrentWeek,
     });
   }
 

@@ -7,7 +7,6 @@ const { createFsFromVolume, Volume } = require("memfs");
 
 const { sequelize } = require("../src/sequelize");
 const { ActivityCalendar } = require("../src/activity-calendar");
-const seed = require("../src/seed");
 
 // We create a new ActivityCalendar with fresh in-memory fs for each test.
 const vol = new Volume();
@@ -19,14 +18,11 @@ beforeEach(async function () {
   vol.fromJSON({ "/images/1.jpg": "123", "/images/2.jpg": "456" });
 
   await sequelize.sync();
-  await seed();
 
   activityCalendar = new ActivityCalendar(createFsFromVolume(vol));
 
-  popularCategory = await sequelize.models.category.findOne({
-    where: {
-      name: "Popular",
-    },
+  popularCategory = await sequelize.models.category.create({
+    name: "Popular",
   });
 });
 
@@ -45,9 +41,10 @@ describe("settings", async function () {
 
   it("set properly updates", async function () {
     await activityCalendar.setSettings(500);
+    assert.strictEqual(await activityCalendar.getSettings(), 500);
 
-    const holdValue = await activityCalendar.getSettings();
-    assert.strictEqual(holdValue, 500);
+    await activityCalendar.setSettings(700);
+    assert.strictEqual(await activityCalendar.getSettings(), 700);
   });
 });
 
@@ -147,12 +144,6 @@ describe("createSymbol()", async function () {
 });
 
 describe("symbol placements", async function () {
-  async function getWeekTags() {
-    return sequelize.models.weekTag.findAll({});
-  }
-
-  let thisWeek, nextWeek;
-
   async function createSymbol(name) {
     return activityCalendar.createSymbol(
       "/images/1.jpg",
@@ -165,12 +156,10 @@ describe("symbol placements", async function () {
     );
   }
 
-  this.beforeEach(async function () {
-    [thisWeek, nextWeek] = await sequelize.models.weekTag.findAll({});
-  });
-
   it("get with no placements", async function () {
-    const placements = await activityCalendar.getSymbolPlacements(thisWeek.id);
+    const placements = await activityCalendar.getSymbolPlacements(
+      /*inCurrentWeek=*/ true
+    );
     assert.strictEqual(placements.length, 0);
   });
 
@@ -181,14 +170,16 @@ describe("symbol placements", async function () {
       symbol.id,
       "10px",
       "20px",
-      thisWeek.id
+      /*inCurrentWeek=*/ true
     );
 
-    const placements = await activityCalendar.getSymbolPlacements(thisWeek.id);
+    const placements = await activityCalendar.getSymbolPlacements(
+      /*inCurrentWeek=*/ true
+    );
     assert.deepInclude(placements[0].dataValues, placement.dataValues);
 
     const nextWeekPlacements = await activityCalendar.getSymbolPlacements(
-      nextWeek.id
+      /*inCurrentWeek=*/ false
     );
     assert.strictEqual(nextWeekPlacements.length, 0);
   });
@@ -212,12 +203,14 @@ describe("symbol placements", async function () {
       symbol.id,
       "10px",
       "20px",
-      thisWeek.id
+      /*inCurrentWeek=*/ true
     );
 
     await activityCalendar.updateSymbolPlacement(placement.id, "20px", "40px");
 
-    const placements = await activityCalendar.getSymbolPlacements(thisWeek.id);
+    const placements = await activityCalendar.getSymbolPlacements(
+      /*inCurrentWeek=*/ true
+    );
     assert.deepInclude(placements[0].dataValues, {
       posX: "20px",
       posY: "40px",
@@ -244,12 +237,14 @@ describe("symbol placements", async function () {
       symbol.id,
       "10px",
       "20px",
-      thisWeek.id
+      /*inCurrentWeek=*/ true
     );
 
     await activityCalendar.deleteSymbolPlacement(placement.id, "20px", "40px");
 
-    const placements = await activityCalendar.getSymbolPlacements(thisWeek.id);
+    const placements = await activityCalendar.getSymbolPlacements(
+      /*inCurrentWeek=*/ true
+    );
     assert.strictEqual(placements.length, 0);
   });
 

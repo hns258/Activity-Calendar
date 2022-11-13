@@ -23,10 +23,4 @@ module.exports = (sequelize) => {
 
   symbol.hasMany(symbolPlacement);
   symbolPlacement.belongsTo(symbol);
-
-  image.hasMany(symbolPlacement);
-  symbolPlacement.belongsTo(image);
-
-  weekTag.hasMany(symbolPlacement);
-  symbolPlacement.belongsTo(weekTag);
 };
