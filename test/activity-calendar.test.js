@@ -145,3 +145,124 @@ describe("createSymbol()", async function () {
     );
   });
 });
+
+describe("symbol placements", async function () {
+  async function getWeekTags() {
+    return sequelize.models.weekTag.findAll({});
+  }
+
+  let thisWeek, nextWeek;
+
+  async function createSymbol(name) {
+    return activityCalendar.createSymbol(
+      "/images/1.jpg",
+      name,
+      "Person",
+      "10px",
+      "5px",
+      0,
+      popularCategory.id
+    );
+  }
+
+  this.beforeEach(async function () {
+    [thisWeek, nextWeek] = await sequelize.models.weekTag.findAll({});
+  });
+
+  it("get with no placements", async function () {
+    const placements = await activityCalendar.getSymbolPlacements(thisWeek.id);
+    assert.strictEqual(placements.length, 0);
+  });
+
+  it("create is succesful", async function () {
+    const symbol = await createSymbol("foo");
+
+    const placement = await activityCalendar.createSymbolPlacement(
+      symbol.id,
+      "10px",
+      "20px",
+      thisWeek.id
+    );
+
+    const placements = await activityCalendar.getSymbolPlacements(thisWeek.id);
+    assert.deepInclude(placements[0].dataValues, placement.dataValues);
+
+    const nextWeekPlacements = await activityCalendar.getSymbolPlacements(
+      nextWeek.id
+    );
+    assert.strictEqual(nextWeekPlacements.length, 0);
+  });
+
+  it("create with invalid args", async function () {
+    await node_assert.rejects(
+      async () => {
+        return activityCalendar.createSymbolPlacement(-1, "10px", "20px", -1);
+      },
+      {
+        name: "SequelizeForeignKeyConstraintError",
+        message: "SQLITE_CONSTRAINT: FOREIGN KEY constraint failed",
+      }
+    );
+  });
+
+  it("update existing", async function () {
+    const symbol = await createSymbol("foo");
+
+    const placement = await activityCalendar.createSymbolPlacement(
+      symbol.id,
+      "10px",
+      "20px",
+      thisWeek.id
+    );
+
+    await activityCalendar.updateSymbolPlacement(placement.id, "20px", "40px");
+
+    const placements = await activityCalendar.getSymbolPlacements(thisWeek.id);
+    assert.deepInclude(placements[0].dataValues, {
+      posX: "20px",
+      posY: "40px",
+    });
+  });
+
+  it("update non-existent", async function () {
+    await node_assert.rejects(
+      async () => {
+        return activityCalendar.updateSymbolPlacement(-1, "5px", "10px");
+      },
+      {
+        name: "Error",
+        message:
+          "Unable to find existing to update symbol placement with id -1.",
+      }
+    );
+  });
+
+  it("delete existing", async function () {
+    const symbol = await createSymbol("foo");
+
+    const placement = await activityCalendar.createSymbolPlacement(
+      symbol.id,
+      "10px",
+      "20px",
+      thisWeek.id
+    );
+
+    await activityCalendar.deleteSymbolPlacement(placement.id, "20px", "40px");
+
+    const placements = await activityCalendar.getSymbolPlacements(thisWeek.id);
+    assert.strictEqual(placements.length, 0);
+  });
+
+  it("delete non-existent", async function () {
+    await node_assert.rejects(
+      async () => {
+        return activityCalendar.deleteSymbolPlacement(-1, "5px", "10px");
+      },
+      {
+        name: "Error",
+        message:
+          "Unable to find existing to delete symbol placement with id -1.",
+      }
+    );
+  });
+});

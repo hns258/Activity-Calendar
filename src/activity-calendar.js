@@ -224,6 +224,42 @@ class ActivityCalendar {
       categoryId,
     });
   }
+
+  async getSymbolPlacements(weekTagId) {
+    return models.symbolPlacement.findAll({ where: { weekTagId } });
+  }
+
+  async createSymbolPlacement(symbolId, posX, posY, weekTagId) {
+    return models.symbolPlacement.create({
+      symbolId,
+      posX,
+      posY,
+      weekTagId,
+    });
+  }
+
+  async updateSymbolPlacement(id, posX, posY) {
+    const [numRows, rows] = await models.symbolPlacement.update(
+      { posX, posY },
+      { where: { id } }
+    );
+    if (numRows === 0) {
+      throw Error(
+        `Unable to find existing to update symbol placement with id ${id}.`
+      );
+    }
+  }
+
+  async deleteSymbolPlacement(id) {
+    const numDestroyed = await models.symbolPlacement.destroy({
+      where: { id },
+    });
+    if (numDestroyed === 0) {
+      throw Error(
+        `Unable to find existing to delete symbol placement with id ${id}.`
+      );
+    }
+  }
 }
 
 module.exports = {
