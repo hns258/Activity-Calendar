@@ -204,7 +204,7 @@ const initializeSymbols = async (activityCalendar) => {
   };
 
   const initializeActivities = async () => {
-    const activitiesDir = path.join(imagesDir, "Activities");
+    const activitiesDir = path.join(imagesDir, "activities");
     const categoryNames = await fs.promises.readdir(activitiesDir);
 
     const categories = await models.category.bulkCreate(
@@ -220,7 +220,7 @@ const initializeSymbols = async (activityCalendar) => {
       categories.map((category) => {
         return initializeWithLeafDir(
           path.join(activitiesDir, category.name),
-          "Activities",
+          "activities",
           category.id
         );
       })
@@ -229,10 +229,10 @@ const initializeSymbols = async (activityCalendar) => {
 
   await Promise.all([
     initializeActivities(),
-    initializeWithLeafDir(path.join(imagesDir, "People"), "People"),
+    initializeWithLeafDir(path.join(imagesDir, "people"), "people"),
     initializeWithLeafDir(
-      path.join(imagesDir, "Transportation"),
-      "Transportation"
+      path.join(imagesDir, "transportation"),
+      "transportation"
     ),
   ]);
 };

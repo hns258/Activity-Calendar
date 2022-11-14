@@ -59,7 +59,7 @@ describe("ActivityCalendar", async function () {
       const symbol = await activityCalendar.createSymbol(
         "/images/1.jpg",
         "foo",
-        "Activities",
+        "activities",
         "10px",
         "5px",
         0,
@@ -68,7 +68,8 @@ describe("ActivityCalendar", async function () {
 
       const symbols = await activityCalendar.getSymbols();
       assert.strictEqual(symbols.length, 1);
-      assert.deepInclude(symbols[0].dataValues, symbol.dataValues);
+      assert.deepInclude(symbols[0], symbol.dataValues);
+      assert.strictEqual(symbols[0].category.name, "Popular");
     });
   });
 
@@ -78,7 +79,7 @@ describe("ActivityCalendar", async function () {
         return activityCalendar.createSymbol(
           "/images/1.jpg",
           name,
-          "Activities",
+          "activities",
           "10px",
           "5px",
           0,
@@ -106,7 +107,7 @@ describe("ActivityCalendar", async function () {
 
         assert.include(symbol.dataValues, {
           name: expectedName,
-          type: "Activities",
+          type: "activities",
           posX: "10px",
           posY: "5px",
           zoom: 0,
@@ -138,13 +139,13 @@ describe("ActivityCalendar", async function () {
           },
           {
             name: "SequelizeValidationError",
-            message: "Validation error: Only Activities can have a category.",
+            message: "Validation error: Only activities can have a category.",
           }
         );
       };
 
-      assertSymbolFail("People");
-      assertSymbolFail("Transportation");
+      assertSymbolFail("people");
+      assertSymbolFail("transportation");
     });
 
     it("create without category", async function () {
@@ -159,15 +160,15 @@ describe("ActivityCalendar", async function () {
         );
       };
 
-      const person = await createSymbol("symbol1", "People");
+      const person = await createSymbol("symbol1", "people");
       assert.strictEqual(person.category, undefined);
 
-      const activity = await createSymbol("symbol2", "Transportation");
+      const activity = await createSymbol("symbol2", "transportation");
       assert.strictEqual(activity.category, undefined);
 
       await node_assert.rejects(
         async () => {
-          return createSymbol("symbol3", "Activities");
+          return createSymbol("symbol3", "activities");
         },
         {
           name: "SequelizeValidationError",
@@ -201,7 +202,7 @@ describe("ActivityCalendar", async function () {
           return activityCalendar.createSymbol(
             "/images/invalid.jpg",
             "foo",
-            "Activities",
+            "activities",
             "10px",
             "5px",
             0,
@@ -222,7 +223,7 @@ describe("ActivityCalendar", async function () {
       return activityCalendar.createSymbol(
         "/images/1.jpg",
         name,
-        "Activities",
+        "activities",
         "10px",
         "5px",
         0,

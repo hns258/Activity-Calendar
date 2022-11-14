@@ -19,9 +19,9 @@ describe("seed", async function () {
     const vol = new Volume();
 
     const seedImagesDir = path.join(__dirname, "..", "src", "seed", "images");
-    const activitiesDir = path.join(seedImagesDir, "Activities");
-    const peopleDir = path.join(seedImagesDir, "People");
-    const transportationDir = path.join(seedImagesDir, "Transportation");
+    const activitiesDir = path.join(seedImagesDir, "activities");
+    const peopleDir = path.join(seedImagesDir, "people");
+    const transportationDir = path.join(seedImagesDir, "transportation");
 
     volJSON = {};
 
