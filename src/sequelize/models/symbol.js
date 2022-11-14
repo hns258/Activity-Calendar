@@ -20,11 +20,11 @@ module.exports = (sequelize, databaseDir) => {
       allowNull: false,
     },
     type: {
-      type: DataTypes.ENUM("People", "Transport", "Activities"),
+      type: DataTypes.ENUM("People", "Transportation", "Activities"),
       allowNull: false,
       validate: {
         isIn: {
-          args: [["People", "Transport", "Activities"]],
+          args: [["People", "Transportation", "Activities"]],
           msg: "type must be one of the enum values.",
         },
         // Only Activities can and must have categories.

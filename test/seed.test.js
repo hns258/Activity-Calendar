@@ -21,7 +21,7 @@ describe("seed", async function () {
     const seedImagesDir = path.join(__dirname, "..", "src", "seed", "images");
     const activitiesDir = path.join(seedImagesDir, "Activities");
     const peopleDir = path.join(seedImagesDir, "People");
-    const transportDir = path.join(seedImagesDir, "Transport");
+    const transportationDir = path.join(seedImagesDir, "Transportation");
 
     volJSON = {};
 
@@ -30,7 +30,7 @@ describe("seed", async function () {
     volJSON[
       path.join(activitiesDir, "Cafes and Restaurants", "Starbucks.png")
     ] = "456";
-    volJSON[path.join(transportDir, "bus.png")] = "789";
+    volJSON[path.join(transportationDir, "bus.png")] = "789";
 
     vol.fromJSON(volJSON);
 

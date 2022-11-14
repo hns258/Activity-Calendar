@@ -144,7 +144,7 @@ describe("ActivityCalendar", async function () {
       };
 
       assertSymbolFail("People");
-      assertSymbolFail("Transport");
+      assertSymbolFail("Transportation");
     });
 
     it("create without category", async function () {
@@ -162,7 +162,7 @@ describe("ActivityCalendar", async function () {
       const person = await createSymbol("symbol1", "People");
       assert.strictEqual(person.category, undefined);
 
-      const activity = await createSymbol("symbol2", "Transport");
+      const activity = await createSymbol("symbol2", "Transportation");
       assert.strictEqual(activity.category, undefined);
 
       await node_assert.rejects(
