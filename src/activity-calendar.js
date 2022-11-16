@@ -201,9 +201,20 @@ class ActivityCalendar {
   }
 
   async getSymbols() {
-    return models.symbol.findAll({
+    const symbols = await models.symbol.findAll({
       order: [[Sequelize.fn("lower", Sequelize.col("symbol.name")), "ASC"]],
       include: models.category,
+    });
+
+    // We only want to expose the data values.
+    return symbols.map((symbol) => {
+      symbol = Object.assign(symbol.dataValues, {
+        imageFilePath: symbol.imageFilePath,
+      });
+      if (symbol.category) {
+        symbol.category = symbol.category.dataValues;
+      }
+      return symbol;
     });
   }
 
