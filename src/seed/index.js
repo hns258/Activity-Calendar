@@ -229,7 +229,6 @@ const initializeSymbols = async (activityCalendar) => {
 
   await Promise.all([
     initializeActivities(),
-    initializeWithLeafDir(path.join(imagesDir, "people"), "people"),
     initializeWithLeafDir(
       path.join(imagesDir, "transportation"),
       "transportation"
