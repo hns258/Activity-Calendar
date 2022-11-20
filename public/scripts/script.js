@@ -195,42 +195,21 @@ function setUpDate() {
 
 // Slide-in library menu functionality initialization
 function toggleSidemenu() {
-  if (!isLeft) {
-    if (open) {
-      console.log("closing sidebar to right");
-      sideMenu.style.right = "-30vw";
-      open = false;
-      document
-        .querySelector("#divSidemenu")
-        .setAttribute("sidemenu-is-visible", false);
-    } else {
-      console.log("opening sidebar to right");
-      sideMenu.style.right = "0px";
-      open = true;
-      document
-        .querySelector("#divSidemenu")
-        .setAttribute("sidemenu-is-visible", true);
-    }
-  } else {
-    if (open) {
-      console.log("closing sidebar to left");
-      sideMenu.style.left = "-29.5vw";
-      open = false;
-      document
-        .querySelector("#divSidemenu")
-        .setAttribute("sidemenu-is-visible", false);
-    } else {
-      console.log("opening sidebar to left");
-      sideMenu.style.left = "0px";
-      open = true;
-      document
-        .querySelector("#divSidemenu")
-        .setAttribute("sidemenu-is-visible", true);
-    }
-  }
+  sideMenu.style[isLeft ? "left" : "right"] = open
+    ? isLeft
+      ? "-29.5vw"
+      : "-30vw"
+    : "0px";
+
+  document
+    .querySelector("#divSidemenu")
+    .setAttribute("sidemenu-is-visible", !open);
+
+  open = !open;
 
   if (open) {
-    clickDrag(); //Bug fix: dragging image for the first time
+    // Accounts for dragging images for the first time.
+    clickDrag();
   }
 }
 
