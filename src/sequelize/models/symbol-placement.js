@@ -8,11 +8,10 @@ module.exports = (sequelize) => {
       primaryKey: true,
       allowNull: false,
     },
-    // If it's not in the current week, we assume it's in the next week.
-    // In the future, we should consider making this a date field instead,
-    // but this is done to maintain compatibility with existing interfaces.
-    inCurrentWeek: {
-      type: DataTypes.BOOLEAN,
+    // The UI currently places symbols on the week granularity, though this will
+    // change in the future.
+    date: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
     posX: {

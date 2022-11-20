@@ -232,37 +232,105 @@ describe("ActivityCalendar", async function () {
     }
 
     it("get with no placements", async function () {
+      const now = new Date();
+      now.setDate(now.getDate() + 7);
       const placements = await activityCalendar.getSymbolPlacements(
-        /*inCurrentWeek=*/ true
+        /*dateStart=*/ new Date(0),
+        /*dateEnd=*/ now
       );
       assert.strictEqual(placements.length, 0);
+    });
+
+    it("get range", async function () {
+      const symbol = await createSymbol("foo");
+
+      const createPlacement = async (date) => {
+        return activityCalendar.createSymbolPlacement(
+          symbol.id,
+          date,
+          "10px",
+          "20px"
+        );
+      };
+
+      const start = new Date();
+
+      const placementDate1 = new Date(start);
+      placementDate1.setDate(placementDate1.getDate() + 1);
+      const placementDate2 = new Date(start);
+      placementDate2.setDate(placementDate2.getDate() + 7);
+      const placementDate3 = new Date(start);
+      placementDate3.setDate(placementDate3.getDate() + 8);
+
+      await Promise.all(
+        [placementDate1, placementDate2, placementDate3].map(createPlacement)
+      );
+
+      {
+        const placements = await activityCalendar.getSymbolPlacements(
+          start,
+          placementDate2
+        );
+        assert.strictEqual(placements.length, 2);
+        assert.deepInclude(placements[0], {
+          date: placementDate1,
+        });
+        assert.deepInclude(placements[1], {
+          date: placementDate2,
+        });
+      }
+
+      {
+        const placements = await activityCalendar.getSymbolPlacements(
+          start,
+          placementDate3
+        );
+        assert.strictEqual(placements.length, 3);
+      }
     });
 
     it("create is succesful", async function () {
       const symbol = await createSymbol("foo");
 
+      const start = new Date();
       const placement = await activityCalendar.createSymbolPlacement(
         symbol.id,
+        start,
         "10px",
-        "20px",
-        /*inCurrentWeek=*/ true
+        "20px"
       );
 
       const placements = await activityCalendar.getSymbolPlacements(
-        /*inCurrentWeek=*/ true
+        /*dateStart=*/ start,
+        /*dateEnd=*/ start
       );
       assert.deepInclude(placements[0], placement);
+      assert.deepInclude(placements[0], {
+        date: start,
+        posX: "10px",
+        posY: "20px",
+      });
 
-      const nextWeekPlacements = await activityCalendar.getSymbolPlacements(
-        /*inCurrentWeek=*/ false
+      const laterStart = new Date(start);
+      laterStart.setDate(laterStart.getDate() + 1);
+      const laterEnd = new Date(laterStart);
+      laterEnd.setDate(laterEnd.getDate() + 7);
+      const laterPlacements = await activityCalendar.getSymbolPlacements(
+        laterStart,
+        laterEnd
       );
-      assert.strictEqual(nextWeekPlacements.length, 0);
+      assert.strictEqual(laterPlacements.length, 0);
     });
 
     it("create with invalid args", async function () {
       await node_assert.rejects(
         async () => {
-          return activityCalendar.createSymbolPlacement(-1, "10px", "20px", -1);
+          return activityCalendar.createSymbolPlacement(
+            -1,
+            new Date(),
+            "10px",
+            "20px"
+          );
         },
         {
           name: "SequelizeForeignKeyConstraintError",
@@ -274,23 +342,29 @@ describe("ActivityCalendar", async function () {
     it("update existing", async function () {
       const symbol = await createSymbol("foo");
 
+      const start = new Date();
       const placement = await activityCalendar.createSymbolPlacement(
         symbol.id,
+        start,
         "10px",
-        "20px",
-        /*inCurrentWeek=*/ true
+        "20px"
       );
 
+      const updatedDate = new Date(start);
+      updatedDate.setDate(updatedDate.getDate() + 1);
       await activityCalendar.updateSymbolPlacement(
         placement.id,
+        updatedDate,
         "20px",
         "40px"
       );
 
       const placements = await activityCalendar.getSymbolPlacements(
-        /*inCurrentWeek=*/ true
+        updatedDate,
+        updatedDate
       );
       assert.deepInclude(placements[0], {
+        date: updatedDate,
         posX: "20px",
         posY: "40px",
       });
@@ -312,11 +386,12 @@ describe("ActivityCalendar", async function () {
     it("delete existing", async function () {
       const symbol = await createSymbol("foo");
 
+      const start = new Date();
       const placement = await activityCalendar.createSymbolPlacement(
         symbol.id,
+        start,
         "10px",
-        "20px",
-        /*inCurrentWeek=*/ true
+        "20px"
       );
 
       await activityCalendar.deleteSymbolPlacement(
@@ -326,7 +401,8 @@ describe("ActivityCalendar", async function () {
       );
 
       const placements = await activityCalendar.getSymbolPlacements(
-        /*inCurrentWeek=*/ true
+        start,
+        start
       );
       assert.strictEqual(placements.length, 0);
     });

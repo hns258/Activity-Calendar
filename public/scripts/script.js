@@ -164,13 +164,35 @@ const elPosForPointerPos = (el, x, y) => {
   return [x - el.offsetWidth / 2 + "px", y - el.offsetHeight / 2 + "px"];
 };
 
+// Weeks start on Monday and end on Sunday.
+const getWeekBoundaries = (now, inCurrentWeek) => {
+  // Monday
+  const weekStart = new Date(now);
+  if (!inCurrentWeek) {
+    weekStart.setDate(weekStart.getDate() + 7);
+  }
+  // We handle 'Sunday' differently than the Date library. Mon-Sat are [0,5].
+  let day = (weekStart.getDay() + 6) % 7;
+
+  weekStart.setDate(weekStart.getDate() - day);
+  weekStart.setHours(0, 0, 0, 0);
+
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekEnd.getDate() + 6);
+  weekEnd.setHours(23, 59, 59, 999);
+
+  return [weekStart, weekEnd];
+};
+
 (async () => {
   const symbolsInLibrary = document.getElementsByClassName("symbol");
   const inCurrentWeek = document.querySelector("#hdnWeek").value === "1";
 
+  const [weekStart, weekEnd] = getWeekBoundaries(new Date(), inCurrentWeek);
+
   const [symbolsById, symbolPlacements, touchDelay] = await Promise.all([
     getSymbolsById(),
-    ipcRenderer.invoke("get-symbol-placements", inCurrentWeek),
+    ipcRenderer.invoke("get-symbol-placements", weekStart, weekEnd),
     ipcRenderer.invoke("get-hold-value"),
   ]);
 
@@ -290,26 +312,22 @@ const elPosForPointerPos = (el, x, y) => {
 
           const symbolId = symbol.getAttribute("data-id");
 
+          // For now, we don't place symbols in the exact day and arbitrarily
+          // choose `weekStart` as the date that fits within the boundary.
           if (symbolPlacementId) {
             document.body.appendChild(symbol);
             symbol.style.zIndex = 0; //Drop the image below the sidebar
             ipcRenderer.invoke(
               "update-symbol-placement",
               symbolPlacementId,
+              weekStart,
               elX,
               elY
             );
           } else {
             ipcRenderer
-              .invoke(
-                "create-symbol-placement",
-                symbolId,
-                elX,
-                elY,
-                inCurrentWeek
-              )
+              .invoke("create-symbol-placement", symbolId, weekStart, elX, elY)
               .then((placement) => {
-                console.log(placement);
                 document.body.append(
                   createSymbolPlacementElement(symbolsById, placement)
                 );

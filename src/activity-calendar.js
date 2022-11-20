@@ -86,27 +86,33 @@ class ActivityCalendar {
     return serializeSymbolModel(symbol);
   }
 
-  async getSymbolPlacements(inCurrentWeek) {
+  async getSymbolPlacements(dateStart, dateEnd) {
     const placements = await models.symbolPlacement.findAll({
-      where: { inCurrentWeek },
+      where: {
+        date: {
+          [Sequelize.Op.gte]: dateStart,
+          [Sequelize.Op.lte]: dateEnd,
+        },
+      },
+      order: [["date", "ASC"]],
     });
     return placements.map(serializeSymbolPlacement);
   }
 
-  async createSymbolPlacement(symbolId, posX, posY, inCurrentWeek) {
+  async createSymbolPlacement(symbolId, date, posX, posY) {
     return serializeSymbolPlacement(
       await models.symbolPlacement.create({
         symbolId,
+        date,
         posX,
         posY,
-        inCurrentWeek,
       })
     );
   }
 
-  async updateSymbolPlacement(id, posX, posY) {
+  async updateSymbolPlacement(id, date, posX, posY) {
     const [numRows, rows] = await models.symbolPlacement.update(
-      { posX, posY },
+      { date, posX, posY },
       { where: { id } }
     );
     if (numRows === 0) {

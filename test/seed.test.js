@@ -48,12 +48,16 @@ describe("seed", async function () {
   it("works without fail", async function () {
     await seed(activityCalendar);
     const symbol = (await activityCalendar.getSymbols())[0];
-    activityCalendar.createSymbolPlacement(symbol.id, "10px", "10px", false);
+    const start = new Date();
+    activityCalendar.createSymbolPlacement(symbol.id, start, "10px", "10px");
 
     // `seed` should be idempotent.
     await seed(activityCalendar);
 
-    const placements = await activityCalendar.getSymbolPlacements(false);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 7);
+
+    const placements = await activityCalendar.getSymbolPlacements(start, end);
 
     // `seed` should not delete any existing entries.
     assert.strictEqual(placements.length, 1);

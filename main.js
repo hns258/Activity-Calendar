@@ -67,20 +67,23 @@ ipcMain.handle(
   }
 );
 
-ipcMain.handle("get-symbol-placements", async (event, inCurrentWeek) => {
-  return calendar.getSymbolPlacements(inCurrentWeek);
+ipcMain.handle("get-symbol-placements", async (event, dateStart, dateEnd) => {
+  return calendar.getSymbolPlacements(dateStart, dateEnd);
 });
 
 ipcMain.handle(
   "create-symbol-placement",
-  async (event, symbolId, posX, posY, inCurrentWeek) => {
-    return calendar.createSymbolPlacement(symbolId, posX, posY, inCurrentWeek);
+  async (event, symbolId, date, posX, posY) => {
+    return calendar.createSymbolPlacement(symbolId, date, posX, posY);
   }
 );
 
-ipcMain.handle("update-symbol-placement", async (event, id, posX, posY) => {
-  return calendar.updateSymbolPlacement(id, posX, posY);
-});
+ipcMain.handle(
+  "update-symbol-placement",
+  async (event, id, date, posX, posY) => {
+    return calendar.updateSymbolPlacement(id, date, posX, posY);
+  }
+);
 
 ipcMain.handle("delete-symbol-placement", async (event, id) => {
   return calendar.deleteSymbolPlacement(id);
