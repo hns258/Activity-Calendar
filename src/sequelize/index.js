@@ -23,11 +23,7 @@ const sequelize = new Sequelize({
 });
 
 const modelDefiners = [
-  require("./models/image"),
-  require("./models/image-copy"),
-  require("./models/image-type"),
   require("./models/settings"),
-  require("./models/week-tag"),
   require("./models/symbol"),
   require("./models/symbol-placement"),
   require("./models/category"),

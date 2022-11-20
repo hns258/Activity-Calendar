@@ -1,22 +1,5 @@
 module.exports = (sequelize) => {
-  const {
-    image,
-    imageCopy,
-    imageType,
-    weekTag,
-    category,
-    symbol,
-    symbolPlacement,
-  } = sequelize.models;
-
-  imageType.hasMany(image);
-  image.belongsTo(imageType);
-
-  image.hasMany(imageCopy);
-  imageCopy.belongsTo(image);
-
-  weekTag.hasMany(imageCopy);
-  imageCopy.belongsTo(weekTag);
+  const { category, symbol, symbolPlacement } = sequelize.models;
 
   category.hasMany(symbol);
   symbol.belongsTo(category);
@@ -25,6 +8,7 @@ module.exports = (sequelize) => {
     foreignKey: { allowNull: false },
     onDelete: "CASCADE",
   });
+
   symbolPlacement.belongsTo(symbol, {
     foreignKey: { allowNull: false },
     onDelete: "CASCADE",
