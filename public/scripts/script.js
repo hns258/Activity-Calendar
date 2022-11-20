@@ -1,121 +1,28 @@
-var open = false;
-var isLeft = document.querySelector(".isLeftToggle").checked;
-const sideMenu = document.querySelector(".sidemenu");
-
-let imagesInLibrary = document.getElementsByClassName("img-lib");
-
-// delay variable for image hold
-let delay;
-let touchDelay;
-
 const ipcRenderer = require("electron").ipcRenderer;
 const fs = require("fs");
 const { randomUUID } = require("crypto");
 
-ipcRenderer.invoke("get-hold-value").then((holdValue) => {
-  touchDelay = holdValue;
-});
+const toggleSidemenu = (() => {
+  var open = false;
+  var isLeft = document.querySelector(".isLeftToggle").checked;
 
-const populateImageLibrary = async (category) => {
-  if (
-    category === "people" ||
-    category === "transportation" ||
-    category === "popular"
-  ) {
-    const row = document.getElementById(category + "-imgs-row");
-    populateRow(row, category);
-  } else {
-    const tableBody = document.getElementById("img-library-table");
-    const th = document.createElement("th");
-    const tr = document.createElement("tr");
-    th.setAttribute("colspan", "4");
-    th.setAttribute("id", "activities-img-row-title");
-    th.classList.add("img-row-title");
-    const title = category.split("-");
-    let newTitle = "";
-    for (let i = 0; i < title.length; i++) {
-      title[i] = title[i].charAt(0).toUpperCase() + title[i].slice(1);
-      if (i === title.length - 1) {
-        newTitle += title[i];
-      } else newTitle += title[i] + " & ";
-    }
-    th.innerHTML = newTitle;
-    tr.appendChild(th);
-    tableBody.appendChild(tr);
-    const imgRow = document.createElement("tr");
-    imgRow.setAttribute("id", "activities-imgs-row");
-    tableBody.appendChild(imgRow);
-    populateRow(imgRow, category);
-  }
-};
+  // Slide-in library menu functionality initialization
+  return () => {
+    const sideMenu = document.querySelector(".sidemenu");
+    sideMenu.style[isLeft ? "left" : "right"] = open
+      ? isLeft
+        ? "-29.5vw"
+        : "-30vw"
+      : "0px";
 
-const populateRow = (rowToModify, category) => {
-  ipcRenderer.invoke("load-images", category).then((images) => {
-    for (const image of images) {
-      rowToModify.innerHTML +=
-        "<td>" +
-        `<img src="${image[0]}" ` +
-        `data-id="${image[1]}" ` +
-        `alt="${image[2]}" ` +
-        'class="img-lib"></td>';
-    }
-  });
-};
+    document
+      .querySelector("#divSidemenu")
+      .setAttribute("sidemenu-is-visible", !open);
 
-const setImageCopy = async (imageCopyID, baseID, posX, posY, weekType) => {
-  return ipcRenderer
-    .invoke("set-image-copy", imageCopyID, baseID, posX, posY, weekType)
-    .then((isSaved) => {
-      return isSaved;
-    });
-};
+    open = !open;
+  };
+})();
 
-const deleteImageCopy = async (imageCopyID) => {
-  return ipcRenderer
-    .invoke("delete-image-copy", imageCopyID)
-    .then((isDeleted) => {
-      return isDeleted;
-    });
-};
-
-async function getImageCopyModels() {
-  let weekIndicator = document.querySelector("#hdnWeek").value;
-  ipcRenderer
-    .invoke("load-image-copies", weekIndicator)
-    .then((imageCopyArray) => {
-      imageCopyArray.forEach((item) => {
-        if (fs.existsSync(item[0])) {
-          let elem = document.createElement("img");
-          elem.src = item[0];
-          elem.setAttribute("clone-id", item[1]);
-          elem.setAttribute("data-id", item[2]);
-          elem.alt = item[5];
-          elem.classList.add("img-lib");
-          elem.classList.add("copy");
-          switch (item[6]) {
-            case "transportation":
-            case "people":
-            case "popular":
-              elem.classList.add(`${item[6]}-imgs-row-copy`);
-              break;
-
-            default:
-              elem.classList.add(`activities-imgs-row-copy`);
-              break;
-          }
-          elem.style.position = "absolute";
-          elem.style.zIndex = 0;
-          elem.style.width = "4.9vw";
-          elem.style.objectFit = "scale-down";
-          elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + "px";
-          elem.style.top = parseInt(item[4]) - elem.offsetHeight / 2 + "px";
-          document.body.append(elem);
-        }
-      });
-    });
-}
-
-// Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
 function setUpDate() {
   var page = window.location.pathname.split("/").pop();
 
@@ -137,196 +44,11 @@ function setUpDate() {
     days[day].style.backgroundColor = "#c5e6f5";
     for (var j = day - 1; j < 21; j += 7) {
       containers[j].style.backgroundColor = "#c5e6f5";
-      console.log(containers[j]);
     }
   }
 }
 
-// Slide-in library menu functionality initialization
-function toggleSidemenu() {
-  sideMenu.style[isLeft ? "left" : "right"] = open
-    ? isLeft
-      ? "-29.5vw"
-      : "-30vw"
-    : "0px";
-
-  document
-    .querySelector("#divSidemenu")
-    .setAttribute("sidemenu-is-visible", !open);
-
-  open = !open;
-
-  if (open) {
-    // Accounts for dragging images for the first time.
-    clickDrag();
-  }
-}
-
-const dragStartEvents = ["touchstart", "mousedown"];
-const dragMoveEvents = ["touchmove", "mousemove"];
-const dragEndEvents = ["touchend", "mouseup"];
-
-function clickDrag() {
-  Array.prototype.forEach.call(imagesInLibrary, (image) => {
-    function removeDelayChecks() {
-      clearTimeout(delay);
-
-      dragEndEvents.forEach((event) =>
-        image.removeEventListener(event, removeDelayChecks)
-      );
-      dragMoveEvents.forEach((event) =>
-        document.removeEventListener(event, removeDelayChecks)
-      );
-    }
-
-    const dragStart = (event) => {
-      removeDelayChecks();
-
-      if (!image.classList.contains("copy")) {
-        console.log("making clone and moving copy");
-        //clone itself and append clone in its original spot
-        const clone = image.cloneNode(true);
-        clone.setAttribute("listener", "false");
-        let parent = image.parentNode;
-        parent.append(clone);
-
-        //finally add copy class to image
-        dragStartEvents.forEach((event) => {
-          image.removeEventListener(event, dragDelay);
-          image.addEventListener(event, dragStart);
-        });
-
-        image.classList.add("copy");
-        image.classList.add(`${parent.parentNode.getAttribute("id")}-copy`);
-        image.setAttribute("clone-id", randomUUID());
-      }
-
-      image.style.position = "absolute";
-      image.style.zIndex = 2;
-      image.style.width = "4.9vw";
-      image.style.objectFit = "scale-down";
-      document.body.append(image);
-
-      showDeletionBox();
-
-      function centerImageAt(pageX, pageY) {
-        image.style.left = pageX - image.offsetWidth / 2 + "px";
-        image.style.top = pageY - image.offsetHeight / 2 + "px";
-      }
-
-      event.preventDefault();
-
-      function centerImageUnderPointer(event) {
-        const { pageX, pageY } =
-          event instanceof TouchEvent ? event.changedTouches[0] : event;
-        centerImageAt(pageX, pageY);
-      }
-
-      centerImageUnderPointer(event);
-
-      // (2) move the image on mousemove
-      dragMoveEvents.forEach((event) =>
-        document.addEventListener(event, centerImageUnderPointer)
-      );
-      var toggleBarPageX = document
-        .getElementById("toggleBar")
-        .getBoundingClientRect().x;
-
-      const deletionContainer = document.getElementsByClassName(
-        "trash-box-container"
-      );
-      if (deletionContainer.length == 0) {
-        // this shouldn't happen but just in case
-        throw new Error(
-          "Unable to find element trash-box-container by class name"
-        );
-      }
-      const deletionBox = document.getElementsByClassName(
-        "trash-box-container"
-      )[0];
-      const deletionBoxBottom = deletionBox.getBoundingClientRect().bottom;
-      console.debug(`DeletionBox bottom (Y coord): ${deletionBoxBottom}`);
-
-      // (3) drop the image, remove unneeded handlers
-      const dragEnd = (endEvent) => {
-        hideDeletionBox();
-        dragMoveEvents.forEach((event) =>
-          document.removeEventListener(event, centerImageUnderPointer)
-        );
-
-        //check if in deletion area
-        const { pageX, pageY } =
-          endEvent instanceof TouchEvent
-            ? endEvent.changedTouches[0]
-            : endEvent;
-
-        console.debug(`Image (x, y): (${pageX}, ${pageY})`);
-
-        if (pageY < deletionBoxBottom) {
-          const copyImageId = image.getAttribute("clone-id");
-          deleteImageCopy(copyImageId).then(function (value) {
-            if (value) {
-              console.log(value);
-              document.body.removeChild(image);
-            } else alert("An error occurred, the image could not be deleted from the database.");
-          });
-          // Check if image dropped within sidebar and remove if true
-        } else if (open && pageX < toggleBarPageX == isLeft) {
-          document.body.removeChild(image);
-        } else {
-          var tempCopyImageId = image.getAttribute("clone-id");
-          var baseId = image.getAttribute("data-id");
-          var weekType = document.getElementById("hdnWeek").value;
-
-          setImageCopy(tempCopyImageId, baseId, pageX, pageY, weekType).then(
-            function (value) {
-              if (value) {
-                console.log(value);
-              } else {
-                alert("An error occurred, the image could not be saved.");
-              }
-            }
-          );
-          image.style.zIndex = 0; //Drop the image below the sidebar
-        }
-        dragEndEvents.forEach((dragEndEvent) =>
-          event.target.removeEventListener(dragEndEvent, dragEnd)
-        );
-      };
-      dragEndEvents.forEach((event) => image.addEventListener(event, dragEnd));
-
-      image.ondragstart = function () {
-        return false;
-      };
-    };
-
-    function dragDelay(event) {
-      console.log(`touchDelay: ${touchDelay}`);
-      if (event instanceof MouseEvent) {
-        dragStart(event);
-      } else {
-        delay = setTimeout(dragStart, touchDelay, event);
-      }
-
-      dragEndEvents.forEach((event) =>
-        image.addEventListener(event, removeDelayChecks)
-      );
-      dragMoveEvents.forEach((event) =>
-        document.addEventListener(event, removeDelayChecks)
-      );
-    }
-
-    if (image.getAttribute("listener") !== "true") {
-      const dragEvent = image.classList.contains("copy")
-        ? dragStart
-        : dragDelay;
-      dragStartEvents.forEach((event) =>
-        image.addEventListener(event, dragEvent)
-      );
-      image.setAttribute("listener", "true");
-    }
-  });
-}
+setUpDate();
 
 function showDeletionBox() {
   document.getElementById("trash-box-container").style.display = "flex";
@@ -338,25 +60,307 @@ function hideDeletionBox() {
   console.log("Hide deletion box triggered.");
 }
 
-// Populate each category of image library
-populateImageLibrary("people");
-populateImageLibrary("transportation");
-populateImageLibrary("popular");
-populateImageLibrary("cafe-restaurants");
-populateImageLibrary("parks-greenspace");
-populateImageLibrary("arts-education");
-populateImageLibrary("volunteering-community");
-populateImageLibrary("entertainment");
-populateImageLibrary("activities-sports");
-populateImageLibrary("holiday-travel");
-populateImageLibrary("places");
-populateImageLibrary("other");
+const getSymbolsById = async () => {
+  const symbols = await ipcRenderer.invoke("get-symbols");
+  const symbolsById = {};
+  for (let symbol of symbols) {
+    symbolsById[symbol.id] = symbol;
+  }
+  return symbolsById;
+};
 
-// Invoke all methods needed to boot up app
-setUpDate();
-getImageCopyModels();
+const createSymbolElement = (symbol) => {
+  const symbolEl = document.createElement("div");
+  symbolEl.classList.add("symbol");
+  symbolEl.classList.add(`${symbol.type}-symbol`);
+  symbolEl.setAttribute("data-id", symbol.id);
 
-//check for new clones every 3 secs
-setInterval(() => {
-  clickDrag();
-}, 1000);
+  const img = document.createElement("img");
+  img.setAttribute("src", symbol.imageFilePath);
+  img.setAttribute("alt", symbol.name);
+  img.classList.add("img-lib");
+  symbolEl.appendChild(img);
+
+  if (symbol.category) {
+    const label = document.createElement("div");
+    label.classList.add("symbol-label");
+    label.innerHTML = symbol.name;
+    label.setAttribute("title", symbol.name);
+    symbolEl.appendChild(label);
+  }
+
+  return symbolEl;
+};
+
+const createSymbolPlacementElement = (symbolsById, placement) => {
+  const elem = createSymbolElement(symbolsById[placement.symbolId]);
+  elem.setAttribute("symbol-placement-id", placement.id);
+  elem.classList.add("symbol-placement");
+
+  elem.style.left = parseInt(placement.posX) - elem.offsetWidth / 2 + "px";
+  elem.style.top = parseInt(placement.posY) - elem.offsetHeight / 2 + "px";
+
+  return elem;
+};
+
+const initSymbolLibrary = (symbols) => {
+  const populateRow = (row, symbol) => {
+    const cell = document.createElement("td");
+
+    cell.appendChild(createSymbolElement(symbol));
+    row.appendChild(cell);
+  };
+
+  // Add types that don't have categories.
+  for (const type of ["people", "transportation"]) {
+    const row = document.getElementById(`${type}-imgs-row`);
+    for (const symbol of symbols.filter((symbol) => symbol.type === type)) {
+      populateRow(row, symbol);
+    }
+  }
+
+  const activitySymbols = symbols.filter(
+    (symbol) => symbol.type === "activities"
+  );
+  const categoryToSymbol = {};
+  for (const symbol of activitySymbols) {
+    const category = symbol.category.name;
+    if (!(category in categoryToSymbol)) {
+      categoryToSymbol[category] = [];
+    }
+
+    categoryToSymbol[category].push(symbol);
+  }
+
+  for (const [category, symbols] of Object.entries(categoryToSymbol)) {
+    const tableBody = document.getElementById("img-library-table");
+
+    const tr = document.createElement("tr");
+
+    const th = document.createElement("th");
+    th.setAttribute("colspan", "4");
+    th.setAttribute("id", "activities-img-row-title");
+    th.classList.add("img-row-title");
+    th.innerHTML = category;
+    tr.appendChild(th);
+
+    tableBody.appendChild(tr);
+
+    const row = document.createElement("tr");
+    row.setAttribute("id", "activities-imgs-row");
+    tableBody.appendChild(row);
+
+    for (const symbol of symbols) {
+      populateRow(row, symbol);
+    }
+  }
+};
+
+const initSymbolPlacements = async (symbolsById, symbolPlacements) => {
+  for (placement of symbolPlacements) {
+    document.body.append(createSymbolPlacementElement(symbolsById, placement));
+  }
+};
+
+const elPosForPointerPos = (el, x, y) => {
+  return [x - el.offsetWidth / 2 + "px", y - el.offsetHeight / 2 + "px"];
+};
+
+(async () => {
+  const symbolsInLibrary = document.getElementsByClassName("symbol");
+  const inCurrentWeek = document.querySelector("#hdnWeek").value === "1";
+
+  const [symbolsById, symbolPlacements, touchDelay] = await Promise.all([
+    getSymbolsById(),
+    ipcRenderer.invoke("get-symbol-placements", inCurrentWeek),
+    ipcRenderer.invoke("get-hold-value"),
+  ]);
+
+  const dragStartEvents = ["touchstart", "mousedown"];
+  const dragMoveEvents = ["touchmove", "mousemove"];
+  const dragEndEvents = ["touchend", "mouseup"];
+
+  let delay;
+
+  function clickDrag() {
+    Array.prototype.forEach.call(symbolsInLibrary, (symbol) => {
+      function removeDelayChecks() {
+        clearTimeout(delay);
+
+        dragEndEvents.forEach((event) =>
+          symbol.removeEventListener(event, removeDelayChecks)
+        );
+        dragMoveEvents.forEach((event) =>
+          document.removeEventListener(event, removeDelayChecks)
+        );
+      }
+
+      const dragStart = (event) => {
+        removeDelayChecks();
+
+        if (!symbol.classList.contains("symbol-placement")) {
+          const clone = symbol.cloneNode(true);
+          clone.setAttribute("listener", "false");
+          let parent = symbol.parentNode;
+          parent.append(clone);
+
+          //finally add copy class to image
+          dragStartEvents.forEach((event) => {
+            symbol.removeEventListener(event, dragDelay);
+            symbol.addEventListener(event, dragStart);
+          });
+
+          symbol.classList.add("symbol-placement");
+        }
+
+        symbol.style.zIndex = 2;
+        document.body.append(symbol);
+
+        showDeletionBox();
+
+        event.preventDefault();
+
+        const centerImageUnderPointer = (event) => {
+          const { pageX, pageY } =
+            event instanceof TouchEvent ? event.changedTouches[0] : event;
+
+          const [left, top] = elPosForPointerPos(symbol, pageX, pageY);
+          symbol.style.left = left;
+          symbol.style.top = top;
+        };
+
+        centerImageUnderPointer(event);
+
+        // (2) move the image on mousemove
+        dragMoveEvents.forEach((event) =>
+          document.addEventListener(event, centerImageUnderPointer)
+        );
+        var toggleBarPageX = document
+          .getElementById("toggleBar")
+          .getBoundingClientRect().x;
+
+        const deletionContainer = document.getElementsByClassName(
+          "trash-box-container"
+        );
+        if (deletionContainer.length == 0) {
+          // this shouldn't happen but just in case
+          throw new Error(
+            "Unable to find element trash-box-container by class name"
+          );
+        }
+        const deletionBox = document.getElementsByClassName(
+          "trash-box-container"
+        )[0];
+        const deletionBoxBottom = deletionBox.getBoundingClientRect().bottom;
+        console.debug(`DeletionBox bottom (Y coord): ${deletionBoxBottom}`);
+
+        // (3) drop the image, remove unneeded handlers
+        const dragEnd = (endEvent) => {
+          hideDeletionBox();
+          dragMoveEvents.forEach((event) =>
+            document.removeEventListener(event, centerImageUnderPointer)
+          );
+
+          dragEndEvents.forEach((dragEndEvent) =>
+            event.target.removeEventListener(dragEndEvent, dragEnd)
+          );
+
+          const symbolPlacementId = symbol.getAttribute("symbol-placement-id");
+
+          const { pageX, pageY } =
+            endEvent instanceof TouchEvent
+              ? endEvent.changedTouches[0]
+              : endEvent;
+
+          const [elX, elY] = elPosForPointerPos(symbol, pageX, pageY);
+
+          // We preemptively remove the symbol and have later logic add it back
+          // in when appropriate.
+          document.body.removeChild(symbol);
+
+          // Check if in deletion area
+          if (pageY < deletionBoxBottom) {
+            if (symbolPlacementId) {
+              ipcRenderer.invoke("delete-symbol-placement", symbolPlacementId);
+            }
+            return;
+          }
+
+          if (open && pageX < toggleBarPageX == isLeft) {
+            return;
+          }
+
+          const symbolId = symbol.getAttribute("data-id");
+
+          if (symbolPlacementId) {
+            document.body.appendChild(symbol);
+            symbol.style.zIndex = 0; //Drop the image below the sidebar
+            ipcRenderer.invoke(
+              "update-symbol-placement",
+              symbolPlacementId,
+              elX,
+              elY
+            );
+          } else {
+            ipcRenderer
+              .invoke(
+                "create-symbol-placement",
+                symbolId,
+                elX,
+                elY,
+                inCurrentWeek
+              )
+              .then((placement) => {
+                console.log(placement);
+                document.body.append(
+                  createSymbolPlacementElement(symbolsById, placement)
+                );
+              });
+          }
+        };
+
+        dragEndEvents.forEach((event) =>
+          symbol.addEventListener(event, dragEnd)
+        );
+
+        symbol.ondragstart = function () {
+          return false;
+        };
+      };
+
+      function dragDelay(event) {
+        console.log(`touchDelay: ${touchDelay}`);
+        if (event instanceof MouseEvent) {
+          dragStart(event);
+        } else {
+          delay = setTimeout(dragStart, touchDelay, event);
+        }
+
+        dragEndEvents.forEach((event) =>
+          symbol.addEventListener(event, removeDelayChecks)
+        );
+        dragMoveEvents.forEach((event) =>
+          document.addEventListener(event, removeDelayChecks)
+        );
+      }
+
+      if (symbol.getAttribute("listener") !== "true") {
+        const dragEvent = symbol.classList.contains("copy")
+          ? dragStart
+          : dragDelay;
+        dragStartEvents.forEach((event) =>
+          symbol.addEventListener(event, dragEvent)
+        );
+        symbol.setAttribute("listener", "true");
+      }
+    });
+  }
+
+  initSymbolLibrary(Object.values(symbolsById));
+  initSymbolPlacements(symbolsById, symbolPlacements);
+
+  //check for new clones every 3 secs
+  setInterval(() => {
+    clickDrag();
+  }, 1000);
+})();

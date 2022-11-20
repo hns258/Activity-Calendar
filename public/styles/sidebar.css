@@ -46,26 +46,8 @@
   height: 8vh; /*WIP sidebar table changes*/
 }
 
-.sidemenu table td img,
-.menuOnLeft table td img {
-  padding: 0;
-  width: 4.9vw;
-  object-fit: scale-down;
-  height: 6.9vh;
-}
-
-#transportation-imgs-row img {
-  background-color: white;
-  object-fit: cover;
-  padding: 15px;
-}
-
 .copy {
   width: 4.9vw !important;
-}
-
-.transportation-imgs-row-copy {
-  padding: 15px;
 }
 
 .activities-imgs-row-copy,
@@ -124,13 +106,6 @@
   width: 2vw;
 }
 
-#activities-imgs-row img,
-#popular-imgs-row img {
-  width: 6.12vw !important;
-  object-fit: scale-down;
-  height: 8vh;
-}
-
 @media only screen and (min-width: 1824px) {
   .settings-area td:nth-child(2) {
     margin-left: 80px;
@@ -184,4 +159,41 @@
     grid-template-rows: 3vh;
     grid-template-columns: 3vw 3vw 3vw 22vw;
   }
+}
+
+.symbol {
+  border-radius: 5px;
+  background-color: white;
+  text-align: center;
+  font-size: 10px;
+  overflow: hidden;
+  height: 100%;
+  aspect-ratio: 1;
+}
+
+.symbol img {
+  width: 100%;
+  object-fit: cover;
+  box-sizing: border-box;
+  aspect-ratio: 1.25;
+}
+
+.symbol .symbol-label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.symbol.symbol-placement {
+  z-index: 0;
+  position: absolute;
+  width: 4.9vw;
+  height: auto;
+}
+
+.transportation-symbol img {
+  aspect-ratio: 1;
+  padding: 15px;
 }
