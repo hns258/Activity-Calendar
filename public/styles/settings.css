@@ -84,11 +84,13 @@ input:checked + .slider:before {
 /* settings page styles */
 .settings-body {
   background-color: #fbeacc;
+  overflow-y: scroll;
 }
-.my-settings {
-  margin-left: 20px !important;
-  margin-top: 20px !important;
+
+#my-settings {
+  padding: 20px 40px 100px 40px;
 }
+
 .title {
   margin-bottom: 20px;
 }
