@@ -1,55 +1,21 @@
-/**
- * Activity Calendar App
- * 2021-08-31
- * PM: Jack Everard
- * Developers: Vaaranan Yogalingam, Kyle Flores, Azhya Knox
- */
-
-//gets current page
-var path = window.location.pathname;
-var page = path.split("/").pop();
-
-// Initializing variables and constants
 var open = false;
 var isLeft = document.querySelector(".isLeftToggle").checked;
-var itemCount = 0;
 const sideMenu = document.querySelector(".sidemenu");
 
-// Coordinates of the currently selected element
-var x = 0;
-var y = 0;
-// Index of element being dragged (i.e. its position relative to all the other images in the side menu library)
-var currentElement = 0;
-// Element being dragged currently OR last element that was dragged
-var toDrag = null;
-// Array of elements that have already been dragged onto the calendar from the library
-var copies = [];
-// Cells of the calendar table
-const containers = document.querySelectorAll(
-  "div.p1 table tr td:not(.extra-col)"
-);
-// Images that can be dragged from the library
-const draggables = document.querySelectorAll("div.sidemenu table tr td img");
-//test
 let imagesInLibrary = document.getElementsByClassName("img-lib");
-let imageArray;
-let deleteBox = document.getElementById("trash-box-container");
 
 // delay variable for image hold
 let delay;
 let touchDelay;
 
-/*****************************************************************/
-/* IPC FUNCTIONS + Node Imports */
 const ipcRenderer = require("electron").ipcRenderer;
 const fs = require("fs");
-const { randomUUID } = require("crypto"); // returns random UUID as string on call
+const { randomUUID } = require("crypto");
 
 ipcRenderer.invoke("get-hold-value").then((holdValue) => {
   touchDelay = holdValue;
 });
 
-// Populates image library with images from database
 const populateImageLibrary = async (category) => {
   if (
     category === "people" ||
@@ -96,9 +62,6 @@ const populateRow = (rowToModify, category) => {
   });
 };
 
-/* Jagoda - implement the following three functions into the frontend script */
-// Call to save or update image copy in database
-// returns true if database save was successful
 const setImageCopy = async (imageCopyID, baseID, posX, posY, weekType) => {
   return ipcRenderer
     .invoke("set-image-copy", imageCopyID, baseID, posX, posY, weekType)
@@ -107,8 +70,6 @@ const setImageCopy = async (imageCopyID, baseID, posX, posY, weekType) => {
     });
 };
 
-// Call to delete image copy in database
-// returns true if database deletion was successful
 const deleteImageCopy = async (imageCopyID) => {
   return ipcRenderer
     .invoke("delete-image-copy", imageCopyID)
@@ -117,14 +78,6 @@ const deleteImageCopy = async (imageCopyID) => {
     });
 };
 
-// Call to return image copy model from database
-// Returns image copy array
-//    array[i][0] = image path
-//    array[i][1] = image copy ID
-//    array[i][2] = base image ID
-//    array[i][3] = position x
-//    array[i][4] = position y
-//    array[i][5] = file name
 async function getImageCopyModels() {
   let weekIndicator = document.querySelector("#hdnWeek").value;
   ipcRenderer
@@ -164,11 +117,10 @@ async function getImageCopyModels() {
     });
 }
 
-/*****************************************************************/
-
-// Initializing the date functionality of the app
 // Note how sunday is a special case (in the Date library, Sunday = 0, Monday = 1, etc. but in our calendar, "This week" = 0, Monday = 1, ... Sunday = 7)
 function setUpDate() {
+  var page = window.location.pathname.split("/").pop();
+
   if (page === "index.html") {
     var dateToday = new Date();
     var day = dateToday.getDay();
@@ -177,7 +129,11 @@ function setUpDate() {
     );
     //exclude extra-col from list
     console.log(days);
-    console.log(containers);
+
+    const containers = document.querySelectorAll(
+      "div.p1 table tr td:not(.extra-col)"
+    );
+
     if (day == 0) {
       var sunday = 7;
       days[sunday].style.backgroundColor = "#c5e6f5";
@@ -219,7 +175,7 @@ const dragEndEvents = ["touchend", "mouseup"];
 
 function clickDrag() {
   Array.prototype.forEach.call(imagesInLibrary, (image) => {
-    function removeDelayChecks(event) {
+    function removeDelayChecks() {
       clearTimeout(delay);
 
       dragEndEvents.forEach((event) =>
@@ -231,7 +187,7 @@ function clickDrag() {
     }
 
     const dragStart = (event) => {
-      removeDelayChecks(event);
+      removeDelayChecks();
 
       if (!image.classList.contains("copy")) {
         console.log("making clone and moving copy");
@@ -241,11 +197,6 @@ function clickDrag() {
         let parent = image.parentNode;
         parent.append(clone);
 
-        //add clone to imageLibrary array
-        imageArray = Array.from(imagesInLibrary);
-        //remove image and add clone
-        imageArray = imageArray.filter((element) => element !== image);
-        imageArray.push(clone);
         //finally add copy class to image
         dragStartEvents.forEach((event) => {
           image.removeEventListener(event, dragDelay);
@@ -262,12 +213,8 @@ function clickDrag() {
       image.style.width = "4.9vw";
       image.style.objectFit = "scale-down";
       document.body.append(image);
-      if (
-        document.querySelector("#divSidemenu")
-        //.getAttribute('sidemenu-is-visible') === 'false'
-      ) {
-        showDeletionBox();
-      }
+
+      showDeletionBox();
 
       function centerImageAt(pageX, pageY) {
         image.style.left = pageX - image.offsetWidth / 2 + "px";

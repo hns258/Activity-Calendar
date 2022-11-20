@@ -1,4 +1,3 @@
-//global variables
 var open = false;
 let leftSideMenu = document.querySelector(".sidemenu");
 let sideBarImg = document.querySelector(".sidebar");

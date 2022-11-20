@@ -8,7 +8,6 @@ function initializeDeletionBox() {
   var element = document.querySelector(".sidemenu") || null;
   if (element === null) {
     //call reverse check here
-    console.log("DEV, YOU NEED TO DO A REVERSE CHECK BECAUSE CLASS DNE!");
     initializeDeletionBox_L();
   } else {
     console.log(element.computedStyleMap().get("right"));

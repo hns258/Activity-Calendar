@@ -1,13 +1,3 @@
-/*
- * Activity Calendar App
- * 2021-09-12
- * PM: Jack Everard
- * Developers: Vaaranan Yogalingam, Kyle Flores, Azhya Knox
- *
- */
-
-/*****************************************************************/
-/* IPC FUNCTIONS */
 const ipcSettingsRenderer = require("electron").ipcRenderer;
 
 var delayValue;
