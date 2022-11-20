@@ -107,11 +107,9 @@ async function getImageCopyModels() {
           elem.style.zIndex = 0;
           elem.style.width = "4.9vw";
           elem.style.objectFit = "scale-down";
+          elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + "px";
+          elem.style.top = parseInt(item[4]) - elem.offsetHeight / 2 + "px";
           document.body.append(elem);
-          setTimeout(() => {
-            elem.style.left = parseInt(item[3]) - elem.offsetWidth / 2 + "px";
-            elem.style.top = parseInt(item[4]) - elem.offsetHeight / 2 + "px";
-          }, 0.00001);
         }
       });
     });
@@ -122,29 +120,24 @@ function setUpDate() {
   var page = window.location.pathname.split("/").pop();
 
   if (page === "index.html") {
-    var dateToday = new Date();
-    var day = dateToday.getDay();
     const days = document.querySelectorAll(
       "div.p1 table tr th:not(.extra-col)"
     );
-    //exclude extra-col from list
-    console.log(days);
 
     const containers = document.querySelectorAll(
       "div.p1 table tr td:not(.extra-col)"
     );
 
+    let day = new Date().getDay();
+    // We handle 'Sunday' differently than the Date library.
     if (day == 0) {
-      var sunday = 7;
-      days[sunday].style.backgroundColor = "#c5e6f5";
-      for (var i = sunday - 1; i < 21; i += 7) {
-        containers[i].style.backgroundColor = "#c5e6f5";
-      }
-    } else {
-      days[day].style.backgroundColor = "#c5e6f5";
-      for (var j = day - 1; j < 21; j += 7) {
-        containers[j].style.backgroundColor = "#c5e6f5";
-      }
+      day = 7;
+    }
+
+    days[day].style.backgroundColor = "#c5e6f5";
+    for (var j = day - 1; j < 21; j += 7) {
+      containers[j].style.backgroundColor = "#c5e6f5";
+      console.log(containers[j]);
     }
   }
 }
