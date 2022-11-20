@@ -68,7 +68,7 @@ describe("ActivityCalendar", async function () {
 
       const symbols = await activityCalendar.getSymbols();
       assert.strictEqual(symbols.length, 1);
-      assert.deepInclude(symbols[0], symbol.dataValues);
+      assert.deepInclude(symbols[0], symbol);
       assert.strictEqual(symbols[0].category.name, "Popular");
     });
   });
@@ -105,7 +105,7 @@ describe("ActivityCalendar", async function () {
           "123"
         );
 
-        assert.include(symbol.dataValues, {
+        assert.include(symbol, {
           name: expectedName,
           type: "activities",
           posX: "10px",
@@ -251,7 +251,7 @@ describe("ActivityCalendar", async function () {
       const placements = await activityCalendar.getSymbolPlacements(
         /*inCurrentWeek=*/ true
       );
-      assert.deepInclude(placements[0].dataValues, placement.dataValues);
+      assert.deepInclude(placements[0], placement);
 
       const nextWeekPlacements = await activityCalendar.getSymbolPlacements(
         /*inCurrentWeek=*/ false
@@ -290,7 +290,7 @@ describe("ActivityCalendar", async function () {
       const placements = await activityCalendar.getSymbolPlacements(
         /*inCurrentWeek=*/ true
       );
-      assert.deepInclude(placements[0].dataValues, {
+      assert.deepInclude(placements[0], {
         posX: "20px",
         posY: "40px",
       });

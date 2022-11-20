@@ -21,6 +21,12 @@ module.exports = (sequelize) => {
   category.hasMany(symbol);
   symbol.belongsTo(category);
 
-  symbol.hasMany(symbolPlacement);
-  symbolPlacement.belongsTo(symbol);
+  symbol.hasMany(symbolPlacement, {
+    foreignKey: { allowNull: false },
+    onDelete: "CASCADE",
+  });
+  symbolPlacement.belongsTo(symbol, {
+    foreignKey: { allowNull: false },
+    onDelete: "CASCADE",
+  });
 };

@@ -172,6 +172,20 @@ const updateFolderLocation = async (category, typePath) => {
     imageType.update({ location: typePath, isCustomized: true });
 };
 
+const serializeSymbolModel = (symbol) => {
+  const serialized = Object.assign(symbol.dataValues, {
+    imageFilePath: symbol.imageFilePath,
+  });
+  if (serialized.category) {
+    serialized.category = serialized.category.dataValues;
+  }
+  return serialized;
+};
+
+const serializeSymbolPlacement = (symbolPlacement) => {
+  return symbolPlacement.dataValues;
+};
+
 class ActivityCalendar {
   static _USER_SETTINGS_ID = 1;
 
@@ -207,15 +221,7 @@ class ActivityCalendar {
     });
 
     // We only want to expose the data values.
-    return symbols.map((symbol) => {
-      symbol = Object.assign(symbol.dataValues, {
-        imageFilePath: symbol.imageFilePath,
-      });
-      if (symbol.category) {
-        symbol.category = symbol.category.dataValues;
-      }
-      return symbol;
-    });
+    return symbols.map(serializeSymbolModel);
   }
 
   // `categoryId` is only valid for Activities.
@@ -234,7 +240,7 @@ class ActivityCalendar {
       fs.constants.COPYFILE_EXCL
     );
 
-    return models.symbol.create({
+    const symbol = await models.symbol.create({
       name,
       imageFileName: destFileName,
       type,
@@ -243,19 +249,26 @@ class ActivityCalendar {
       zoom,
       categoryId,
     });
+
+    return serializeSymbolModel(symbol);
   }
 
   async getSymbolPlacements(inCurrentWeek) {
-    return models.symbolPlacement.findAll({ where: { inCurrentWeek } });
+    const placements = await models.symbolPlacement.findAll({
+      where: { inCurrentWeek },
+    });
+    return placements.map(serializeSymbolPlacement);
   }
 
   async createSymbolPlacement(symbolId, posX, posY, inCurrentWeek) {
-    return models.symbolPlacement.create({
-      symbolId,
-      posX,
-      posY,
-      inCurrentWeek,
-    });
+    return serializeSymbolPlacement(
+      await models.symbolPlacement.create({
+        symbolId,
+        posX,
+        posY,
+        inCurrentWeek,
+      })
+    );
   }
 
   async updateSymbolPlacement(id, posX, posY) {
