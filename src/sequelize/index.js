@@ -2,8 +2,6 @@ const { Sequelize } = require("sequelize");
 const path = require("path");
 const app = require("electron").app;
 
-const associations = require("./associations");
-
 const databaseDir =
   app && app.isPackaged
     ? path.join(process.resourcesPath, "database")
@@ -29,10 +27,12 @@ const modelDefiners = [
   require("./models/category"),
 ];
 
-for (const modelDefiner of modelDefiners) {
-  modelDefiner(sequelize, databaseDir);
-}
-
-associations(sequelize);
+modelDefiners
+  .map((modelDefiner) => modelDefiner(sequelize, databaseDir))
+  .forEach((model) => {
+    if (model.associate) {
+      model.associate(sequelize);
+    }
+  });
 
 module.exports = { sequelize, databaseDir };

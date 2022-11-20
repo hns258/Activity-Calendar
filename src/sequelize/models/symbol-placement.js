@@ -1,7 +1,7 @@
 const DataTypes = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define("symbolPlacement", {
+  const SymbolPlacement = sequelize.define("symbolPlacement", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -23,4 +23,15 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
   });
+
+  SymbolPlacement.associate = (sequelize) => {
+    const { symbol } = sequelize.models;
+
+    SymbolPlacement.belongsTo(symbol, {
+      foreignKey: { allowNull: false },
+      onDelete: "CASCADE",
+    });
+  };
+
+  return SymbolPlacement;
 };

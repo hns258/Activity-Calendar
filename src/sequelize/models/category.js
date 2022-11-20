@@ -1,7 +1,7 @@
 const DataTypes = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define("category", {
+  const Category = sequelize.define("category", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -14,4 +14,12 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
   });
+
+  Category.associate = (sequelize) => {
+    const { symbol } = sequelize.models;
+
+    Category.hasMany(symbol);
+  };
+
+  return Category;
 };
