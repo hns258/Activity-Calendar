@@ -1,6 +1,4 @@
 const ipcRenderer = require("electron").ipcRenderer;
-const fs = require("fs");
-const { randomUUID } = require("crypto");
 
 const toggleSidemenu = (() => {
   var open = false;

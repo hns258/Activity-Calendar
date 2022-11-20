@@ -84,27 +84,15 @@ input:checked + .slider:before {
 /* settings page styles */
 .settings-body {
   background-color: #fbeacc;
+  overflow-y: scroll;
 }
-.my-settings {
-  margin-left: 20px !important;
-  margin-top: 20px !important;
+
+#my-settings {
+  padding: 20px 40px 100px 40px;
 }
+
 .title {
   margin-bottom: 20px;
-}
-.folder-dir {
-  margin: 20px auto;
-  padding: 5px auto;
-}
-.folder-dir h3 {
-  font-size: 1rem;
-  font-weight: 500;
-  font-family: "Billionary", sans-serif;
-}
-.paths {
-  display: block;
-  font-family: "K Cyrillic Light", sans-serif;
-  letter-spacing: 1.5px;
 }
 .back-btn {
   font-family: "Billionary", sans-serif;
@@ -123,28 +111,6 @@ input:checked + .slider:before {
   margin-top: 20px;
   font-family: "Billionary", sans-serif;
   font-size: 0.8rem;
-}
-.btn-file {
-  position: relative;
-  overflow: hidden;
-  background-color: #efefef !important;
-  border: 1px solid black !important;
-  color: black !important;
-}
-.btn-file input[type="file"] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  min-width: 100%;
-  min-height: 100%;
-  font-size: 100px;
-  text-align: right;
-  filter: alpha(opacity=0);
-  opacity: 0;
-  outline: none;
-  background: white;
-  cursor: inherit;
-  display: block;
 }
 
 /* MEDIA BREAKPOINTS */
@@ -193,35 +159,6 @@ input:checked + .slider:before {
   .title {
     font-size: 3.5rem;
   }
-  .folder-dir {
-    padding: 20px 0;
-  }
-  .folder-dir h3 {
-    font-size: 2.5rem;
-  }
-  .folder-dir input {
-    font-size: 2.5rem;
-  }
-  .btn-file {
-    width: 200px;
-    height: 50px;
-    font-size: 1.25rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  #activities-folder-loc {
-    display: inline-flex !important;
-    width: 200px;
-    height: 50px;
-    font-size: 1.25rem !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  .paths {
-    font-size: 1.5rem;
-    margin-bottom: 50px;
-  }
   .desc {
     font-size: 1.5rem;
   }
@@ -232,15 +169,5 @@ input:checked + .slider:before {
     height: 4%;
     width: 8%;
     font-size: 1.5rem !important;
-  }
-  .cat-label {
-    font-size: 1.5rem;
-    margin-left: 20px;
-  }
-  #category-dropdown {
-    width: 300px;
-    height: 50px;
-    text-align: center;
-    font-size: 1.25rem !important;
   }
 }

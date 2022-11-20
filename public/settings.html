@@ -34,83 +34,8 @@
   </head>
 
   <body class="settings-body">
-    <div class="container-fluid my-settings">
+    <div id="my-settings" class="container-fluid">
       <h2 class="title">Settings</h2>
-      <div>
-        <span
-          class="btn btn-primary btn-file"
-          onclick="goToSymbolCreator()"
-          name="people-folder-loc"
-          id="people-folder-loc"
-        >
-          Symbol Creator
-        </span>
-      </div>
-      <form class="directory-form">
-        <div class="folder-dir people-folder">
-          <h3>Choose folder where the people images are</h3>
-          <span
-            class="btn btn-primary btn-file"
-            onclick="selectSettingsFolder(event)"
-            name="people-folder-loc"
-            id="people-folder-loc"
-          >
-            Select Folder...
-          </span>
-          <span class="people-folder-path paths"></span>
-        </div>
-        <div class="folder-dir transport-folder">
-          <h3>Choose folder where the transport images are</h3>
-          <span
-            class="btn btn-primary btn-file"
-            onclick="selectSettingsFolder(event)"
-            name="transportation-folder-loc"
-            id="transportation-folder-loc"
-          >
-            Select Folder...
-          </span>
-          <span class="transportation-folder-path paths"></span>
-        </div>
-        <div class="folder-dir popular-folder">
-          <h3>Choose folder where the popular images are</h3>
-          <span
-            class="btn btn-primary btn-file"
-            onclick="selectSettingsFolder(event)"
-            name="popular-folder-loc"
-            id="popular-folder-loc"
-          >
-            Select Folder...
-          </span>
-          <span class="popular-folder-path paths"></span>
-        </div>
-        <div class="folder-dir activity-folder">
-          <h3>Choose folder where the activity images are</h3>
-          <span
-            class="btn btn-primary btn-file"
-            onclick="selectSettingsFolder(event)"
-            name="activities-folder-loc"
-            id="activities-folder-loc"
-          >
-            Select Folder...
-          </span>
-          <span for="category-dropdown" class="cat-label">Category: </span>
-          <select onchange="initializeSettings()" id="category-dropdown">
-            <option value="cafe-restaurants">Cafe & Restaurants</option>
-            <option value="parks-greenspace">Parks & Greenspace</option>
-            <option value="arts-education">Arts & Education</option>
-            <option value="volunteering-community">
-              Volunteering & Community
-            </option>
-            <option value="entertainment">Entertainment</option>
-            <option value="activities-sports">Activities & Sports</option>
-            <option value="holiday-travel">Holiday & Travel</option>
-            <option value="places">Places</option>
-            <option value="other">Other</option>
-          </select>
-          <span class="activities-folder-path paths"></span>
-        </div>
-      </form>
-
       <div>
         <label class="form-label h3" for="delayRange"
           >Image Hold Sensitivity</label
