@@ -19,6 +19,10 @@ const serializeSymbolPlacement = (symbolPlacement) => {
   return symbolPlacement.dataValues;
 };
 
+const serializeWeekTemplate = (weekTemplate) => {
+  return weekTemplate.dataValues;
+};
+
 class ActivityCalendar {
   static _USER_SETTINGS_ID = 1;
 
@@ -99,20 +103,40 @@ class ActivityCalendar {
     return placements.map(serializeSymbolPlacement);
   }
 
-  async createSymbolPlacement(symbolId, date, posX, posY) {
+  async getSymbolPlacementsForWeekTemplate(weekTemplateId) {
+    const placements = await models.symbolPlacement.findAll({
+      where: { weekTemplateId },
+    });
+    return placements.map(serializeSymbolPlacement);
+  }
+
+  async createSymbolPlacement(
+    symbolId,
+    date,
+    posX,
+    posY,
+    weekTemplateId = null // TODO is this is ok or do we want to use smth like -1?
+  ) {
     return serializeSymbolPlacement(
       await models.symbolPlacement.create({
         symbolId,
         date,
         posX,
         posY,
+        weekTemplateId,
       })
     );
   }
 
-  async updateSymbolPlacement(id, date, posX, posY) {
+  async createWeekTemplate(name, description = "") {
+    return serializeWeekTemplate(
+      await models.weekTemplate.create({ name, description })
+    );
+  }
+
+  async updateSymbolPlacement(id, date, posX, posY, weekTemplateId = null) {
     const [numRows, rows] = await models.symbolPlacement.update(
-      { date, posX, posY },
+      { date, posX, posY, weekTemplateId },
       { where: { id } }
     );
     if (numRows === 0) {
@@ -132,6 +156,21 @@ class ActivityCalendar {
       );
     }
   }
+
+  // TODO verify this is ok, similar to .net SqlDateTime.MinValue and placed here vs top
+  static MIN_DATE = new Date(0);
+
+  async addSymbolToWeekTemplate(symbolId, posX, posY, weekTemplateId) {
+    await this.createSymbolPlacement(
+      symbolId,
+      ActivityCalendar.MIN_DATE, // TODO check this vs null (column is non-nullable now)
+      posX,
+      posY,
+      weekTemplateId
+    );
+  }
+
+  // TODO add update (positions have changed) and delete
 
   _log(message) {
     if (this.verbose) {

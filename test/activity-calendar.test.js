@@ -420,4 +420,42 @@ describe("ActivityCalendar", async function () {
       );
     });
   });
+
+  describe("week templates", async function () {
+    // TODO check if ok to move this outside scope so all tests can use?
+    const createSymbol = async (name) => {
+      return activityCalendar.createSymbol(
+        "/images/1.jpg",
+        name,
+        "activities",
+        "25px",
+        "25px",
+        0,
+        popularCategory.id
+      );
+    };
+
+    const createWeekTemplate = async (name) => {
+      return activityCalendar.createWeekTemplate(name);
+    };
+
+    it("create is successful", async function () {
+      const symbol = await createSymbol("foo");
+      const weekTemplate = await createWeekTemplate("winter week");
+
+      await activityCalendar.addSymbolToWeekTemplate(
+        symbol.id,
+        "10px",
+        "20px",
+        weekTemplate.id
+      );
+
+      const placementsForWeekTemplate =
+        await activityCalendar.getSymbolPlacementsForWeekTemplate(
+          weekTemplate.id
+        );
+
+      assert.strictEqual(placementsForWeekTemplate[0].symbolId, symbol.id);
+    });
+  });
 });
