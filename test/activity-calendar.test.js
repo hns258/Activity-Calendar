@@ -422,7 +422,7 @@ describe("ActivityCalendar", async function () {
   });
 
   describe("week templates", async function () {
-    // TODO check if ok to move this outside scope so all tests can use?
+    // TODO check if ok to move this to outer scope so all tests can use?
     const createSymbol = async (name) => {
       return activityCalendar.createSymbol(
         "/images/1.jpg",
@@ -435,13 +435,11 @@ describe("ActivityCalendar", async function () {
       );
     };
 
-    const createWeekTemplate = async (name) => {
-      return activityCalendar.createWeekTemplate(name);
-    };
-
     it("create is successful", async function () {
       const symbol = await createSymbol("foo");
-      const weekTemplate = await createWeekTemplate("winter week");
+      const weekTemplate = await activityCalendar.createWeekTemplate(
+        "winter week"
+      );
 
       await activityCalendar.addSymbolToWeekTemplate(
         symbol.id,
