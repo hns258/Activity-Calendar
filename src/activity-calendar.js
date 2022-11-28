@@ -133,6 +133,38 @@ class ActivityCalendar {
     }
   }
 
+  /**
+   * Image Type Ids: People = 1, Transportation = 2, Popular = 3, ids > 3 are types of activities -
+   * TODO check if this needs to be changed after db rewrite, maybe get ID from string instead
+   */
+  static _TYPE_ACTIVITIES = "activities";
+  /**
+   * Get the categories and names of activities (except "Popular" to exclude dupes).
+   * @returns array of categories and activity images' names
+   */
+  async getActivityImageKeywords() {
+    const [images, image_types] = await Promise.all([
+      models.symbol.findAll({
+        attributes: ["name"],
+        raw: true,
+        where: {
+          type: ActivityCalendar._TYPE_ACTIVITIES,
+        },
+      }),
+      models.category.findAll({
+        attributes: ["name"],
+        raw: true,
+      }),
+    ]);
+
+    const allKeywords = images.concat(image_types);
+    console.log(`found ${allKeywords.length} words`);
+
+    return Array.from(allKeywords).map((word) =>
+      word.name.trim().toLowerCase()
+    );
+  }
+
   _log(message) {
     if (this.verbose) {
       console.log(message);

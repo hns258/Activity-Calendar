@@ -6,8 +6,8 @@ var isLeft = false;
 const sideToggleBtn = document.querySelector(".isLeftToggle");
 
 //gets current page
-var path = window.location.pathname;
-var page = path.split("/").pop();
+var windowPath = window.location.pathname;
+var page = windowPath.split("/").pop();
 
 // this function is to transition settings sidebar from right to left side of screen
 function switchToLeft() {

@@ -88,3 +88,7 @@ ipcMain.handle(
 ipcMain.handle("delete-symbol-placement", async (event, id) => {
   return calendar.deleteSymbolPlacement(id);
 });
+
+ipcMain.handle('get-activity-image-keywords', async (event) => {
+  return calendar.getActivityImageKeywords();
+})

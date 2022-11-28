@@ -70,7 +70,7 @@
   grid-column: 2 / 4;
 }
 #transportation-imgs-row,
-#activities-imgs-row {
+.activities-imgs-row {
   display: grid;
   grid-template-columns: repeat(4, 7.5vh);
   grid-gap: 26px;
@@ -78,6 +78,23 @@
   margin: 30px 10px 10px 25px;
 }
 
+.activities-search-container {
+  height: 3vh !important;
+}
+
+#activities-search-bar {
+  margin: 30px 10px 30px 25px;
+  width: 20vw;
+  padding: 15px 10px 15px 10px;
+  font-family: Billionary, serif;
+  border: 2px solid;
+  height: 2vh;
+  background-color: #fbf7ef;
+}
+
+::placeholder {
+  color: black;
+}
 .settings-area {
   margin-top: 2vh;
   grid-template-rows: 2vh;
@@ -150,7 +167,7 @@
   }
 
   #transportation-imgs-row,
-  #activities-imgs-row {
+  .activities-imgs-row {
     grid-gap: 2vh 3.28vh;
     margin: 20px 20px;
   }
@@ -163,6 +180,18 @@
   #activities-imgs-row {
     /*grid-auto-rows: 6vh;*/
     grid-template-columns: repeat(4, 7.5vh);
+  }
+
+  #activities-search-bar {
+    margin: 20px 20px;
+    height: 2vh;
+    font-size: 1.75rem;
+    border: 3px solid;
+  }
+
+  ::placeholder {
+    color: black;
+    font-size: 1.75rem;
   }
 
   #people-imgs-row {

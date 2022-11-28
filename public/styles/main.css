@@ -18,6 +18,11 @@ body {
   font-family: "Billionary";
   src: local("Billionary"),
     url(../misc/fonts/Billionary-Regular.otf) format("truetype");
+  /* Ensure only letters are used from this font file (the only symbols provided
+  in the file), w/o this addition, numbers and punctuation will be shown
+  as the logo
+  (https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/unicode-range) */
+  unicode-range: U+0041-005A, U+0061-007A;
 }
 
 @font-face {

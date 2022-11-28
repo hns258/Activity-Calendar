@@ -1,3 +1,4 @@
+// const { KeywordSearch } = require("./keyword-search");
 const ipcRenderer = require("electron").ipcRenderer;
 
 const toggleSidemenu = (() => {
@@ -77,6 +78,7 @@ const createSymbolElement = (symbol) => {
   img.setAttribute("src", symbol.imageFilePath);
   img.setAttribute("alt", symbol.name);
   img.classList.add("img-lib");
+
   symbolEl.appendChild(img);
 
   if (symbol.category) {
@@ -101,9 +103,12 @@ const createSymbolPlacementElement = (symbolsById, placement) => {
   return elem;
 };
 
+const excludeFromSearch = ["people", "transportation", "popular"];
+
 const initSymbolLibrary = (symbols) => {
   const populateRow = (row, symbol) => {
     const cell = document.createElement("td");
+    cell.classList.add("activity-img-holder"); // TODO change to cell
 
     cell.appendChild(createSymbolElement(symbol));
     row.appendChild(cell);
@@ -139,13 +144,15 @@ const initSymbolLibrary = (symbols) => {
     th.setAttribute("colspan", "4");
     th.setAttribute("id", "activities-img-row-title");
     th.classList.add("img-row-title");
+    th.setAttribute("id", category + "-img-row-title");
     th.innerHTML = category;
     tr.appendChild(th);
 
     tableBody.appendChild(tr);
 
     const row = document.createElement("tr");
-    row.setAttribute("id", "activities-imgs-row");
+    row.setAttribute("class", "activities-imgs-row");
+    row.setAttribute("id", `${category}-imgs-row`);
     tableBody.appendChild(row);
 
     for (const symbol of symbols) {
@@ -184,6 +191,84 @@ const getWeekBoundaries = (now, inCurrentWeek) => {
   return [weekStart, weekEnd];
 };
 
+let keywordSearch;
+
+// Using template for the activity search bar so any changes made here will be reflected in both index.html and next_week.html
+const searchBarTemplate = document.createElement("template");
+searchBarTemplate.innerHTML = `
+	<tr class="activities-search-container">
+		<td class="activities-search-container">
+			<input type="search" id="activities-search-bar" oninput="filterActivities()" placeholder="Search activities...">
+		</td>
+	</tr>
+`;
+document
+  .getElementById("transportation-imgs-row")
+  .after(searchBarTemplate.content);
+
+/* Filter for images of activities to display based on search bar values.
+ * Applies "fuzzy searching" via fuse.io
+ *
+ * NOTE: If running into performance issues, consider searching only after "Enter" key (per ticket) or when >3(?) chars were entered (e.g., loop only if keywordsToFind.len() > 3)
+ * TODO Consider adding a settings or checkbox if exact phrase search is needed
+ */
+function filterActivities() {
+  const searchBarInput = document
+    .getElementById("activities-search-bar")
+    .value.trim();
+
+  // if (searchBarInput.length < 2 ) return; // TODO remove later
+
+  // TODO ask team if this is ok performance-wise (can "cache" this outside instead but would need to refresh if user adds a new activity)
+  // TODO make sure transportation symbols are being excluded
+  const activityCells = document.getElementsByClassName("activity-img-holder"); // Can't just hide image (need parent's <td>), would leave an empty space instead of collapsing
+  const activityRows = document.getElementsByClassName("activities-imgs-row");
+  const categoryTitles = document.getElementsByClassName("img-row-title");
+
+  const activityElements = Array.from(activityCells)
+    .concat(Array.from(activityRows))
+    .concat(Array.from(categoryTitles));
+
+  // When no words are being searched, clear out style changes for previous searc
+  // Currently there is an issue where fuse does not return all if the search query is empty
+  // https://github.com/krisk/Fuse/issues/664
+  if (searchBarInput.length === 0) {
+    // document.getElementById("popular-imgs-row").style.removeProperty("display");
+
+    for (const element of activityElements) {
+      element.style.removeProperty("display");
+    }
+    return;
+  }
+
+  // No need to show popular activities when searching
+  // document.getElementById("popular-imgs-row").style.display = "none";
+  // document.getElementById("popular-img-row-title").style.display = "none";
+
+  console.log(`User searching for [${searchBarInput}]`);
+
+  const fuzzyResults = keywordSearch.getFuzzySearchResults(searchBarInput);
+
+  const imgObjects = keywordSearch.setMatches(
+    Array.from(activityCells),
+    fuzzyResults
+  );
+
+  for (const imgObject of imgObjects) {
+    imgObject.cell.style.display = imgObject.matched ? "" : "none";
+  }
+
+  const grouped = keywordSearch.groupMatchedByCategory(imgObjects);
+
+  for (const group of grouped) {
+    const elementIdTitle = group.category + "-img-row-title";
+    const elementIdRow = group.category + "-imgs-row";
+    const displayValue = group.matched ? "" : "none";
+    document.getElementById(elementIdTitle).style.display = displayValue;
+    document.getElementById(elementIdRow).style.display = displayValue;
+  }
+}
+
 (async () => {
   const symbolsInLibrary = document.getElementsByClassName("symbol");
   const inCurrentWeek = document.querySelector("#hdnWeek").value === "1";
@@ -194,6 +279,12 @@ const getWeekBoundaries = (now, inCurrentWeek) => {
     getSymbolsById(),
     ipcRenderer.invoke("get-symbol-placements", weekStart, weekEnd),
     ipcRenderer.invoke("get-hold-value"),
+    // TODO Need to refresh when new symbol is added!! or retrieve from DOM (check with whoever is doing symbol creator)
+    // Check with team if it's better to just extract from DOM
+    ipcRenderer.invoke("get-activity-image-keywords").then((keywords) => {
+      console.log("retrieving activity keywords");
+      keywordSearch = new KeywordSearch(keywords);
+    }),
   ]);
 
   const dragStartEvents = ["touchstart", "mousedown"];
