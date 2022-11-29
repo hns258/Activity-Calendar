@@ -1,25 +1,35 @@
 const ipcRenderer = require("electron").ipcRenderer;
 
-const toggleSidemenu = (() => {
-  var open = false;
-  var isLeft = document.querySelector(".isLeftToggle").checked;
+const isSidemenuOpen = () => {
+  return document
+    .querySelector("#divSidemenu")
+    .hasAttribute("sidemenu-is-visible");
+};
 
-  // Slide-in library menu functionality initialization
-  return () => {
-    const sideMenu = document.querySelector(".sidemenu");
-    sideMenu.style[isLeft ? "left" : "right"] = open
-      ? isLeft
-        ? "-29.5vw"
-        : "-30vw"
-      : "0px";
+const isSidemenuLeft = () => {
+  return document.querySelector(".isLeftToggle").checked;
+};
 
+const toggleSidemenu = () => {
+  const isOpen = isSidemenuOpen();
+  const isLeft = isSidemenuLeft();
+  const sideMenu = document.querySelector(".sidemenu");
+  sideMenu.style[isLeft ? "left" : "right"] = isOpen
+    ? isLeft
+      ? "-29.5vw"
+      : "-30vw"
+    : "0px";
+
+  if (isOpen) {
     document
       .querySelector("#divSidemenu")
-      .setAttribute("sidemenu-is-visible", !open);
-
-    open = !open;
-  };
-})();
+      .removeAttribute("sidemenu-is-visible");
+  } else {
+    document
+      .querySelector("#divSidemenu")
+      .setAttribute("sidemenu-is-visible", "");
+  }
+};
 
 function setUpDate() {
   var page = window.location.pathname.split("/").pop();
@@ -298,7 +308,7 @@ const getWeekBoundaries = (now, inCurrentWeek) => {
           // in when appropriate.
           document.body.removeChild(symbol);
 
-          // Check if in deletion area
+          // Checks if in deletion area.
           if (pageY < deletionBoxBottom) {
             if (symbolPlacementId) {
               ipcRenderer.invoke("delete-symbol-placement", symbolPlacementId);
@@ -306,7 +316,8 @@ const getWeekBoundaries = (now, inCurrentWeek) => {
             return;
           }
 
-          if (open && pageX < toggleBarPageX == isLeft) {
+          // Checks if symbol is dropped in the sidemenu.
+          if (isSidemenuOpen() && pageX < toggleBarPageX == isSidemenuLeft()) {
             return;
           }
 

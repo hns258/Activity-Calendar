@@ -1,4 +1,3 @@
-var open = false;
 let leftSideMenu = document.querySelector(".sidemenu");
 let sideBarImg = document.querySelector(".sidebar");
 let switchTitle = document.querySelector(".switch-title");
