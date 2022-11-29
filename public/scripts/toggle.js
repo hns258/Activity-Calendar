@@ -10,11 +10,8 @@ var page = path.split("/").pop();
 
 // this function is to transition settings sidebar from right to left side of screen
 function switchToLeft() {
-  console.log(leftSideMenu);
-  console.log("toggle has been clicked!");
   //reset isLeft based on
   isLeft = sideToggleBtn.checked;
-  console.log(isLeft);
   //when toggle is clicked
   if (!isLeft) {
     //left settings should be on
@@ -37,13 +34,9 @@ function switchToLeft() {
     //set the toggle to ON (blue)
     setTimeout(() => {
       sideToggleBtn.checked = true;
-      console.log(sideToggleBtn);
-      console.log(sideToggleBtn.checked);
       //set isLeft boolean to TRUE
-      console.log("done");
     }, 1500);
     isLeft = true;
-    console.log("finished!!!");
   } else {
     //left settings should be off
     if (page === "index.html") {
@@ -70,19 +63,12 @@ function switchToLeft() {
     //set toggle to OFF (grey)
     setTimeout(() => {
       sideToggleBtn.checked = false;
-      console.log(sideToggleBtn);
-      console.log(sideToggleBtn.checked);
-      //set isLeft boolean to FALSE
-
-      console.log("done 2");
     }, 1500);
     isLeft = false;
-    console.log("finished 2!!!");
   }
 }
 
 //open the settings page from the sidebar button
 function goToSettings() {
-  console.log("settings cog has been clicked.");
   window.location.href = "settings.html";
 }

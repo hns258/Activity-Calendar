@@ -60,12 +60,10 @@ setUpDate();
 
 function showDeletionBox() {
   document.getElementById("trash-box-container").style.display = "flex";
-  console.log("Show deletion box triggered.");
 }
 
 function hideDeletionBox() {
   document.getElementById("trash-box-container").style.display = "none";
-  console.log("Hide deletion box triggered.");
 }
 
 const getSymbolsById = async () => {
@@ -282,7 +280,6 @@ const getWeekBoundaries = (now, inCurrentWeek) => {
           "trash-box-container"
         )[0];
         const deletionBoxBottom = deletionBox.getBoundingClientRect().bottom;
-        console.debug(`DeletionBox bottom (Y coord): ${deletionBoxBottom}`);
 
         // (3) drop the image, remove unneeded handlers
         const dragEnd = (endEvent) => {
@@ -356,7 +353,6 @@ const getWeekBoundaries = (now, inCurrentWeek) => {
       };
 
       function dragDelay(event) {
-        console.log(`touchDelay: ${touchDelay}`);
         if (event instanceof MouseEvent) {
           dragStart(event);
         } else {
