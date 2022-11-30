@@ -160,9 +160,7 @@ class ActivityCalendar {
     const allKeywords = images.concat(image_types);
     console.log(`found ${allKeywords.length} words`);
 
-    return Array.from(allKeywords).map((word) =>
-      word.name.trim().toLowerCase()
-    );
+    return Array.from(allKeywords).map((word) => word.name.trim());
   }
 
   _log(message) {

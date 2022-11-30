@@ -87,6 +87,7 @@ const createSymbolElement = (symbol) => {
     label.innerHTML = symbol.name;
     label.setAttribute("title", symbol.name);
     symbolEl.appendChild(label);
+    symbolEl.setAttribute("data-category", symbol.category.name);
   }
 
   return symbolEl;
@@ -103,12 +104,13 @@ const createSymbolPlacementElement = (symbolsById, placement) => {
   return elem;
 };
 
-const excludeFromSearch = ["people", "transportation", "popular"];
-
 const initSymbolLibrary = (symbols) => {
   const populateRow = (row, symbol) => {
     const cell = document.createElement("td");
-    cell.classList.add("activity-img-holder"); // TODO change to cell
+
+    if (symbol.category) {
+      cell.classList.add("activity-img-holder"); // TODO change to cell
+    }
 
     cell.appendChild(createSymbolElement(symbol));
     row.appendChild(cell);
@@ -217,8 +219,6 @@ function filterActivities() {
     .getElementById("activities-search-bar")
     .value.trim();
 
-  // if (searchBarInput.length < 2 ) return; // TODO remove later
-
   // TODO ask team if this is ok performance-wise (can "cache" this outside instead but would need to refresh if user adds a new activity)
   // TODO make sure transportation symbols are being excluded
   const activityCells = document.getElementsByClassName("activity-img-holder"); // Can't just hide image (need parent's <td>), would leave an empty space instead of collapsing
@@ -229,21 +229,15 @@ function filterActivities() {
     .concat(Array.from(activityRows))
     .concat(Array.from(categoryTitles));
 
-  // When no words are being searched, clear out style changes for previous searc
+  // When no words are being searched, clear out style changes for previous search
   // Currently there is an issue where fuse does not return all if the search query is empty
   // https://github.com/krisk/Fuse/issues/664
   if (searchBarInput.length === 0) {
-    // document.getElementById("popular-imgs-row").style.removeProperty("display");
-
     for (const element of activityElements) {
       element.style.removeProperty("display");
     }
     return;
   }
-
-  // No need to show popular activities when searching
-  // document.getElementById("popular-imgs-row").style.display = "none";
-  // document.getElementById("popular-img-row-title").style.display = "none";
 
   console.log(`User searching for [${searchBarInput}]`);
 

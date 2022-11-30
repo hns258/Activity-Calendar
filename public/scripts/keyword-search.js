@@ -1,6 +1,5 @@
 const Fuse = require("fuse.js");
 const path = require("path");
-// const path = require("path");
 
 /* TODO Rename to ActivitySearch */
 class KeywordSearch {
@@ -8,7 +7,6 @@ class KeywordSearch {
     // Consider making these configurable in (Advanced) Settings page?
     this._fuseOptions = {
       includeScore: true,
-      minMatchCharLength: 3,
       threshold: 0.6,
       ignoreLocation: true,
       ignoreFieldNorm: true,
@@ -37,33 +35,43 @@ class KeywordSearch {
    * @returns Object containing any separate info needed and the activityCell itself
    * */
   extractActivityInfo(activityCell) {
-    const imageSrc = activityCell.getElementsByTagName("img")[0].src;
-    const imgSrc = decodeURI(imageSrc).toLowerCase();
-    const parsedPath = path.parse(imgSrc);
-    const category = path.basename(parsedPath.dir);
-    return { src: imgSrc, category: category, cell: activityCell };
+    const imgTag = activityCell.getElementsByTagName("img")[0];
+    const name = decodeURIComponent(imgTag.alt); // TODO check if there's a simpler way to decode w/o 3rd party lib https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript?noredirect=1&lq=1
+    const divTag = activityCell.getElementsByTagName("div")[0];
+    const category = decodeURIComponent(divTag.getAttribute("data-category"));
+    return {
+      name: name,
+      category: category,
+      cell: activityCell,
+    };
   }
 
   getFuzzySearchResults(input) {
-    this.minMatchCharLength = Math.floor(0.75 * input.replaceAll(" ", "").length);
+    // Want to match "most" (percentage) of the characters provided
+    this.minMatchCharLength = Math.floor(
+      0.75 * input.replaceAll(" ", "").length
+    );
     const fuseResults = this._fuse.search(input);
     console.debug(this._fuseOptions);
     console.log(`input: ${input}`);
     console.table(fuseResults);
-    return fuseResults.map((result) => result.item.toLowerCase());
+    return fuseResults.map((result) => result.item);
   }
 
   setMatches(activityCells, fuzzySearchResults) {
-    const activityObjects = activityCells.map((activity) =>
-      this.extractActivityInfo(activity)
+    const activityObjects = activityCells.map((activityCell) =>
+      this.extractActivityInfo(activityCell)
     );
-    const matches = activityObjects.map((activity) => ({
-      category: activity.category,
-      matched: fuzzySearchResults.some((result) =>
-        activity.src.includes(result)
+
+    const matches = activityObjects.map((activityObj) => ({
+      name: activityObj.name,
+      category: activityObj.category,
+      matched: fuzzySearchResults.some(
+        (result) =>
+          activityObj.name.includes(result) ||
+          activityObj.category.includes(result)
       ),
-      src: activity.src,
-      cell: activity.cell,
+      cell: activityObj.cell,
     }));
 
     console.table(matches);
