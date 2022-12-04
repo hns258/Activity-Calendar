@@ -128,15 +128,9 @@ class ActivityCalendar {
     );
   }
 
-  async createWeekTemplate(name, description = "") {
-    return serializeWeekTemplate(
-      await models.weekTemplate.create({ name, description })
-    );
-  }
-
-  async updateSymbolPlacement(id, date, posX, posY, weekTemplateId = null) {
+  async updateSymbolPlacement(id, date, posX, posY) {
     const [numRows, rows] = await models.symbolPlacement.update(
-      { date, posX, posY, weekTemplateId },
+      { date, posX, posY },
       { where: { id } }
     );
     if (numRows === 0) {
@@ -153,6 +147,35 @@ class ActivityCalendar {
     if (numDestroyed === 0) {
       throw Error(
         `Unable to find existing to delete symbol placement with id ${id}.`
+      );
+    }
+  }
+
+  async createWeekTemplate(name, description = "") {
+    return serializeWeekTemplate(
+      await models.weekTemplate.create({ name, description })
+    );
+  }
+
+  async updateWeekTemplate(id, name, description) {
+    const [numRows, rows] = await models.weekTemplate.update(
+      { name, description },
+      { where: { id }}
+    );
+    if (numRows === 0) {
+      throw Error(
+        `Unable to find existing to update week template with id ${id}.`
+      );
+    }
+  }
+
+  async deleteWeekTemplate(id) {
+    const numDestroyed = await models.weekTemplate.destroy({
+      where: {id},
+    });
+    if (numDestroyed === 0) {
+      throw Error(
+        `Unable to find existing to delete week template with id ${id}.`
       );
     }
   }
