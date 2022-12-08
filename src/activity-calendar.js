@@ -115,7 +115,7 @@ class ActivityCalendar {
     date,
     posX,
     posY,
-    weekTemplateId = null // TODO is this is ok or do we want to use smth like -1?
+    weekTemplateId = null
   ) {
     return serializeSymbolPlacement(
       await models.symbolPlacement.create({
@@ -158,9 +158,9 @@ class ActivityCalendar {
   }
 
   async updateWeekTemplate(id, name, description) {
-    const [numRows, rows] = await models.weekTemplate.update(
+    const [numRows] = await models.weekTemplate.update(
       { name, description },
-      { where: { id }}
+      { where: { id } }
     );
     if (numRows === 0) {
       throw Error(
@@ -171,7 +171,7 @@ class ActivityCalendar {
 
   async deleteWeekTemplate(id) {
     const numDestroyed = await models.weekTemplate.destroy({
-      where: {id},
+      where: { id },
     });
     if (numDestroyed === 0) {
       throw Error(
@@ -180,13 +180,10 @@ class ActivityCalendar {
     }
   }
 
-  // TODO verify this is ok, similar to .net SqlDateTime.MinValue and placed here vs top
-  static MIN_DATE = new Date(0);
-
   async addSymbolToWeekTemplate(symbolId, posX, posY, weekTemplateId) {
     await this.createSymbolPlacement(
       symbolId,
-      ActivityCalendar.MIN_DATE, // TODO check this vs null (column is non-nullable now)
+      null,
       posX,
       posY,
       weekTemplateId
