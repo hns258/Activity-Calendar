@@ -190,8 +190,6 @@ class ActivityCalendar {
     );
   }
 
-  // TODO add update (positions have changed) and delete
-
   _log(message) {
     if (this.verbose) {
       console.log(message);
