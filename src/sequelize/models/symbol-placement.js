@@ -31,10 +31,6 @@ module.exports = (sequelize) => {
       foreignKey: { allowNull: false },
       onDelete: "CASCADE",
     });
-
-    // TODO add constraint to ensure:
-    // 1) weekTemplateId is "null", if date != Date(0)
-    // 2) date == Date(0), if weekTemplateId is not "null"
   };
 
   return SymbolPlacement;

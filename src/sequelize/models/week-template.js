@@ -18,6 +18,7 @@ module.exports = (sequelize) => {
     },
   });
 
+  // If this column in symbolPlacement ends up being sparse, move to a mapping table
   WeekTemplate.associate = (sequelize) => {
     const { symbolPlacement } = sequelize.models;
 
