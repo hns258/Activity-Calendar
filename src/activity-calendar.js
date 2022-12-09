@@ -151,6 +151,11 @@ class ActivityCalendar {
     }
   }
 
+  async getWeekTemplate(weekTemplateId) {
+    const weekTemplate = await models.weekTemplate.findByPk(weekTemplateId);
+    return serializeWeekTemplate(weekTemplate);
+  }
+
   async createWeekTemplate(name, description = "") {
     return serializeWeekTemplate(
       await models.weekTemplate.create({ name, description })

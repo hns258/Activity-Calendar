@@ -422,7 +422,6 @@ describe("ActivityCalendar", async function () {
   });
 
   describe("week templates", async function () {
-    // TODO check if ok to move this to outer scope so all tests can use?
     const createSymbol = async (name) => {
       return activityCalendar.createSymbol(
         "/images/1.jpg",
@@ -448,12 +447,35 @@ describe("ActivityCalendar", async function () {
         weekTemplate.id
       );
 
-      const placementsForWeekTemplate =
+      const weekTemplatePlacements =
         await activityCalendar.getSymbolPlacementsForWeekTemplate(
           weekTemplate.id
         );
 
-      assert.strictEqual(placementsForWeekTemplate[0].symbolId, symbol.id);
+      const actualSymbolId = weekTemplatePlacements[0].symbolId;
+      assert.strictEqual(actualSymbolId, symbol.id);
     });
+
+    it("update is successful", async function () {
+      const weekTemplate = await activityCalendar.createWeekTemplate(
+        "spring week"
+      );
+      await activityCalendar.updateWeekTemplate(
+        weekTemplate.id,
+        "fall week",
+        "updated"
+      );
+      const weekTemplateUpdated = await activityCalendar.getWeekTemplate(
+        weekTemplate.id
+      );
+
+      const actualName = weekTemplateUpdated.name;
+      const actualDescription = weekTemplateUpdated.description;
+
+      assert.strictEqual(actualName, "fall week");
+      assert.strictEqual(actualDescription, "updated");
+    });
+
+    // TODO add more tests (deleteWeekTemplate, updateSymbolPlacements w/ weekTemplate, etc.)
   });
 });
